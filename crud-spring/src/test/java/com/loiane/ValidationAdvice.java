@@ -1,0 +1,31 @@
+package com.loiane;
+
+import java.lang.reflect.Method;
+import java.util.Set;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.executable.ExecutableValidator;
+
+import org.springframework.aop.MethodBeforeAdvice;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
+public class ValidationAdvice implements MethodBeforeAdvice {
+    
+    static private final ExecutableValidator executableValidator;
+
+    static {
+        LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
+        factory.afterPropertiesSet();
+        executableValidator = factory.getValidator().forExecutables();
+        factory.close();
+    }
+
+    @Override
+    public void before(Method method, Object[] args, Object target) throws Throwable {
+        Set<ConstraintViolation<Object>> violations = executableValidator.validateParameters(target, method, args);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+    }
+}
