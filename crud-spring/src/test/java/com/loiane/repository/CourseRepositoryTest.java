@@ -59,10 +59,8 @@ class CourseRepositoryTest {
 
     @Test
     @DisplayName("Should not find a course that does not exist")
-    void shouldNotFindCourseById() {
-        
+    void testFindByIdNotFound() {
         Optional<Course> courseFound = courseRepository.findById(100L);
-
         assertThat(courseFound).isNotPresent();
     }
 
