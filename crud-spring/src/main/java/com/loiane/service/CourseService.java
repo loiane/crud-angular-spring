@@ -1,11 +1,11 @@
 package com.loiane.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import com.loiane.exception.RecordNotFoundException;
 import com.loiane.model.Course;
 import com.loiane.repository.CourseRepository;
 
@@ -25,31 +25,25 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
-    public Optional<Course> findById(@Positive @NotNull Long id) {
-        return courseRepository.findById(id);
+    public Course findById(@Positive @NotNull Long id) {
+        return courseRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
     }
 
     public Course create(@Valid Course course) {
         return courseRepository.save(course);
     }
 
-    public Optional<Course> update(@Positive @NotNull Long id, @Valid Course course) {
+    public Course update(@Positive @NotNull Long id, @Valid Course course) {
         return courseRepository.findById(id).map(actual -> {
             actual.setName(course.getName());
             actual.setCategory(course.getCategory());
-            Course updated = courseRepository.save(actual);
-            return Optional.of(updated);
+            return courseRepository.save(actual);
         })
-        .orElse(Optional.empty());
+        .orElseThrow(() -> new RecordNotFoundException(id));
     }
 
-    public Optional<Boolean> delete(@Positive @NotNull Long id) {
-        return courseRepository.findById(id)
-        .map(
-            course -> {
-            courseRepository.deleteById(id);
-            return Optional.of(true);
-        })
-        .orElse(Optional.empty());
+    public void delete(@Positive @NotNull Long id) {
+        courseRepository.delete(courseRepository.findById(id)
+            .orElseThrow(() -> new RecordNotFoundException(id)));
     }
 }
