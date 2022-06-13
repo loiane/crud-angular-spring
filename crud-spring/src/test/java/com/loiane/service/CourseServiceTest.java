@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.BDDMockito.then;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.loiane.TestData;
 import com.loiane.ValidationAdvice;
+import com.loiane.exception.RecordNotFoundException;
 import com.loiane.model.Course;
 import com.loiane.repository.CourseRepository;
 
@@ -75,9 +76,8 @@ public class CourseServiceTest {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
         when(this.courseRepository.findById((Long) any())).thenReturn(ofResult);
-        Optional<Course> actualFindByIdResult = this.courseService.findById(1L);
-        assertSame(ofResult, actualFindByIdResult);
-        assertTrue(actualFindByIdResult.isPresent());
+        Course actualFindByIdResult = this.courseService.findById(1L);
+        assertSame(course, actualFindByIdResult);
         verify(this.courseRepository).findById((Long) any());
     }
 
@@ -85,11 +85,10 @@ public class CourseServiceTest {
      * Method under test: {@link CourseService#findById(int)}
      */
     @Test
-    @DisplayName("Should return empty when course not found")
+    @DisplayName("Should thow NotFound exception when course not found")
     void testFindByIdNotFound() {
         when(this.courseRepository.findById((Long) any())).thenReturn(Optional.empty());
-        final Optional<Course> actualFindByIdResult = this.courseService.findById(1L);
-        assertTrue(actualFindByIdResult.isEmpty());
+        assertThrows(RecordNotFoundException.class, () -> this.courseService.findById(123L));
         verify(this.courseRepository).findById((Long) any());
     }
 
@@ -119,7 +118,7 @@ public class CourseServiceTest {
      */
     @Test
     @DisplayName("Should throw an exception when creating an invalid course")
-    void createInvalid() {
+    void testCreateInvalid() {
         final List<Course> courses = TestData.createInvalidCourses();
         for (Course course: courses) {
             assertThrows(ConstraintViolationException.class, () -> this.courseService.create(course));
@@ -145,7 +144,7 @@ public class CourseServiceTest {
         .name("Spring Boot")
         .category("back-end")
         .build();
-        assertTrue(this.courseService.update(1L, course2).isPresent());
+        assertSame(course1, this.courseService.update(123L, course2));
         verify(this.courseRepository).save((Course) any());
         verify(this.courseRepository).findById((Long) any());
     }
@@ -154,21 +153,20 @@ public class CourseServiceTest {
      * Method under test: {@link CourseService#update(Long, Course)}
      */
     @Test
-    @DisplayName("Should update a course when valid v2")
-    void testUpdate2() {
+    @DisplayName("Should throw an exception when updating an invalid course ID")
+    void testUpdateNotFound() {
         Course course = TestData.createValidCourse();
-        when(this.courseRepository.save((Course) any())).thenReturn(course);
-        Optional<Course> emptyResult = Optional.empty();
-        when(this.courseRepository.findById((Long) any())).thenReturn(emptyResult);
+        Optional<Course> ofResult = Optional.of(course);
+        when(this.courseRepository.save((Course) any())).thenThrow(new RecordNotFoundException(123L));
+        when(this.courseRepository.findById((Long) any())).thenReturn(ofResult);
 
         Course course1 = Course.builder()
         .id(1L)
         .name("Spring Boot")
         .category("back-end")
         .build();
-        Optional<Course> actualUpdateResult = this.courseService.update(1L, course1);
-        assertSame(emptyResult, actualUpdateResult);
-        assertFalse(actualUpdateResult.isPresent());
+        assertThrows(RecordNotFoundException.class, () -> this.courseService.update(123L, course1));
+        verify(this.courseRepository).save((Course) any());
         verify(this.courseRepository).findById((Long) any());
     }
 
@@ -205,13 +203,11 @@ public class CourseServiceTest {
     void testDelete() {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
-        doNothing().when(this.courseRepository).deleteById((Long) any());
+        doNothing().when(this.courseRepository).delete((Course) any());
         when(this.courseRepository.findById((Long) any())).thenReturn(ofResult);
-        Optional<Boolean> actualDeleteResult = this.courseService.delete(1L);
-        assertTrue(actualDeleteResult.isPresent());
-        assertTrue(actualDeleteResult.get());
+        this.courseService.delete(1L);
         verify(this.courseRepository).findById((Long) any());
-        verify(this.courseRepository).deleteById((Long) any());
+        verify(this.courseRepository).delete((Course) any());
     }
 
     /**
@@ -219,14 +215,14 @@ public class CourseServiceTest {
      */
     @Test
     @DisplayName("Should return empty when course not found - delete")
-    void testDelete2() {
-        doNothing().when(this.courseRepository).deleteById((Long) any());
-        Optional<Course> emptyResult = Optional.empty();
-        when(this.courseRepository.findById((Long) any())).thenReturn(emptyResult);
-        Optional<Boolean> actualDeleteResult = this.courseService.delete(1L);
-        assertSame(emptyResult, actualDeleteResult);
-        assertFalse(actualDeleteResult.isPresent());
+    void testDeleteNotFound() {
+        Course course = TestData.createValidCourse();
+        Optional<Course> ofResult = Optional.of(course);
+        doThrow(new RecordNotFoundException(1L)).when(this.courseRepository).delete((Course) any());
+        when(this.courseRepository.findById((Long) any())).thenReturn(ofResult);
+        assertThrows(RecordNotFoundException.class, () -> this.courseService.delete(1L));
         verify(this.courseRepository).findById((Long) any());
+        verify(this.courseRepository).delete((Course) any());
     }
 
     @Test
