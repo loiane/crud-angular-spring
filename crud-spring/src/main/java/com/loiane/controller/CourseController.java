@@ -2,9 +2,7 @@ package com.loiane.controller;
 
 import java.util.List;
 
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.loiane.exception.CourseNotFoundException;
 import com.loiane.model.Course;
 import com.loiane.service.CourseService;
 
@@ -40,8 +37,7 @@ public class CourseController {
 
     @GetMapping("/{id}")
     public Course findById(@PathVariable @Positive @NotNull Long id) {
-        return courseService.findById(id)
-        .orElseThrow(() -> ObjectNotFoundException::new);
+        return courseService.findById(id);
     }
 
     @PostMapping
@@ -53,13 +49,12 @@ public class CourseController {
     @PutMapping(value = "/{id}")
     public Course update(@PathVariable @Positive @NotNull Long id,
          @RequestBody @Valid Course course) {
-        return courseService.update(id, course)
-        .orElseThrow(() -> new CourseNotFoundException(id));
+        return courseService.update(id, course);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable @Positive @NotNull Long id) {
-        courseService.delete(id).orElseThrow(() -> new CourseNotFoundException(id));
+        courseService.delete(id);
     }
 }
