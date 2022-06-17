@@ -36,7 +36,7 @@ import jakarta.validation.ConstraintViolationException;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = {CourseService.class})
 @ExtendWith(SpringExtension.class)
-public class CourseServiceTest {
+class CourseServiceTest {
     
     @MockBean
     private CourseRepository courseRepository;
