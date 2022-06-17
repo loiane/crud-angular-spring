@@ -41,7 +41,7 @@ import com.loiane.service.CourseService;
 @ActiveProfiles("test")
 @ContextConfiguration(classes = { CourseController.class })
 @ExtendWith(SpringExtension.class)
-public class CourseControllerTest {
+class CourseControllerTest {
 
     private final static String API = "/api/courses";
     private final static String API_ID = "/api/courses/{id}";
