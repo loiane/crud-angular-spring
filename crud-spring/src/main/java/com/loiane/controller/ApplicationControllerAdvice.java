@@ -28,7 +28,7 @@ public class ApplicationControllerAdvice {
     public FieldError[] validationError(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         final List<FieldError> fieldErrors = result.getFieldErrors();
-        return fieldErrors.toArray(new FieldError[fieldErrors.size()]);
+        return fieldErrors.toArray(new FieldError[0]);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
