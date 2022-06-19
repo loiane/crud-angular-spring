@@ -22,7 +22,7 @@ public class ValidationAdvice implements MethodBeforeAdvice {
     }
 
     @Override
-    public void before(Method method, Object[] args, Object target) throws Throwable {
+    public void before(Method method, Object[] args, Object target) {
         Set<ConstraintViolation<Object>> violations = executableValidator.validateParameters(target, method, args);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
