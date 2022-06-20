@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -67,7 +68,7 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#findById(int)}
+     * Method under test: {@link CourseService#findById(Long)}
      * Happy path
      */
     @Test
@@ -75,21 +76,21 @@ class CourseServiceTest {
     void testFindById() {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
-        when(this.courseRepository.findById((Long) any())).thenReturn(ofResult);
+        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
         Course actualFindByIdResult = this.courseService.findById(1L);
         assertSame(course, actualFindByIdResult);
-        verify(this.courseRepository).findById((Long) any());
+        verify(this.courseRepository).findById(anyLong());
     }
 
     /**
-     * Method under test: {@link CourseService#findById(int)}
+     * Method under test: {@link CourseService#findById(Long)}
      */
     @Test
     @DisplayName("Should thow NotFound exception when course not found")
     void testFindByIdNotFound() {
-        when(this.courseRepository.findById((Long) any())).thenReturn(Optional.empty());
+        when(this.courseRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(RecordNotFoundException.class, () -> this.courseService.findById(123L));
-        verify(this.courseRepository).findById((Long) any());
+        verify(this.courseRepository).findById(anyLong());
     }
 
     @Test
@@ -106,7 +107,7 @@ class CourseServiceTest {
     @DisplayName("Should create a course when valid")
     void testCreate() {
         Course course = TestData.createValidCourse();
-        when(this.courseRepository.save((Course) any())).thenReturn(course);
+        when(this.courseRepository.save(any())).thenReturn(course);
 
         Course course1 = TestData.createValidCourse();
         assertSame(course, this.courseService.create(course1));
@@ -136,8 +137,8 @@ class CourseServiceTest {
         Optional<Course> ofResult = Optional.of(course);
 
         Course course1 = TestData.createValidCourse();
-        when(this.courseRepository.save((Course) any())).thenReturn(course1);
-        when(this.courseRepository.findById((Long) any())).thenReturn(ofResult);
+        when(this.courseRepository.save(any())).thenReturn(course1);
+        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
 
         Course course2 = Course.builder()
         .id(1L)
@@ -145,8 +146,8 @@ class CourseServiceTest {
         .category("back-end")
         .build();
         assertSame(course1, this.courseService.update(123L, course2));
-        verify(this.courseRepository).save((Course) any());
-        verify(this.courseRepository).findById((Long) any());
+        verify(this.courseRepository).save(any());
+        verify(this.courseRepository).findById(anyLong());
     }
 
     /**
@@ -157,8 +158,8 @@ class CourseServiceTest {
     void testUpdateNotFound() {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
-        when(this.courseRepository.save((Course) any())).thenThrow(new RecordNotFoundException(123L));
-        when(this.courseRepository.findById((Long) any())).thenReturn(ofResult);
+        when(this.courseRepository.save(any())).thenThrow(new RecordNotFoundException(123L));
+        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
 
         Course course1 = Course.builder()
         .id(1L)
@@ -166,10 +167,13 @@ class CourseServiceTest {
         .category("back-end")
         .build();
         assertThrows(RecordNotFoundException.class, () -> this.courseService.update(123L, course1));
-        verify(this.courseRepository).save((Course) any());
-        verify(this.courseRepository).findById((Long) any());
+        verify(this.courseRepository).save(any());
+        verify(this.courseRepository).findById(anyLong());
     }
 
+    /**
+     * Method under test: {@link CourseService#update(Long, Course)}
+     */
     @Test
     @DisplayName("Should throw exception when id is not valid - update")
     void testUpdateInvalid() {
@@ -196,32 +200,32 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#delete(int)}
+     * Method under test: {@link CourseService#delete(Long)}
      */
     @Test
     @DisplayName("Should delete a course")
     void testDelete() {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
-        doNothing().when(this.courseRepository).delete((Course) any());
-        when(this.courseRepository.findById((Long) any())).thenReturn(ofResult);
+        doNothing().when(this.courseRepository).delete(any());
+        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
         this.courseService.delete(1L);
-        verify(this.courseRepository).findById((Long) any());
-        verify(this.courseRepository).delete((Course) any());
+        verify(this.courseRepository).findById(anyLong());
+        verify(this.courseRepository).delete(any());
     }
 
     /**
-     * Method under test: {@link CourseService#delete(int)}
+     * Method under test: {@link CourseService#delete(Long)}
      */
     @Test
     @DisplayName("Should return empty when course not found - delete")
     void testDeleteNotFound() {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
-        doThrow(new RecordNotFoundException(1L)).when(this.courseRepository).delete((Course) any());
-        when(this.courseRepository.findById((Long) any())).thenReturn(ofResult);
+        doThrow(new RecordNotFoundException(1L)).when(this.courseRepository).delete(any());
+        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
         assertThrows(RecordNotFoundException.class, () -> this.courseService.delete(1L));
-        verify(this.courseRepository).findById((Long) any());
+        verify(this.courseRepository).findById(anyLong());
         verify(this.courseRepository).delete((Course) any());
     }
 
