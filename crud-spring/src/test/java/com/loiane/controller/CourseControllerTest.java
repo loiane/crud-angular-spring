@@ -34,6 +34,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loiane.TestData;
 import com.loiane.ValidationAdvice;
+import com.loiane.dto.CourseRequestDTO;
 import com.loiane.exception.RecordNotFoundException;
 import com.loiane.model.Course;
 import com.loiane.service.CourseService;
@@ -137,8 +138,9 @@ class CourseControllerTest {
     @Test
     @DisplayName("Should create a course when valid")
     void testCreate() throws Exception {
+        CourseRequestDTO courseDTO = TestData.createValidCourseDTO();
         Course course = TestData.createValidCourse();
-        when(this.courseService.create(course)).thenReturn(course);
+        when(this.courseService.create(courseDTO)).thenReturn(course);
 
         String content = (new ObjectMapper()).writeValueAsString(course);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post(API)
