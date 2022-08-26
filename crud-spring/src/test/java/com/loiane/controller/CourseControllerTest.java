@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -28,15 +30,15 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.util.NestedServletException;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loiane.TestData;
 import com.loiane.ValidationAdvice;
 import com.loiane.exception.RecordNotFoundException;
 import com.loiane.model.Course;
 import com.loiane.service.CourseService;
+
+import jakarta.servlet.ServletException;
 
 @ActiveProfiles("test")
 @ContextConfiguration(classes = { CourseController.class })
@@ -103,10 +105,10 @@ class CourseControllerTest {
      */
     @Test
     @DisplayName("Should return a 404 status code when course is not found")
-    void testFindByIdNotFound() throws Exception {
-        when(this.courseService.findById(anyLong())).thenThrow(new RecordNotFoundException(123L));
+    void testFindByIdNotFound() {
+        when(this.courseService.findById(anyLong())).thenThrow(new RecordNotFoundException(1L));
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(API_ID, 1);
-        assertThrows(NestedServletException.class, () -> {
+        assertThrows(ServletException.class, () -> {
             ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.courseController)
                     .build()
                     .perform(requestBuilder);
@@ -119,9 +121,9 @@ class CourseControllerTest {
      */
     @Test
     @DisplayName("Should return bad request status code when id is not a positive number")
-    void testFindByIdNegative() throws Exception {
+    void testFindByIdNegative() {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(API_ID, -1);
-        assertThrows(NestedServletException.class, () -> {
+        assertThrows(ServletException.class, () -> {
             ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.courseController)
                     .build()
                     .perform(requestBuilder);
@@ -154,8 +156,6 @@ class CourseControllerTest {
 
     /**
      * Method under test: {@link CourseController#create(Course)}
-     * 
-     * @throws JsonProcessingException
      */
     @Test
     @DisplayName("Should return bad request when creating an invalid course")
@@ -180,7 +180,7 @@ class CourseControllerTest {
     @DisplayName("Should update a course when valid")
     void testUpdate() throws Exception {
         Course course = TestData.createValidCourse();
-        when(this.courseService.update((Long) any(), (Course) any())).thenReturn(course);
+        when(this.courseService.update(anyLong(), any())).thenReturn(course);
 
         String content = (new ObjectMapper()).writeValueAsString(course);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, 1L)
@@ -203,13 +203,13 @@ class CourseControllerTest {
     @DisplayName("Should throw an exception when updating an invalid course ID")
     void testUpdateNotFound() throws Exception {
         Course course = TestData.createValidCourse();
-        when(this.courseService.update((Long) any(), (Course) any())).thenThrow(new RecordNotFoundException(1L));
+        when(this.courseService.update(anyLong(), any())).thenThrow(new RecordNotFoundException(1L));
 
         String content = (new ObjectMapper()).writeValueAsString(course);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
-        assertThrows(NestedServletException.class, () -> {
+        assertThrows(ServletException.class, () -> {
             ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.courseController)
                     .build()
                     .perform(requestBuilder);
@@ -223,27 +223,88 @@ class CourseControllerTest {
     @Test
     @DisplayName("Should throw exception when id is not valid - update")
     void testUpdateInvalid() throws Exception {
-        Course course = TestData.createValidCourse();
-        String content = (new ObjectMapper()).writeValueAsString(course);
 
         // invalid id and valid course
-        assertThrows(NestedServletException.class, () -> {
-            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, -1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content);
+        final Course validCourse = TestData.createValidCourse();
+        final String content = (new ObjectMapper()).writeValueAsString(validCourse);
+        assertThrows(ServletException.class, () -> {
+            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, -1)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(content);
+            ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.courseController)
+                    .build()
+                    .perform(requestBuilder);
+            actualPerformResult.andExpect(status().isMethodNotAllowed());
+        });
+
+        // valid id and invalid course
+        final List<Course> courses = TestData.createInvalidCourses();
+        for (Course course : courses) {
+            final String contentUpdate = (new ObjectMapper()).writeValueAsString(course);
+            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, 1L)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(contentUpdate);
             ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.courseController)
                     .build()
                     .perform(requestBuilder);
             actualPerformResult.andExpect(status().isBadRequest());
+        }
+
+        // invalid id and invalid course
+        for (Course course : courses) {
+            final String contentUpdate = (new ObjectMapper()).writeValueAsString(course);
+            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, -1L)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(contentUpdate);
+            ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.courseController)
+                    .build()
+                    .perform(requestBuilder);
+            actualPerformResult.andExpect(status().isBadRequest());
+        }
+    }
+
+    /**
+     * Method under test: {@link CourseController#delete(Long)}
+     */
+    @Test
+    void testDelete() throws Exception {
+        doNothing().when(this.courseService).delete(anyLong());
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete(API_ID, 1);
+        MockMvcBuilders.standaloneSetup(this.courseController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    /**
+     * Method under test: {@link CourseController#delete(Long)}
+     */
+    @Test
+    @DisplayName("Should return empty when course not found - delete")
+    void testDeleteNotFound() {
+        doThrow(new RecordNotFoundException(1L)).doNothing().when(this.courseService).delete(anyLong());
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete(API_ID, 1);
+        assertThrows(ServletException.class, () -> {
+            ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.courseController)
+                    .build()
+                    .perform(requestBuilder);
+            actualPerformResult.andExpect(status().isNotFound());
         });
-        assertThrows(IllegalArgumentException.class, () -> {
-            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, null)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content);
+    }
+
+    /**
+     * Method under test: {@link CourseController#delete(Long)}
+     */
+    @Test
+    @DisplayName("Should throw exception when id is not valid - delete")
+    void testDeleteInvalid() {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete(API_ID, -1);
+        assertThrows(ServletException.class, () -> {
             ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.courseController)
                     .build()
                     .perform(requestBuilder);
             actualPerformResult.andExpect(status().isBadRequest());
         });
     }
+
 }
