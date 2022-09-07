@@ -2,7 +2,6 @@ package com.loiane.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -12,6 +11,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.loiane.TestData;
 import com.loiane.ValidationAdvice;
+import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.mapper.CourseMapper;
 import com.loiane.exception.RecordNotFoundException;
@@ -65,8 +66,13 @@ class CourseServiceTest {
     void testFindAll() {
         List<Course> courseList = List.of(TestData.createValidCourse());
         when(this.courseRepository.findAll()).thenReturn(courseList);
-        List<Course> actualFindAllResult = this.courseService.findAll();
-        assertSame(courseList, actualFindAllResult);
+        List<CourseDTO> dtoList = new ArrayList<>(courseList.size());
+        for (Course course : courseList) {
+            dtoList.add(courseMapper.toDTO(course));
+        }
+
+        List<CourseDTO> actualFindAllResult = this.courseService.findAll();
+        assertEquals(dtoList, actualFindAllResult);
         assertFalse(actualFindAllResult.isEmpty());
         assertEquals(1, actualFindAllResult.size());
         verify(this.courseRepository).findAll();
@@ -82,8 +88,8 @@ class CourseServiceTest {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
         when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
-        Course actualFindByIdResult = this.courseService.findById(1L);
-        assertSame(course, actualFindByIdResult);
+        CourseDTO actualFindByIdResult = this.courseService.findById(1L);
+        assertEquals(courseMapper.toDTO(ofResult.get()), actualFindByIdResult);
         verify(this.courseRepository).findById(anyLong());
     }
 
@@ -111,11 +117,11 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should create a course when valid")
     void testCreate() {
-        CourseRequestDTO courseDTO = TestData.createValidCourseDTO();
+        CourseRequestDTO courseDTO = TestData.createValidCourseRequest();
         Course course = TestData.createValidCourse();
         when(this.courseRepository.save(any())).thenReturn(course);
 
-        assertSame(course, this.courseService.create(courseDTO));
+        assertEquals(courseMapper.toDTO(course), this.courseService.create(courseDTO));
         verify(this.courseRepository).save((Course) any());
     }
 
@@ -145,12 +151,8 @@ class CourseServiceTest {
         when(this.courseRepository.save(any())).thenReturn(course1);
         when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
 
-        Course course2 = Course.builder()
-                .id(1L)
-                .name("Spring Boot")
-                .category("back-end")
-                .build();
-        assertSame(course1, this.courseService.update(123L, course2));
+        CourseRequestDTO course2 = TestData.createValidCourseRequest();
+        assertEquals(courseMapper.toDTO(course1), this.courseService.update(1L, course2));
         verify(this.courseRepository).save(any());
         verify(this.courseRepository).findById(anyLong());
     }
@@ -166,11 +168,7 @@ class CourseServiceTest {
         when(this.courseRepository.save(any())).thenThrow(new RecordNotFoundException(123L));
         when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
 
-        Course course1 = Course.builder()
-                .id(1L)
-                .name("Spring Boot")
-                .category("back-end")
-                .build();
+        CourseRequestDTO course1 = TestData.createValidCourseRequest();
         assertThrows(RecordNotFoundException.class, () -> this.courseService.update(123L, course1));
         verify(this.courseRepository).save(any());
         verify(this.courseRepository).findById(anyLong());
@@ -183,20 +181,20 @@ class CourseServiceTest {
     @DisplayName("Should throw exception when id is not valid - update")
     void testUpdateInvalid() {
 
-        Course validCourse = TestData.createValidCourse();
+        CourseRequestDTO validCourse = TestData.createValidCourseRequest();
 
         // invalid id and valid course
         assertThrows(ConstraintViolationException.class, () -> this.courseService.update(-1L, validCourse));
         assertThrows(ConstraintViolationException.class, () -> this.courseService.update(null, validCourse));
 
         // valid id and invalid course
-        final List<Course> courses = TestData.createInvalidCourses();
-        for (Course course : courses) {
+        final List<CourseRequestDTO> courses = TestData.createInvalidCoursesDTO();
+        for (CourseRequestDTO course : courses) {
             assertThrows(ConstraintViolationException.class, () -> this.courseService.update(1L, course));
         }
 
         // invalid id and invalid course
-        for (Course course : courses) {
+        for (CourseRequestDTO course : courses) {
             assertThrows(ConstraintViolationException.class, () -> this.courseService.update(-1L, course));
             assertThrows(ConstraintViolationException.class, () -> this.courseService.update(null, course));
         }

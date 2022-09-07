@@ -34,6 +34,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loiane.TestData;
 import com.loiane.ValidationAdvice;
+import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.exception.RecordNotFoundException;
 import com.loiane.model.Course;
@@ -68,8 +69,8 @@ class CourseControllerTest {
     @Test
     @DisplayName("Should return a list of courses in JSON format")
     void testFindAll() throws Exception {
-        Course course = TestData.createValidCourse();
-        List<Course> courses = List.of(course);
+        CourseDTO course = TestData.createValidCourseDTO();
+        List<CourseDTO> courses = List.of(course);
         when(this.courseService.findAll()).thenReturn(courses);
         MockMvcBuilders.standaloneSetup(this.courseController)
                 .build()
@@ -77,9 +78,9 @@ class CourseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(courses.size())))
-                .andExpect(jsonPath("$[0]._id", is(course.getId()), Long.class))
-                .andExpect(jsonPath("$[0].name", is(course.getName())))
-                .andExpect(jsonPath("$[0].category", is(course.getCategory())));
+                .andExpect(jsonPath("$[0]._id", is(course.id()), Long.class))
+                .andExpect(jsonPath("$[0].name", is(course.name())))
+                .andExpect(jsonPath("$[0].category", is(course.category())));
     }
 
     /**
@@ -88,17 +89,17 @@ class CourseControllerTest {
     @Test
     @DisplayName("Should return a course by id")
     void testFindById() throws Exception {
-        Course course = TestData.createValidCourse();
+        CourseDTO course = TestData.createValidCourseDTO();
         when(this.courseService.findById(anyLong())).thenReturn(course);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(API_ID, course.getId());
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(API_ID, course.id());
         MockMvcBuilders.standaloneSetup(this.courseController)
                 .build()
                 .perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("_id", is(course.getId()), Long.class))
-                .andExpect(jsonPath("name", is(course.getName())))
-                .andExpect(jsonPath("category", is(course.getCategory())));
+                .andExpect(jsonPath("_id", is(course.id()), Long.class))
+                .andExpect(jsonPath("name", is(course.name())))
+                .andExpect(jsonPath("category", is(course.category())));
     }
 
     /**
@@ -138,8 +139,8 @@ class CourseControllerTest {
     @Test
     @DisplayName("Should create a course when valid")
     void testCreate() throws Exception {
-        CourseRequestDTO courseDTO = TestData.createValidCourseDTO();
-        Course course = TestData.createValidCourse();
+        CourseRequestDTO courseDTO = TestData.createValidCourseRequest();
+        CourseDTO course = TestData.createValidCourseDTO();
         when(this.courseService.create(courseDTO)).thenReturn(course);
 
         String content = (new ObjectMapper()).writeValueAsString(course);
@@ -151,9 +152,9 @@ class CourseControllerTest {
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("_id", is(course.getId()), Long.class))
-                .andExpect(jsonPath("name", is(course.getName())))
-                .andExpect(jsonPath("category", is(course.getCategory())));
+                .andExpect(jsonPath("_id", is(course.id()), Long.class))
+                .andExpect(jsonPath("name", is(course.name())))
+                .andExpect(jsonPath("category", is(course.category())));
     }
 
     /**
@@ -181,7 +182,7 @@ class CourseControllerTest {
     @Test
     @DisplayName("Should update a course when valid")
     void testUpdate() throws Exception {
-        Course course = TestData.createValidCourse();
+        CourseDTO course = TestData.createValidCourseDTO();
         when(this.courseService.update(anyLong(), any())).thenReturn(course);
 
         String content = (new ObjectMapper()).writeValueAsString(course);
@@ -193,9 +194,9 @@ class CourseControllerTest {
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("_id", is(course.getId()), Long.class))
-                .andExpect(jsonPath("name", is(course.getName())))
-                .andExpect(jsonPath("category", is(course.getCategory())));
+                .andExpect(jsonPath("_id", is(course.id()), Long.class))
+                .andExpect(jsonPath("name", is(course.name())))
+                .andExpect(jsonPath("category", is(course.category())));
     }
 
     /**

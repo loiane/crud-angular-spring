@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 public class Course {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("_id")

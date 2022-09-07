@@ -3,6 +3,7 @@ package com.loiane.dto.mapper;
 import org.springframework.stereotype.Component;
 
 import com.loiane.dto.CourseRequestDTO;
+import com.loiane.dto.CourseDTO;
 import com.loiane.model.Course;
 
 /**
@@ -12,7 +13,11 @@ import com.loiane.model.Course;
 @Component
 public class CourseMapper {
 
-    public Course dtoToModel(CourseRequestDTO courseRequestDTO) {
+    public Course toModel(CourseRequestDTO courseRequestDTO) {
         return Course.builder().name(courseRequestDTO.name()).category(courseRequestDTO.category()).build();
+    }
+
+    public CourseDTO toDTO(Course course) {
+        return new CourseDTO(course.getId(), course.getName(), course.getCategory());
     }
 }
