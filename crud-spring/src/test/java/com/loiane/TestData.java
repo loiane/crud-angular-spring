@@ -75,6 +75,7 @@ public class TestData {
                 new CourseRequestDTO(null, validName, createLessonsDTO()),
                 new CourseRequestDTO(empty, validName, createLessonsDTO()),
                 new CourseRequestDTO(LOREN_IPSUM, validName, createLessonsDTO()),
-                new CourseRequestDTO(validCategory, validName, createLessonsDTO()));
+                new CourseRequestDTO(validCategory, validName, createLessonsDTO()),
+                new CourseRequestDTO(validCategory, validName, List.of()));
     }
 }
