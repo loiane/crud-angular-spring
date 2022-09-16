@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.loiane.TestData;
 import com.loiane.model.Course;
+import com.loiane.model.Lesson;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -25,10 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * In practice, only additional methods to the interface should be tested.
  */
 @ActiveProfiles("test")
-@ExtendWith(SpringExtension.class) 
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
 class CourseRepositoryTest {
-    
+
     @Autowired
     private TestEntityManager entityManager;
 
@@ -38,23 +39,25 @@ class CourseRepositoryTest {
     @Test
     @DisplayName("Should find all courses in the database")
     void testFindAll() {
-        Course course = Course.builder().name("Spring").category("back-end").build();
+        Course course = createValidCourse();
         entityManager.persist(course);
 
         var courses = courseRepository.findAll();
 
         assertThat(courses).isNotEmpty();
+        assertThat(courses.get(0).getLessons()).isNotEmpty();
     }
 
     @Test
     @DisplayName("Should find a course by id")
     void testFindById() {
-        Course course = Course.builder().name("Spring").category("back-end").build();
+        Course course = createValidCourse();
         entityManager.persist(course);
 
         Optional<Course> courseFound = courseRepository.findById(course.getId());
 
         assertThat(courseFound).isPresent();
+        assertThat(courseFound.get().getLessons()).isNotEmpty();
     }
 
     @Test
@@ -67,7 +70,7 @@ class CourseRepositoryTest {
     @Test
     @DisplayName("Should save a course when record is valid")
     void testSave() {
-        Course course = TestData.createValidCourse();
+        Course course = createValidCourse();
         final Course courseSaved = courseRepository.save(course);
 
         final Course actual = entityManager.find(Course.class, courseSaved.getId());
@@ -80,8 +83,16 @@ class CourseRepositoryTest {
     @DisplayName("Should throw an exception when creating an invalid course")
     void testCreateInvalid() {
         final List<Course> courses = TestData.createInvalidCourses();
-        for (Course course: courses) {
+        for (Course course : courses) {
             assertThrows(ConstraintViolationException.class, () -> courseRepository.save(course));
-        } 
+        }
+    }
+
+    private Course createValidCourse() {
+        return Course.builder()
+                .name("Spring")
+                .category("back-end")
+                .lessons(List.of(Lesson.builder().name("Intro").youtubeUrl("abcdefgh123").build()))
+                .build();
     }
 }

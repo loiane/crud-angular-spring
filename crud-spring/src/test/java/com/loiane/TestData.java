@@ -1,30 +1,39 @@
 package com.loiane;
 
 import java.util.List;
+import java.util.Set;
 
 import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CourseRequestDTO;
+import com.loiane.dto.LessonDTO;
 import com.loiane.model.Course;
+import com.loiane.model.Lesson;
 
 public class TestData {
 
     private static final String COURSE_NAME = "Spring";
     private static final String COURSE_CATEGORY = "back-end";
-    private static final String LOREN_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et quam nec diam tristique mollis eget quis urna. Sed dapibus lectus in arcu rutrum, non luctus sem finibus. Cras nisl neque, pellentesque et tortor id, dapibus auctor turpis.";;
+    private static final String LOREN_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et quam nec diam tristique mollis eget quis urna. Sed dapibus lectus in arcu rutrum, non luctus sem finibus. Cras nisl neque, pellentesque et tortor id, dapibus auctor turpis.";
+
+    private static final String LESSON_NAME = "Spring Intro";
+    private static final String LESSON_YOUTUBE = "abcdefgh123";
 
     private TestData() {
     }
 
     public static Course createValidCourse() {
-        return Course.builder()
+        Course course = Course.builder()
                 .id(1L)
                 .name("Spring")
                 .category("back-end")
                 .build();
+        course.setLessons(
+                Set.of(Lesson.builder().id(1).name("Intro").youtubeUrl("abcdefgh123").course(course).build()));
+        return course;
     }
 
     public static CourseDTO createValidCourseDTO() {
-        return new CourseDTO(1L, COURSE_NAME, COURSE_CATEGORY);
+        return new CourseDTO(1L, COURSE_NAME, COURSE_CATEGORY, List.of(new LessonDTO(1, LESSON_NAME, LESSON_YOUTUBE)));
     }
 
     public static CourseRequestDTO createValidCourseRequest() {

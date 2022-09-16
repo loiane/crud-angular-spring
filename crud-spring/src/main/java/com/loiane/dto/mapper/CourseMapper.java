@@ -1,8 +1,12 @@
 package com.loiane.dto.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Component;
 
 import com.loiane.dto.CourseRequestDTO;
+import com.loiane.dto.LessonDTO;
 import com.loiane.dto.CourseDTO;
 import com.loiane.model.Course;
 
@@ -18,6 +22,13 @@ public class CourseMapper {
     }
 
     public CourseDTO toDTO(Course course) {
-        return new CourseDTO(course.getId(), course.getName(), course.getCategory());
+        if (course == null) {
+            return null;
+        }
+        List<LessonDTO> lessonDTOList = course.getLessons()
+                .stream()
+                .map(lesson -> new LessonDTO(lesson.getId(), lesson.getName(), lesson.getYoutubeUrl()))
+                .collect(Collectors.toList());
+        return new CourseDTO(course.getId(), course.getName(), course.getCategory(), lessonDTOList);
     }
 }
