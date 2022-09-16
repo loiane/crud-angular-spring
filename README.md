@@ -25,7 +25,7 @@ CRUD Angular + Spring demonstrating Has-Many relationship, with tests.
 - ✅ JPA repository
 - [ ] JPA Pagination
 - ✅ Controller, Service and Repository layers
-- [ ] Has-Many relationship (Course-Lessons)
+- ✅ Has-Many relationship (Course-Lessons)
 - [ ] Swagger
 - ✅ Java 17 Records as DTO (Data Transfer Object)
 - ✅ Hibernate / Jakarta Validation
