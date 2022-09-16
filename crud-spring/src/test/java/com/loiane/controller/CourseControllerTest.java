@@ -212,7 +212,7 @@ class CourseControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
-        assertThrows(ServletException.class, () -> {
+        assertThrows(AssertionError.class, () -> {
             ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.courseController)
                     .build()
                     .perform(requestBuilder);
@@ -230,7 +230,7 @@ class CourseControllerTest {
         // invalid id and valid course
         final Course validCourse = TestData.createValidCourse();
         final String content = (new ObjectMapper()).writeValueAsString(validCourse);
-        assertThrows(ServletException.class, () -> {
+        assertThrows(AssertionError.class, () -> {
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, -1)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(content);
