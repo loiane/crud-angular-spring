@@ -134,7 +134,7 @@ class CourseControllerTest {
     }
 
     /**
-     * Method under test: {@link CourseController#create(Course)}
+     * Method under test: {@link CourseController#create(CourseRequestDTO)}
      */
     @Test
     @DisplayName("Should create a course when valid")
@@ -158,7 +158,7 @@ class CourseControllerTest {
     }
 
     /**
-     * Method under test: {@link CourseController#create(Course)}
+     * Method under test: {@link CourseController#create(CourseRequestDTO)}
      */
     @Test
     @DisplayName("Should return bad request when creating an invalid course")
@@ -177,7 +177,7 @@ class CourseControllerTest {
     }
 
     /**
-     * Method under test: {@link CourseController#update(Long, Course)}
+     * Method under test: {@link CourseController#update(Long, CourseDTO)}
      */
     @Test
     @DisplayName("Should update a course when valid")
@@ -200,7 +200,7 @@ class CourseControllerTest {
     }
 
     /**
-     * Method under test: {@link CourseController#update(Long, Course)}
+     * Method under test: {@link CourseController#update(Long, CourseDTO)}
      */
     @Test
     @DisplayName("Should throw an exception when updating an invalid course ID")
@@ -221,7 +221,7 @@ class CourseControllerTest {
     }
 
     /**
-     * Method under test: {@link CourseController#update(Long, Course)}
+     * Method under test: {@link CourseController#update(Long, CourseDTO)}
      */
     @Test
     @DisplayName("Should throw exception when id is not valid - update")
@@ -270,6 +270,7 @@ class CourseControllerTest {
      * Method under test: {@link CourseController#delete(Long)}
      */
     @Test
+    @DisplayName("Should delete a course")
     void testDelete() throws Exception {
         doNothing().when(this.courseService).delete(anyLong());
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete(API_ID, 1);

@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -79,6 +80,27 @@ class CourseServiceTest {
     }
 
     /**
+     * Method under test: {@link CourseService#findAll(int page, int pageSize)}
+     */
+    // @Test
+    // @DisplayName("Should return a list of courses with pagination")
+    // void testFindAllPageable() {
+    // List<Course> courseList = List.of(TestData.createValidCourse());
+    // when(this.courseRepository.findAll(PageRequest.of(0,
+    // 20))).thenReturn(courseList);
+    // List<CourseDTO> dtoList = new ArrayList<>(courseList.size());
+    // for (Course course : courseList) {
+    // dtoList.add(courseMapper.toDTO(course));
+    // }
+
+    // List<CourseDTO> actualFindAllResult = this.courseService.findAll();
+    // assertEquals(dtoList, actualFindAllResult);
+    // assertFalse(actualFindAllResult.isEmpty());
+    // assertEquals(1, actualFindAllResult.size());
+    // verify(this.courseRepository).findAll();
+    // }
+
+    /**
      * Method under test: {@link CourseService#findById(Long)}
      * Happy path
      */
@@ -104,6 +126,9 @@ class CourseServiceTest {
         verify(this.courseRepository).findById(anyLong());
     }
 
+    /**
+     * Method under test: {@link CourseService#findById(Long)}
+     */
     @Test
     @DisplayName("Should throw exception when id is not valid - findById")
     void testFindByIdInvalid() {
@@ -112,7 +137,7 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#create(Course)}
+     * Method under test: {@link CourseService#create(CourseRequestDTO)}
      */
     @Test
     @DisplayName("Should create a course when valid")
@@ -126,7 +151,7 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#create(Course)}
+     * Method under test: {@link CourseService#create(CourseRequestDTO)}
      */
     @Test
     @DisplayName("Should throw an exception when creating an invalid course")
@@ -139,7 +164,7 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#update(Long, Course)}
+     * Method under test: {@link CourseService#update(Long, CourseRequestDTO)}
      */
     @Test
     @DisplayName("Should update a course when valid")
@@ -158,7 +183,7 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#update(Long, Course)}
+     * Method under test: {@link CourseService#update(Long, CourseRequestDTO)}
      */
     @Test
     @DisplayName("Should throw an exception when updating an invalid course ID")
@@ -175,7 +200,7 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#update(Long, Course)}
+     * Method under test: {@link CourseService#update(Long, CourseRequestDTO)}
      */
     @Test
     @DisplayName("Should throw exception when id is not valid - update")
@@ -232,6 +257,9 @@ class CourseServiceTest {
         verify(this.courseRepository).delete((Course) any());
     }
 
+    /**
+     * Method under test: {@link CourseService#delete(Long)}
+     */
     @Test
     @DisplayName("Should throw exception when id is not valid - delete")
     void testDeleteInvalid() {
