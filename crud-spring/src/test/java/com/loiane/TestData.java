@@ -6,6 +6,7 @@ import java.util.Set;
 import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.LessonDTO;
+import com.loiane.enums.Status;
 import com.loiane.model.Course;
 import com.loiane.model.Lesson;
 
@@ -33,7 +34,7 @@ public class TestData {
     }
 
     public static CourseDTO createValidCourseDTO() {
-        return new CourseDTO(1L, COURSE_NAME, COURSE_CATEGORY, createLessonsDTO());
+        return new CourseDTO(1L, COURSE_NAME, COURSE_CATEGORY, Status.ACTIVE.getValue(), createLessonsDTO());
     }
 
     public static CourseRequestDTO createValidCourseRequest() {

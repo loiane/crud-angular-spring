@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,9 +34,15 @@ public class CourseController {
         this.courseService = courseService;
     }
 
+    // @GetMapping
+    // public List<CourseDTO> findAll() {
+    // return courseService.findAll();
+    // }
+
     @GetMapping
-    public List<CourseDTO> findAll() {
-        return courseService.findAll();
+    public List<CourseDTO> findAll(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        return courseService.findAll(page, pageSize);
     }
 
     @GetMapping("/{id}")

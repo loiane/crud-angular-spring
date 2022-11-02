@@ -39,6 +39,7 @@ public class CourseMapper {
                 .stream()
                 .map(lesson -> new LessonDTO(lesson.getId(), lesson.getName(), lesson.getYoutubeUrl()))
                 .collect(Collectors.toList());
-        return new CourseDTO(course.getId(), course.getName(), course.getCategory(), lessonDTOList);
+        return new CourseDTO(course.getId(), course.getName(), course.getCategory(), course.getStatus().getValue(),
+                lessonDTOList);
     }
 }

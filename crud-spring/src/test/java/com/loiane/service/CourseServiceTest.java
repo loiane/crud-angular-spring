@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -82,23 +83,23 @@ class CourseServiceTest {
     /**
      * Method under test: {@link CourseService#findAll(int page, int pageSize)}
      */
-    // @Test
-    // @DisplayName("Should return a list of courses with pagination")
-    // void testFindAllPageable() {
-    // List<Course> courseList = List.of(TestData.createValidCourse());
-    // when(this.courseRepository.findAll(PageRequest.of(0,
-    // 20))).thenReturn(courseList);
-    // List<CourseDTO> dtoList = new ArrayList<>(courseList.size());
-    // for (Course course : courseList) {
-    // dtoList.add(courseMapper.toDTO(course));
-    // }
+    @Test
+    @DisplayName("Should return a list of courses with pagination")
+    void testFindAllPageable() {
+        List<Course> courseList = List.of(TestData.createValidCourse());
+        Page<Course> coursePage = null;
+        when(this.courseRepository.findAll(PageRequest.of(0, 20))).thenReturn(coursePage);
+        List<CourseDTO> dtoList = new ArrayList<>(courseList.size());
+        for (Course course : courseList) {
+            dtoList.add(courseMapper.toDTO(course));
+        }
 
-    // List<CourseDTO> actualFindAllResult = this.courseService.findAll();
-    // assertEquals(dtoList, actualFindAllResult);
-    // assertFalse(actualFindAllResult.isEmpty());
-    // assertEquals(1, actualFindAllResult.size());
-    // verify(this.courseRepository).findAll();
-    // }
+        List<CourseDTO> actualFindAllResult = this.courseService.findAll();
+        assertEquals(dtoList, actualFindAllResult);
+        assertFalse(actualFindAllResult.isEmpty());
+        assertEquals(1, actualFindAllResult.size());
+        verify(this.courseRepository).findAll();
+    }
 
     /**
      * Method under test: {@link CourseService#findById(Long)}

@@ -3,6 +3,7 @@ package com.loiane.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -30,6 +31,12 @@ public class CourseService {
 
     public List<CourseDTO> findAll() {
         return courseRepository.findAll().stream()
+                .map(courseMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<CourseDTO> findAll(int page, int pageSize) {
+        return courseRepository.findAll(PageRequest.of(page, pageSize)).stream()
                 .map(courseMapper::toDTO)
                 .collect(Collectors.toList());
     }

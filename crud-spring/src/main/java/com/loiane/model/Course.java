@@ -5,8 +5,12 @@ import java.util.Set;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.loiane.enums.Status;
+import com.loiane.enums.converters.StatusConverter;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -49,7 +53,12 @@ public class Course {
     private String category;
 
     @NotNull
-    @NotEmpty
+    @Column(length = 8, nullable = false)
+    @Convert(converter = StatusConverter.class)
+    private Status status;
+
+    // @NotNull
+    // @NotEmpty
     @Valid
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     @Singular
