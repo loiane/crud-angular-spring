@@ -38,13 +38,14 @@ public class CourseService {
     }
 
     public List<CourseDTO> findAll(int page, int pageSize) {
-        return courseRepository.findAll(PageRequest.of(page, pageSize)).stream()
+        return courseRepository.findByStatus(PageRequest.of(page, pageSize), Status.ACTIVE)
+                .stream()
                 .map(courseMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     public CourseDTO findById(@Positive @NotNull Long id) {
-        return courseRepository.findById(id).map(courseMapper::toDTO)
+        return courseRepository.findByIdAndStatus(id, Status.ACTIVE).map(courseMapper::toDTO)
                 .orElseThrow(() -> new RecordNotFoundException(id));
     }
 
@@ -55,7 +56,7 @@ public class CourseService {
     }
 
     public CourseDTO update(@Positive @NotNull Long id, @Valid CourseRequestDTO courseRequestDTO) {
-        return courseRepository.findById(id).map(actual -> {
+        return courseRepository.findByIdAndStatus(id, Status.ACTIVE).map(actual -> {
             actual.setName(courseRequestDTO.name());
             actual.setCategory(courseMapper.convertCategoryValue(courseRequestDTO.category()));
             return courseMapper.toDTO(courseRepository.save(actual));
@@ -64,7 +65,7 @@ public class CourseService {
     }
 
     public void delete(@Positive @NotNull Long id) {
-        courseRepository.delete(courseRepository.findById(id)
+        courseRepository.delete(courseRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new RecordNotFoundException(id)));
     }
 }

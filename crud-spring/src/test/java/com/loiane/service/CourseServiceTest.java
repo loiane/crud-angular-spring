@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +23,7 @@ import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,6 +34,7 @@ import com.loiane.ValidationAdvice;
 import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.mapper.CourseMapper;
+import com.loiane.enums.Status;
 import com.loiane.exception.RecordNotFoundException;
 import com.loiane.model.Course;
 import com.loiane.repository.CourseRepository;
@@ -85,22 +86,21 @@ class CourseServiceTest {
      * Method under test: {@link CourseService#findAll(int page, int pageSize)}
      */
     @Test
-    @Disabled
     @DisplayName("Should return a list of courses with pagination")
     void testFindAllPageable() {
         List<Course> courseList = List.of(TestData.createValidCourse());
-        Page<Course> coursePage = null;
-        when(this.courseRepository.findAll(PageRequest.of(0, 20))).thenReturn(coursePage);
+        Page<Course> coursePage = new PageImpl<>(courseList);
+        when(this.courseRepository.findByStatus(any(PageRequest.class), any(Status.class))).thenReturn(coursePage);
         List<CourseDTO> dtoList = new ArrayList<>(courseList.size());
         for (Course course : courseList) {
             dtoList.add(courseMapper.toDTO(course));
         }
 
-        List<CourseDTO> actualFindAllResult = this.courseService.findAll();
+        List<CourseDTO> actualFindAllResult = this.courseService.findAll(0, 5);
         assertEquals(dtoList, actualFindAllResult);
         assertFalse(actualFindAllResult.isEmpty());
         assertEquals(1, actualFindAllResult.size());
-        verify(this.courseRepository).findAll();
+        verify(this.courseRepository).findByStatus(any(PageRequest.class), any(Status.class));
     }
 
     /**
@@ -112,10 +112,10 @@ class CourseServiceTest {
     void testFindById() {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
-        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
+        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(ofResult);
         CourseDTO actualFindByIdResult = this.courseService.findById(1L);
         assertEquals(courseMapper.toDTO(ofResult.get()), actualFindByIdResult);
-        verify(this.courseRepository).findById(anyLong());
+        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
     }
 
     /**
@@ -124,9 +124,9 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should thow NotFound exception when course not found")
     void testFindByIdNotFound() {
-        when(this.courseRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(Optional.empty());
         assertThrows(RecordNotFoundException.class, () -> this.courseService.findById(123L));
-        verify(this.courseRepository).findById(anyLong());
+        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
     }
 
     /**
@@ -177,12 +177,12 @@ class CourseServiceTest {
 
         Course course1 = TestData.createValidCourse();
         when(this.courseRepository.save(any())).thenReturn(course1);
-        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
+        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(ofResult);
 
         CourseRequestDTO course2 = TestData.createValidCourseRequest();
         assertEquals(courseMapper.toDTO(course1), this.courseService.update(1L, course2));
         verify(this.courseRepository).save(any());
-        verify(this.courseRepository).findById(anyLong());
+        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
     }
 
     /**
@@ -194,12 +194,12 @@ class CourseServiceTest {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
         when(this.courseRepository.save(any())).thenThrow(new RecordNotFoundException(123L));
-        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
+        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(ofResult);
 
         CourseRequestDTO course1 = TestData.createValidCourseRequest();
         assertThrows(RecordNotFoundException.class, () -> this.courseService.update(123L, course1));
         verify(this.courseRepository).save(any());
-        verify(this.courseRepository).findById(anyLong());
+        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
     }
 
     /**
@@ -239,9 +239,9 @@ class CourseServiceTest {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
         doNothing().when(this.courseRepository).delete(any());
-        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
+        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(ofResult);
         this.courseService.delete(1L);
-        verify(this.courseRepository).findById(anyLong());
+        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
         verify(this.courseRepository).delete(any());
     }
 
@@ -254,9 +254,9 @@ class CourseServiceTest {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
         doThrow(new RecordNotFoundException(1L)).when(this.courseRepository).delete(any());
-        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
+        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(ofResult);
         assertThrows(RecordNotFoundException.class, () -> this.courseService.delete(1L));
-        verify(this.courseRepository).findById(anyLong());
+        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
         verify(this.courseRepository).delete((Course) any());
     }
 

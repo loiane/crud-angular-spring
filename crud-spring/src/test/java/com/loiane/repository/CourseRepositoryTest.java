@@ -17,6 +17,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -51,26 +53,6 @@ class CourseRepositoryTest {
     }
 
     @Test
-    @DisplayName("Should find a course by id")
-    void testFindById() {
-        Course course = createValidCourse();
-        entityManager.persist(course);
-
-        Optional<Course> courseFound = courseRepository.findById(course.getId());
-
-        assertThat(courseFound).isPresent();
-        assertThat(courseFound.get().getStatus()).isEqualTo(Status.ACTIVE);
-        assertThat(courseFound.get().getLessons()).isNotEmpty();
-    }
-
-    @Test
-    @DisplayName("Should not find a course that does not exist")
-    void testFindByIdNotFound() {
-        Optional<Course> courseFound = courseRepository.findById(100L);
-        assertThat(courseFound).isNotPresent();
-    }
-
-    @Test
     @DisplayName("Should save a course when record is valid")
     void testSave() {
         Course course = createValidCourse();
@@ -90,6 +72,46 @@ class CourseRepositoryTest {
         for (Course course : courses) {
             assertThrows(ConstraintViolationException.class, () -> courseRepository.save(course));
         }
+    }
+
+    @Test
+    @DisplayName("Should find a course by id and Status ACTIVE")
+    void testFindByIdAndStatus() {
+        Course course = createValidCourse();
+        entityManager.persist(course);
+
+        Optional<Course> courseFound = courseRepository.findByIdAndStatus(course.getId(), Status.ACTIVE);
+
+        assertThat(courseFound).isPresent();
+        assertThat(courseFound.get().getStatus()).isEqualTo(Status.ACTIVE);
+        assertThat(courseFound.get().getLessons()).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Should not find a course by id with Status INACTIVE")
+    void testFindByIdAndStatusInactive() {
+        Course course = createValidCourse();
+        course.setStatus(Status.INACTIVE);
+        entityManager.persist(course);
+
+        Optional<Course> courseFound = courseRepository.findByIdAndStatus(course.getId(), Status.ACTIVE);
+
+        assertThat(courseFound).isNotPresent();
+    }
+
+    @Test
+    void testFindByStatus() {
+        Course course = createValidCourse();
+        entityManager.persist(course);
+        Page<Course> coursePage = courseRepository.findByStatus(PageRequest.of(0, 5), Status.ACTIVE);
+
+        assertThat(coursePage).isNotNull();
+        assertThat(coursePage.getContent()).isNotEmpty();
+        assertThat(coursePage.getContent().get(0).getLessons()).isNotEmpty();
+        coursePage.getContent().stream().forEach(c -> {
+            assertThat(c.getStatus()).isEqualTo(Status.ACTIVE);
+            assertThat(c.getLessons()).isNotEmpty();
+        });
     }
 
     private Course createValidCourse() {
