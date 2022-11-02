@@ -42,7 +42,6 @@ public class CourseMapper {
                 .map(lesson -> new LessonDTO(lesson.getId(), lesson.getName(), lesson.getYoutubeUrl()))
                 .collect(Collectors.toList());
         return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(),
-                course.getStatus().getValue(),
                 lessonDTOList);
     }
 
