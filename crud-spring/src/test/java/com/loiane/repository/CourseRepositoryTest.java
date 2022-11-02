@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.loiane.TestData;
+import com.loiane.enums.Category;
 import com.loiane.model.Course;
 import com.loiane.model.Lesson;
 
@@ -91,7 +92,7 @@ class CourseRepositoryTest {
     private Course createValidCourse() {
         return Course.builder()
                 .name("Spring")
-                .category("back-end")
+                .category(Category.BACK_END)
                 .lessons(List.of(Lesson.builder().name("Intro").youtubeUrl("abcdefgh123").build()))
                 .build();
     }

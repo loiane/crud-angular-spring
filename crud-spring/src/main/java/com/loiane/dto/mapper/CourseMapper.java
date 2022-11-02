@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.LessonDTO;
+import com.loiane.enums.Category;
 import com.loiane.dto.CourseDTO;
 import com.loiane.model.Course;
 import com.loiane.model.Lesson;
@@ -21,7 +22,8 @@ public class CourseMapper {
 
     public Course toModel(CourseRequestDTO courseRequestDTO) {
 
-        Course course = Course.builder().name(courseRequestDTO.name()).category(courseRequestDTO.category()).build();
+        Course course = Course.builder().name(courseRequestDTO.name())
+                .category(convertCategoryValue(courseRequestDTO.category())).build();
 
         Set<Lesson> lessons = courseRequestDTO.lessons().stream()
                 .map(lessonDTO -> Lesson.builder().id(lessonDTO._id()).name(lessonDTO.name())
@@ -39,7 +41,19 @@ public class CourseMapper {
                 .stream()
                 .map(lesson -> new LessonDTO(lesson.getId(), lesson.getName(), lesson.getYoutubeUrl()))
                 .collect(Collectors.toList());
-        return new CourseDTO(course.getId(), course.getName(), course.getCategory(), course.getStatus().getValue(),
+        return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(),
+                course.getStatus().getValue(),
                 lessonDTOList);
+    }
+
+    public Category convertCategoryValue(String value) {
+        if (value == null) {
+            return null;
+        }
+        return switch (value) {
+            case "Front-end" -> Category.FRONT_END;
+            case "Back-end" -> Category.BACK_END;
+            default -> throw new IllegalArgumentException("Invalid Category.");
+        };
     }
 }

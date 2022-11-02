@@ -6,6 +6,7 @@ import java.util.Set;
 import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.LessonDTO;
+import com.loiane.enums.Category;
 import com.loiane.enums.Status;
 import com.loiane.model.Course;
 import com.loiane.model.Lesson;
@@ -26,7 +27,7 @@ public class TestData {
         Course course = Course.builder()
                 .id(1L)
                 .name("Spring")
-                .category("back-end")
+                .category(Category.BACK_END)
                 .build();
         course.setLessons(
                 Set.of(Lesson.builder().id(1).name("Intro").youtubeUrl("abcdefgh123").course(course).build()));
@@ -47,19 +48,18 @@ public class TestData {
 
     public static List<Course> createInvalidCourses() {
         final String validName = COURSE_NAME;
-        final String validCategory = COURSE_CATEGORY;
         final String empty = "";
 
         return List.of(
                 Course.builder().name(null).category(null).build(),
-                Course.builder().name(null).category(validCategory).build(),
-                Course.builder().name(empty).category(validCategory).build(),
-                Course.builder().name("Spr").category(validCategory).build(),
-                Course.builder().name(LOREN_IPSUM).category(validCategory).build(),
+                Course.builder().name(null).category(Category.BACK_END).build(),
+                Course.builder().name(empty).category(Category.BACK_END).build(),
+                Course.builder().name("Spr").category(Category.BACK_END).build(),
+                Course.builder().name(LOREN_IPSUM).category(Category.BACK_END).build(),
                 Course.builder().name(validName).category(null).build(),
-                Course.builder().name(validName).category(empty).build(),
-                Course.builder().name(validName).category(LOREN_IPSUM).build(),
-                Course.builder().name(validName).category(validName).build());
+                Course.builder().name(validName).category(Category.BACK_END).build(),
+                Course.builder().name(validName).category(Category.BACK_END).build(),
+                Course.builder().name(validName).category(Category.BACK_END).build());
     }
 
     public static List<CourseRequestDTO> createInvalidCoursesDTO() {

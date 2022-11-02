@@ -8,10 +8,11 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.executable.ExecutableValidator;
 
 import org.springframework.aop.MethodBeforeAdvice;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 public class ValidationAdvice implements MethodBeforeAdvice {
-    
+
     static private final ExecutableValidator executableValidator;
 
     static {
@@ -22,7 +23,7 @@ public class ValidationAdvice implements MethodBeforeAdvice {
     }
 
     @Override
-    public void before(Method method, Object[] args, Object target) {
+    public void before(Method method, Object[] args, @Nullable Object target) {
         Set<ConstraintViolation<Object>> violations = executableValidator.validateParameters(target, method, args);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
