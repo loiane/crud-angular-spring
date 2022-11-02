@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.loiane.TestData;
 import com.loiane.enums.Category;
+import com.loiane.enums.Status;
 import com.loiane.model.Course;
 import com.loiane.model.Lesson;
 
@@ -58,6 +59,7 @@ class CourseRepositoryTest {
         Optional<Course> courseFound = courseRepository.findById(course.getId());
 
         assertThat(courseFound).isPresent();
+        assertThat(courseFound.get().getStatus()).isEqualTo(Status.ACTIVE);
         assertThat(courseFound.get().getLessons()).isNotEmpty();
     }
 
@@ -77,6 +79,7 @@ class CourseRepositoryTest {
         final Course actual = entityManager.find(Course.class, courseSaved.getId());
 
         assertThat(courseSaved.getId()).isPositive();
+        assertThat(courseSaved.getStatus()).isEqualTo(Status.ACTIVE);
         assertThat(actual).isEqualTo(courseSaved);
     }
 
@@ -93,6 +96,7 @@ class CourseRepositoryTest {
         return Course.builder()
                 .name("Spring")
                 .category(Category.BACK_END)
+                .status(Status.ACTIVE)
                 .lessons(List.of(Lesson.builder().name("Intro").youtubeUrl("abcdefgh123").build()))
                 .build();
     }

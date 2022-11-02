@@ -7,13 +7,13 @@ import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.LessonDTO;
 import com.loiane.enums.Category;
+import com.loiane.enums.Status;
 import com.loiane.model.Course;
 import com.loiane.model.Lesson;
 
 public class TestData {
 
     private static final String COURSE_NAME = "Spring";
-    private static final String COURSE_CATEGORY = "back-end";
     private static final String LOREN_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc et quam nec diam tristique mollis eget quis urna. Sed dapibus lectus in arcu rutrum, non luctus sem finibus. Cras nisl neque, pellentesque et tortor id, dapibus auctor turpis.";
 
     private static final String LESSON_NAME = "Spring Intro";
@@ -27,6 +27,7 @@ public class TestData {
                 .id(1L)
                 .name("Spring")
                 .category(Category.BACK_END)
+                .status(Status.ACTIVE)
                 .build();
         course.setLessons(
                 Set.of(Lesson.builder().id(1).name("Intro").youtubeUrl("abcdefgh123").course(course).build()));
@@ -34,11 +35,11 @@ public class TestData {
     }
 
     public static CourseDTO createValidCourseDTO() {
-        return new CourseDTO(1L, COURSE_NAME, COURSE_CATEGORY, createLessonsDTO());
+        return new CourseDTO(1L, COURSE_NAME, Category.BACK_END.getValue(), createLessonsDTO());
     }
 
     public static CourseRequestDTO createValidCourseRequest() {
-        return new CourseRequestDTO(COURSE_NAME, COURSE_CATEGORY, createLessonsDTO());
+        return new CourseRequestDTO(COURSE_NAME, Category.BACK_END.getValue(), createLessonsDTO());
     }
 
     private static List<LessonDTO> createLessonsDTO() {
@@ -63,7 +64,7 @@ public class TestData {
 
     public static List<CourseRequestDTO> createInvalidCoursesDTO() {
         final String validName = COURSE_NAME;
-        final String validCategory = COURSE_CATEGORY;
+        final String validCategory = Category.BACK_END.getValue();
         final String empty = "";
 
         return List.of(

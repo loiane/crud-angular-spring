@@ -10,7 +10,9 @@ import org.springframework.validation.annotation.Validated;
 import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.mapper.CourseMapper;
+import com.loiane.enums.Status;
 import com.loiane.exception.RecordNotFoundException;
+import com.loiane.model.Course;
 import com.loiane.repository.CourseRepository;
 
 import jakarta.validation.Valid;
@@ -47,7 +49,9 @@ public class CourseService {
     }
 
     public CourseDTO create(@Valid CourseRequestDTO courseRequestDTO) {
-        return courseMapper.toDTO(courseRepository.save(courseMapper.toModel(courseRequestDTO)));
+        Course course = courseMapper.toModel(courseRequestDTO);
+        course.setStatus(Status.ACTIVE);
+        return courseMapper.toDTO(courseRepository.save(course));
     }
 
     public CourseDTO update(@Positive @NotNull Long id, @Valid CourseRequestDTO courseRequestDTO) {

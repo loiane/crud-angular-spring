@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -71,7 +72,7 @@ class CourseControllerTest {
     void testFindAll() throws Exception {
         CourseDTO course = TestData.createValidCourseDTO();
         List<CourseDTO> courses = List.of(course);
-        when(this.courseService.findAll()).thenReturn(courses);
+        when(this.courseService.findAll(anyInt(), anyInt())).thenReturn(courses);
         MockMvcBuilders.standaloneSetup(this.courseController)
                 .build()
                 .perform(MockMvcRequestBuilders.get(API))

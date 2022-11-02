@@ -1,5 +1,6 @@
 package com.loiane.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.validator.constraints.Length;
@@ -64,5 +65,5 @@ public class Course {
     @ToString.Exclude
     // @OneToMany(cascade = CascadeType.ALL)
     // @JoinColumn(name = "courseID", referencedColumnName = "id")
-    private Set<Lesson> lessons;
+    private Set<Lesson> lessons = new HashSet<>();
 }

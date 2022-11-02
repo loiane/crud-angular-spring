@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -84,6 +85,7 @@ class CourseServiceTest {
      * Method under test: {@link CourseService#findAll(int page, int pageSize)}
      */
     @Test
+    @Disabled
     @DisplayName("Should return a list of courses with pagination")
     void testFindAllPageable() {
         List<Course> courseList = List.of(TestData.createValidCourse());
