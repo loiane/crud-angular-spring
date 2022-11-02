@@ -34,11 +34,6 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-    // @GetMapping
-    // public List<CourseDTO> findAll() {
-    // return courseService.findAll();
-    // }
-
     @GetMapping
     public List<CourseDTO> findAll(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int pageSize) {
