@@ -31,12 +31,6 @@ public class CourseService {
         this.courseMapper = courseMapper;
     }
 
-    public List<CourseDTO> findAll() {
-        return courseRepository.findAll().stream()
-                .map(courseMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
     public List<CourseDTO> findAll(int page, int pageSize) {
         return courseRepository.findByStatus(PageRequest.of(page, pageSize), Status.ACTIVE)
                 .stream()

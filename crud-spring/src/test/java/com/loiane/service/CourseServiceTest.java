@@ -63,26 +63,6 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#findAll()}
-     */
-    @Test
-    @DisplayName("Should return a list of courses")
-    void testFindAll() {
-        List<Course> courseList = List.of(TestData.createValidCourse());
-        when(this.courseRepository.findAll()).thenReturn(courseList);
-        List<CourseDTO> dtoList = new ArrayList<>(courseList.size());
-        for (Course course : courseList) {
-            dtoList.add(courseMapper.toDTO(course));
-        }
-
-        List<CourseDTO> actualFindAllResult = this.courseService.findAll();
-        assertEquals(dtoList, actualFindAllResult);
-        assertFalse(actualFindAllResult.isEmpty());
-        assertEquals(1, actualFindAllResult.size());
-        verify(this.courseRepository).findAll();
-    }
-
-    /**
      * Method under test: {@link CourseService#findAll(int page, int pageSize)}
      */
     @Test
