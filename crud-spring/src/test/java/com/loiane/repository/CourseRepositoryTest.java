@@ -40,16 +40,23 @@ class CourseRepositoryTest {
     @Autowired
     CourseRepository courseRepository;
 
+    /**
+     * Method under test: {@link CourseService#findByStatus(int, int)}
+     */
     @Test
-    @DisplayName("Should find all courses in the database")
-    void testFindAll() {
+    @DisplayName("Should find all courses in the database by Status with pagination")
+    void testFindAllByStatus() {
         Course course = createValidCourse();
         entityManager.persist(course);
+        Page<Course> coursePage = courseRepository.findByStatus(PageRequest.of(0, 5), Status.ACTIVE);
 
-        var courses = courseRepository.findAll();
-
-        assertThat(courses).isNotEmpty();
-        assertThat(courses.get(0).getLessons()).isNotEmpty();
+        assertThat(coursePage).isNotNull();
+        assertThat(coursePage.getContent()).isNotEmpty();
+        assertThat(coursePage.getContent().get(0).getLessons()).isNotEmpty();
+        coursePage.getContent().stream().forEach(c -> {
+            assertThat(c.getStatus()).isEqualTo(Status.ACTIVE);
+            assertThat(c.getLessons()).isNotEmpty();
+        });
     }
 
     @Test
@@ -74,6 +81,9 @@ class CourseRepositoryTest {
         }
     }
 
+    /**
+     * Method under test: {@link CourseService#findByIdAndStatus(Long, Status)}
+     */
     @Test
     @DisplayName("Should find a course by id and Status ACTIVE")
     void testFindByIdAndStatus() {
@@ -87,6 +97,9 @@ class CourseRepositoryTest {
         assertThat(courseFound.get().getLessons()).isNotEmpty();
     }
 
+    /**
+     * Method under test: {@link CourseService#findByIdAndStatus(Long, Status)}
+     */
     @Test
     @DisplayName("Should not find a course by id with Status INACTIVE")
     void testFindByIdAndStatusInactive() {
@@ -99,19 +112,20 @@ class CourseRepositoryTest {
         assertThat(courseFound).isNotPresent();
     }
 
+    /**
+     * Method under test: {@link CourseService#findByIdAndStatus(Long, Status)}
+     */
     @Test
-    void testFindByStatus() {
+    @DisplayName("Should find a course by name")
+    void testFindByName() {
         Course course = createValidCourse();
         entityManager.persist(course);
-        Page<Course> coursePage = courseRepository.findByStatus(PageRequest.of(0, 5), Status.ACTIVE);
 
-        assertThat(coursePage).isNotNull();
-        assertThat(coursePage.getContent()).isNotEmpty();
-        assertThat(coursePage.getContent().get(0).getLessons()).isNotEmpty();
-        coursePage.getContent().stream().forEach(c -> {
-            assertThat(c.getStatus()).isEqualTo(Status.ACTIVE);
-            assertThat(c.getLessons()).isNotEmpty();
-        });
+        List<Course> courseFound = courseRepository.findByName(course.getName());
+
+        assertThat(courseFound).isNotEmpty();
+        assertThat(courseFound.get(0).getStatus()).isEqualTo(Status.ACTIVE);
+        assertThat(courseFound.get(0).getLessons()).isNotEmpty();
     }
 
     private Course createValidCourse() {

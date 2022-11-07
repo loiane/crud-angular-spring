@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +36,7 @@ import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.mapper.CourseMapper;
 import com.loiane.enums.Status;
+import com.loiane.exception.BusinessException;
 import com.loiane.exception.RecordNotFoundException;
 import com.loiane.model.Course;
 import com.loiane.repository.CourseRepository;
@@ -63,7 +65,7 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#findAll(int page, int pageSize)}
+     * Method under test: {@link CourseService#findAll(int, int)}
      */
     @Test
     @DisplayName("Should return a list of courses with pagination")
@@ -144,6 +146,20 @@ class CourseServiceTest {
             assertThrows(ConstraintViolationException.class, () -> this.courseService.create(course));
         }
         then(courseRepository).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Method under test: {@link CourseService#create(CourseRequestDTO)}
+     */
+    @Test
+    @DisplayName("Should throw an exception when creating a duplicate course")
+    void testCreateSameName() {
+        CourseRequestDTO courseDTO = TestData.createValidCourseRequest();
+        when(this.courseRepository.findByName(any())).thenThrow(new BusinessException(""));
+
+        assertThrows(BusinessException.class, () -> this.courseService.create(courseDTO));
+        verify(this.courseRepository).findByName(any());
+        verify(this.courseRepository, times(0)).save(any());
     }
 
     /**

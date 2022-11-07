@@ -1,5 +1,6 @@
 package com.loiane.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -16,4 +17,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Page<Course> findByStatus(Pageable pageable, Status status);
 
     Optional<Course> findByIdAndStatus(Long id, Status status);
+
+    List<Course> findByName(String name);
 }
