@@ -23,10 +23,10 @@ CRUD Angular + Spring demonstrating Has-Many relationship, with tests.
 
 - ✅ Java model class with validation
 - ✅ JPA repository
-- [ ] JPA Pagination
+- [ ] JPA Pagination (_In Progress_)
 - ✅ Controller, Service and Repository layers
 - ✅ Has-Many relationship (Course-Lessons)
-- [ ] Swagger
+- [ ] Swagger (not compatible with Spring 6 yet)
 - ✅ Java 17 Records as DTO (Data Transfer Object)
 - ✅ Hibernate / Jakarta Validation
 - ✅ Unit tests for all layers (repository, service, controller)
@@ -36,6 +36,7 @@ CRUD Angular + Spring demonstrating Has-Many relationship, with tests.
 - [ ] Angular Material components
 - [ ] List of all courses
 - [ ] Form to update/create courses with lessons (has-many - FormArray)
+- [ ] Form asyn validation for duplicated courses and lessons
 - [ ] View only screen
 - [ ] TypedForms (Angular v14+)
 - [ ] Presentational x Smart Components
