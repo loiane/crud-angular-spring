@@ -1,7 +1,5 @@
 package com.loiane.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.loiane.dto.CourseDTO;
+import com.loiane.dto.CoursePageDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.service.CourseService;
 
@@ -35,7 +34,7 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<CourseDTO> findAll(@RequestParam(defaultValue = "0") int page,
+    public CoursePageDTO findAll(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int pageSize) {
         return courseService.findAll(page, pageSize);
     }

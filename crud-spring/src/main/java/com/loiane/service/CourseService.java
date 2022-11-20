@@ -3,11 +3,13 @@ package com.loiane.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import com.loiane.dto.CourseDTO;
+import com.loiane.dto.CoursePageDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.mapper.CourseMapper;
 import com.loiane.enums.Status;
@@ -32,11 +34,12 @@ public class CourseService {
         this.courseMapper = courseMapper;
     }
 
-    public List<CourseDTO> findAll(int page, int pageSize) {
-        return courseRepository.findByStatus(PageRequest.of(page, pageSize), Status.ACTIVE)
-                .stream()
+    public CoursePageDTO findAll(int page, int pageSize) {
+        Page<Course> coursePage = courseRepository.findByStatus(PageRequest.of(page, pageSize), Status.ACTIVE);
+        List<CourseDTO> list = coursePage.stream()
                 .map(courseMapper::toDTO)
                 .collect(Collectors.toList());
+        return new CoursePageDTO(list, coursePage.getTotalElements(), coursePage.getTotalPages());
     }
 
     public CourseDTO findById(@Positive @NotNull Long id) {

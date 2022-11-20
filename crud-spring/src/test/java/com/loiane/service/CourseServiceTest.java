@@ -33,6 +33,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.loiane.TestData;
 import com.loiane.ValidationAdvice;
 import com.loiane.dto.CourseDTO;
+import com.loiane.dto.CoursePageDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.mapper.CourseMapper;
 import com.loiane.enums.Status;
@@ -78,10 +79,10 @@ class CourseServiceTest {
             dtoList.add(courseMapper.toDTO(course));
         }
 
-        List<CourseDTO> actualFindAllResult = this.courseService.findAll(0, 5);
-        assertEquals(dtoList, actualFindAllResult);
-        assertFalse(actualFindAllResult.isEmpty());
-        assertEquals(1, actualFindAllResult.size());
+        CoursePageDTO coursePageDTO = this.courseService.findAll(0, 5);
+        assertEquals(dtoList, coursePageDTO.courses());
+        assertFalse(coursePageDTO.courses().isEmpty());
+        assertEquals(1, coursePageDTO.totalElements());
         verify(this.courseRepository).findByStatus(any(PageRequest.class), any(Status.class));
     }
 
@@ -154,10 +155,11 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should throw an exception when creating a duplicate course")
     void testCreateSameName() {
-        CourseRequestDTO courseDTO = TestData.createValidCourseRequest();
-        when(this.courseRepository.findByName(any())).thenThrow(new BusinessException(""));
+        CourseRequestDTO courseRequestDTO = TestData.createValidCourseRequest();
+        when(this.courseRepository.findByName(any()))
+                .thenThrow(new BusinessException("A course with name " + courseRequestDTO.name() + " already exists."));
 
-        assertThrows(BusinessException.class, () -> this.courseService.create(courseDTO));
+        assertThrows(BusinessException.class, () -> this.courseService.create(courseRequestDTO));
         verify(this.courseRepository).findByName(any());
         verify(this.courseRepository, times(0)).save(any());
     }

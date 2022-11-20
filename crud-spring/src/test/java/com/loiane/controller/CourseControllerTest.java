@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loiane.TestData;
 import com.loiane.ValidationAdvice;
 import com.loiane.dto.CourseDTO;
+import com.loiane.dto.CoursePageDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.exception.RecordNotFoundException;
 import com.loiane.model.Course;
@@ -72,16 +73,18 @@ class CourseControllerTest {
     void testFindAll() throws Exception {
         CourseDTO course = TestData.createValidCourseDTO();
         List<CourseDTO> courses = List.of(course);
-        when(this.courseService.findAll(anyInt(), anyInt())).thenReturn(courses);
+        CoursePageDTO pageDTO = new CoursePageDTO(courses, 1L, 1);
+        when(this.courseService.findAll(anyInt(), anyInt())).thenReturn(pageDTO);
         MockMvcBuilders.standaloneSetup(this.courseController)
                 .build()
                 .perform(MockMvcRequestBuilders.get(API))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(courses.size())))
-                .andExpect(jsonPath("$[0]._id", is(course.id()), Long.class))
-                .andExpect(jsonPath("$[0].name", is(course.name())))
-                .andExpect(jsonPath("$[0].category", is(course.category())));
+                .andExpect(jsonPath("courses", hasSize(courses.size())))
+                .andExpect(jsonPath("totalElements", is(1)))
+                .andExpect(jsonPath("courses[0]._id", is(course.id()), Long.class))
+                .andExpect(jsonPath("courses[0].name", is(course.name())))
+                .andExpect(jsonPath("courses[0].category", is(course.category())));
     }
 
     /**
