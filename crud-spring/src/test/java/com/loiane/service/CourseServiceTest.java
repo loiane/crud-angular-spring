@@ -79,7 +79,7 @@ class CourseServiceTest {
             dtoList.add(courseMapper.toDTO(course));
         }
 
-        CoursePageDTO coursePageDTO = this.courseService.findAll(0, 5);
+        CoursePageDTO coursePageDTO = this.courseService.findAll(0, 5, "");
         assertEquals(dtoList, coursePageDTO.courses());
         assertFalse(coursePageDTO.courses().isEmpty());
         assertEquals(1, coursePageDTO.totalElements());

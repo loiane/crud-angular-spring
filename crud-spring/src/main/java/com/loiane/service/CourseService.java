@@ -21,6 +21,7 @@ import com.loiane.repository.CourseRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Service
 @Validated
@@ -34,8 +35,14 @@ public class CourseService {
         this.courseMapper = courseMapper;
     }
 
-    public CoursePageDTO findAll(int page, int pageSize) {
-        Page<Course> coursePage = courseRepository.findByStatus(PageRequest.of(page, pageSize), Status.ACTIVE);
+    public CoursePageDTO findAll(@PositiveOrZero int page, @Positive int pageSize, final String name) {
+        Page<Course> coursePage;
+        if (name != null && isNameValid(name)) {
+            coursePage = courseRepository.findByNameAndStatus(PageRequest.of(page, pageSize), name.trim(),
+                    Status.ACTIVE);
+        } else {
+            coursePage = courseRepository.findByStatus(PageRequest.of(page, pageSize), Status.ACTIVE);
+        }
         List<CourseDTO> list = coursePage.stream()
                 .map(courseMapper::toDTO)
                 .collect(Collectors.toList());
@@ -72,5 +79,9 @@ public class CourseService {
     public void delete(@Positive @NotNull Long id) {
         courseRepository.delete(courseRepository.findByIdAndStatus(id, Status.ACTIVE)
                 .orElseThrow(() -> new RecordNotFoundException(id)));
+    }
+
+    public boolean isNameValid(String name) {
+        return name == null || (!name.trim().equals("") && name.length() >= 5);
     }
 }

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -74,7 +75,7 @@ class CourseControllerTest {
         CourseDTO course = TestData.createValidCourseDTO();
         List<CourseDTO> courses = List.of(course);
         CoursePageDTO pageDTO = new CoursePageDTO(courses, 1L, 1);
-        when(this.courseService.findAll(anyInt(), anyInt())).thenReturn(pageDTO);
+        when(this.courseService.findAll(anyInt(), anyInt(), anyString())).thenReturn(pageDTO);
         MockMvcBuilders.standaloneSetup(this.courseController)
                 .build()
                 .perform(MockMvcRequestBuilders.get(API))

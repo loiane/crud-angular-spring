@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CoursePageDTO;
 import com.loiane.dto.CourseRequestDTO;
+import com.loiane.exception.BusinessException;
 import com.loiane.service.CourseService;
 
 import jakarta.validation.Valid;
@@ -35,8 +36,12 @@ public class CourseController {
 
     @GetMapping
     public CoursePageDTO findAll(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int pageSize) {
-        return courseService.findAll(page, pageSize);
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false) String name) {
+        if (courseService.isNameValid(name)) {
+            return courseService.findAll(page, pageSize, name);
+        }
+        throw new IllegalArgumentException("Invalid name.");
     }
 
     @GetMapping("/{id}")
