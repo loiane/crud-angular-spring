@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CoursePageDTO;
 import com.loiane.dto.CourseRequestDTO;
-import com.loiane.exception.BusinessException;
 import com.loiane.service.CourseService;
 
 import jakarta.validation.Valid;
