@@ -23,12 +23,11 @@ public class TestData {
     }
 
     public static Course createValidCourse() {
-        Course course = Course.builder()
-                .id(1L)
-                .name("Spring")
-                .category(Category.BACK_END)
-                .status(Status.ACTIVE)
-                .build();
+        Course course = new Course();
+        course.setId(1L);
+        course.setName("Spring");
+        course.setCategory(Category.BACK_END);
+        course.setStatus(Status.ACTIVE);
 
         Lesson lesson = new Lesson();
         lesson.setName("Lesson 1");
@@ -55,15 +54,20 @@ public class TestData {
         final String empty = "";
 
         return List.of(
-                Course.builder().name(null).category(null).build(),
-                Course.builder().name(null).category(Category.BACK_END).build(),
-                Course.builder().name(empty).category(Category.BACK_END).build(),
-                Course.builder().name("Spr").category(Category.BACK_END).build(),
-                Course.builder().name(LOREN_IPSUM).category(Category.BACK_END).build(),
-                Course.builder().name(validName).category(null).build(),
-                Course.builder().name(validName).category(Category.BACK_END).build(),
-                Course.builder().name(validName).category(Category.BACK_END).build(),
-                Course.builder().name(validName).category(Category.BACK_END).build());
+                buildCourse(null, null),
+                buildCourse(null, Category.BACK_END),
+                buildCourse(empty, Category.BACK_END),
+                buildCourse("Spr", Category.BACK_END),
+                buildCourse(LOREN_IPSUM, Category.BACK_END),
+                buildCourse(validName, null),
+                buildCourse(validName, Category.BACK_END));
+    }
+
+    private static Course buildCourse(String name, Category category) {
+        Course course = new Course();
+        course.setName(name);
+        course.setCategory(category);
+        return course;
     }
 
     public static List<CourseRequestDTO> createInvalidCoursesDTO() {

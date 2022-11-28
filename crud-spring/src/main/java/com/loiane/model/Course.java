@@ -21,18 +21,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Singular;
-import lombok.ToString;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@Builder
 @Entity
 public class Course {
 
@@ -61,9 +50,51 @@ public class Course {
     // @NotEmpty
     @Valid
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    @Singular
-    @ToString.Exclude
     // @OneToMany(cascade = CascadeType.ALL)
     // @JoinColumn(name = "courseID", referencedColumnName = "id")
     private Set<Lesson> lessons = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Set<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(Set<Lesson> lessons) {
+        if (lessons == null) {
+            throw new IllegalArgumentException("Lessons cannot be null.");
+        }
+        this.lessons = lessons;
+    }
+
 }

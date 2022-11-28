@@ -22,8 +22,9 @@ public class CourseMapper {
 
     public Course toModel(CourseRequestDTO courseRequestDTO) {
 
-        Course course = Course.builder().name(courseRequestDTO.name())
-                .category(convertCategoryValue(courseRequestDTO.category())).build();
+        Course course = new Course();
+        course.setName(courseRequestDTO.name());
+        course.setCategory(Category.valueOf(courseRequestDTO.category()));
 
         Set<Lesson> lessons = courseRequestDTO.lessons().stream()
                 .map(lessonDTO -> {
@@ -37,6 +38,7 @@ public class CourseMapper {
                     return lesson;
                 }).collect(Collectors.toSet());
         course.setLessons(lessons);
+
         return course;
     }
 

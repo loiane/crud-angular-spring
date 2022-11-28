@@ -2,6 +2,7 @@ package com.loiane.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import com.loiane.TestData;
 import com.loiane.enums.Category;
@@ -129,15 +130,17 @@ class CourseRepositoryTest {
     }
 
     private Course createValidCourse() {
+        Course course = new Course();
+        course.setName("Spring");
+        course.setCategory(Category.BACK_END);
+        course.setStatus(Status.ACTIVE);
+
         Lesson lesson = new Lesson();
         lesson.setName("Lesson 1");
         lesson.setYoutubeUrl("abcdefgh123");
+        lesson.setCourse(course);
+        course.setLessons(Set.of(lesson));
 
-        return Course.builder()
-                .name("Spring")
-                .category(Category.BACK_END)
-                .status(Status.ACTIVE)
-                .lessons(List.of(lesson))
-                .build();
+        return course;
     }
 }
