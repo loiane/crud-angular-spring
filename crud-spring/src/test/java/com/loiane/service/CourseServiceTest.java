@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -66,7 +67,7 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#findAll(int, int)}
+     * Method under test: {@link CourseService#findAll(int, int, String)}
      */
     @Test
     @DisplayName("Should return a list of courses with pagination")
@@ -84,6 +85,28 @@ class CourseServiceTest {
         assertFalse(coursePageDTO.courses().isEmpty());
         assertEquals(1, coursePageDTO.totalElements());
         verify(this.courseRepository).findByStatus(any(PageRequest.class), any(Status.class));
+    }
+
+    /**
+     * Method under test: {@link CourseService#findAll(int, int, String)}
+     */
+    @Test
+    @DisplayName("Should return a list of courses with pagination and name filter")
+    void testFindAllPageableFilteredbyName() {
+        List<Course> courseList = List.of(TestData.createValidCourse());
+        Page<Course> coursePage = new PageImpl<>(courseList);
+        when(this.courseRepository.findByNameAndStatus(any(PageRequest.class), anyString(), any(Status.class)))
+                .thenReturn(coursePage);
+        List<CourseDTO> dtoList = new ArrayList<>(courseList.size());
+        for (Course course : courseList) {
+            dtoList.add(courseMapper.toDTO(course));
+        }
+
+        CoursePageDTO coursePageDTO = this.courseService.findAll(0, 5, "Spring");
+        assertEquals(dtoList, coursePageDTO.courses());
+        assertFalse(coursePageDTO.courses().isEmpty());
+        assertEquals(1, coursePageDTO.totalElements());
+        verify(this.courseRepository).findByNameAndStatus(any(PageRequest.class), anyString(), any(Status.class));
     }
 
     /**
@@ -157,7 +180,7 @@ class CourseServiceTest {
     void testCreateSameName() {
         CourseRequestDTO courseRequestDTO = TestData.createValidCourseRequest();
         when(this.courseRepository.findByName(any()))
-                .thenThrow(new BusinessException("A course with name " + courseRequestDTO.name() + " already exists."));
+                .thenReturn(List.of(TestData.createValidCourse()));
 
         assertThrows(BusinessException.class, () -> this.courseService.create(courseRequestDTO));
         verify(this.courseRepository).findByName(any());
