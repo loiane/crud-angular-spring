@@ -5,11 +5,11 @@ CRUD Angular + Spring demonstrating Has-Many relationship, with tests.
 ## 💻 Tecnologies
 
 - Java 17
-- Spring Boot 3
+- Spring Boot 3 (Spring 6)
 - JPA + Hibernate
 - JUnit 5 + Mockito (back-end tests)
 - Maven
-- Angular v14
+- Angular v15
 - Angular Material
 - Karma + Jasmine (front-end tests)
 
@@ -23,7 +23,7 @@ CRUD Angular + Spring demonstrating Has-Many relationship, with tests.
 
 - ✅ Java model class with validation
 - ✅ JPA repository
-- ✅ JPA Pagination (_In Progress_)
+- ✅ JPA Pagination
 - ✅ Controller, Service and Repository layers
 - ✅ Has-Many relationship (Course-Lessons)
 - [ ] Swagger (not compatible with Spring 6 yet)
