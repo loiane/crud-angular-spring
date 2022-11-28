@@ -24,7 +24,7 @@ public class CourseMapper {
 
         Course course = new Course();
         course.setName(courseRequestDTO.name());
-        course.setCategory(Category.valueOf(courseRequestDTO.category()));
+        course.setCategory(convertCategoryValue(courseRequestDTO.category()));
 
         Set<Lesson> lessons = courseRequestDTO.lessons().stream()
                 .map(lessonDTO -> {
