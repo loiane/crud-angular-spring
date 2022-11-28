@@ -129,11 +129,15 @@ class CourseRepositoryTest {
     }
 
     private Course createValidCourse() {
+        Lesson lesson = new Lesson();
+        lesson.setName("Lesson 1");
+        lesson.setYoutubeUrl("abcdefgh123");
+
         return Course.builder()
                 .name("Spring")
                 .category(Category.BACK_END)
                 .status(Status.ACTIVE)
-                .lessons(List.of(Lesson.builder().name("Intro").youtubeUrl("abcdefgh123").build()))
+                .lessons(List.of(lesson))
                 .build();
     }
 }

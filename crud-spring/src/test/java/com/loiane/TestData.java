@@ -29,8 +29,12 @@ public class TestData {
                 .category(Category.BACK_END)
                 .status(Status.ACTIVE)
                 .build();
-        course.setLessons(
-                Set.of(Lesson.builder().id(1).name("Intro").youtubeUrl("abcdefgh123").course(course).build()));
+
+        Lesson lesson = new Lesson();
+        lesson.setName("Lesson 1");
+        lesson.setYoutubeUrl("abcdefgh123");
+        lesson.setCourse(course);
+        course.setLessons(Set.of(lesson));
         return course;
     }
 
