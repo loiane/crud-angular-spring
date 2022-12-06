@@ -3,6 +3,7 @@ package com.loiane.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.validator.constraints.Length;
 
 import com.loiane.enums.Category;
@@ -22,6 +23,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+@SQLDelete(sql = "UPDATE Course SET status = 'Inactive' WHERE id=?")
 @Entity
 public class Course {
 

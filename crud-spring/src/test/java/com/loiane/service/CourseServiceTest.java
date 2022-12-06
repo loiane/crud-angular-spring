@@ -2,6 +2,7 @@ package com.loiane.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -82,8 +83,9 @@ class CourseServiceTest {
 
         CoursePageDTO coursePageDTO = this.courseService.findAll(0, 5, "");
         assertEquals(dtoList, coursePageDTO.courses());
-        assertFalse(coursePageDTO.courses().isEmpty());
+        assertThat(coursePageDTO.courses()).isNotEmpty();
         assertEquals(1, coursePageDTO.totalElements());
+        assertThat(coursePageDTO.courses().get(0).lessons()).isNotEmpty();
         verify(this.courseRepository).findByStatus(any(PageRequest.class), any(Status.class));
     }
 
@@ -106,6 +108,7 @@ class CourseServiceTest {
         assertEquals(dtoList, coursePageDTO.courses());
         assertFalse(coursePageDTO.courses().isEmpty());
         assertEquals(1, coursePageDTO.totalElements());
+        assertThat(coursePageDTO.courses()).isNotEmpty();
         verify(this.courseRepository).findByNameAndStatus(any(PageRequest.class), anyString(), any(Status.class));
     }
 
@@ -128,7 +131,7 @@ class CourseServiceTest {
      * Method under test: {@link CourseService#findById(Long)}
      */
     @Test
-    @DisplayName("Should thow NotFound exception when course not found")
+    @DisplayName("Should throw NotFound exception when course not found")
     void testFindByIdNotFound() {
         when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(Optional.empty());
         assertThrows(RecordNotFoundException.class, () -> this.courseService.findById(123L));
@@ -255,7 +258,7 @@ class CourseServiceTest {
      * Method under test: {@link CourseService#delete(Long)}
      */
     @Test
-    @DisplayName("Should delete a course")
+    @DisplayName("Should soft delete a course")
     void testDelete() {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
