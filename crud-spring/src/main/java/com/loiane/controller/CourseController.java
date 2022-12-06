@@ -22,6 +22,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+/**
+ * Represents the REST API for the Course resource.
+ */
 @Validated
 @RestController
 @RequestMapping("api/courses")

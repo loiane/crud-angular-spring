@@ -14,6 +14,9 @@ import com.loiane.exception.RecordNotFoundException;
 
 import jakarta.validation.ConstraintViolationException;
 
+/**
+ * Controller advice that handles exceptions thrown by the controllers.
+ */
 @RestControllerAdvice
 public class ApplicationControllerAdvice {
 
@@ -22,7 +25,7 @@ public class ApplicationControllerAdvice {
     public String handleNotFoundException(RecordNotFoundException e) {
         return e.getMessage();
     }
-    
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public FieldError[] validationError(MethodArgumentNotValidException ex) {
