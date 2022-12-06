@@ -2,6 +2,8 @@
 
 CRUD Angular + Spring demonstrating Has-Many relationship, with tests.
 
+This API is to showcase, specially for beginners, what a basic CRUD API that's close to be Production ready looks like.
+
 ## 💻 Tecnologies
 
 - Java 17
