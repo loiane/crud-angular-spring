@@ -19,9 +19,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          working-directory: crud-angular
           node-version: 18
           cache: 'npm'
+          cache-dependency-path: crud-angular/package-lock.json
 
       - name: Install dependencies
         run: npm install
