@@ -14,7 +14,7 @@ jobs:
       - name: Checkout the source code
         uses: actions/checkout@v3
         with:
-          path: crud-angular
+          working-directory: crud-angular
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
