@@ -19,16 +19,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          path: crud-angular
           node-version: 18
           cache: 'npm'
 
       - name: Install dependencies
         run: npm install
+        working-directory: crud-angular
 
 
       - name: Run tests
         run: npm run test:ci
+        working-directory: crud-angular
 
       - name: Build
         run: npm run build
+        working-directory: crud-angular
