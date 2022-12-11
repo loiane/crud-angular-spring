@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test --browsers=ChromeHeadless",
     "test:ci": "ng test --no-watch --code-coverage --browsers=ChromeHeadless",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "format": "npx prettier 'src/**/*.{js,ts,html,css,scss}' --write"
   },
   "private": true,
   "dependencies": {
@@ -39,12 +40,15 @@
     "@typescript-eslint/eslint-plugin": "5.44.0",
     "@typescript-eslint/parser": "5.44.0",
     "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
+    "prettier": "^2.8.1",
     "typescript": "~4.8.2"
   }
 }
