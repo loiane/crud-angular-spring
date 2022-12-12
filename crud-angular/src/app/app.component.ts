@@ -2,9 +2,11 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `
+    <mat-toolbar color="primary">
+      <h1 [routerLink]="['/']" style="cursor: pointer;">CRUD Angular</h1>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  `
 })
-export class AppComponent {
-  title = 'crud-angular';
-}
+export class AppComponent { }
