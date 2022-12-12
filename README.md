@@ -43,14 +43,14 @@ This API is to showcase, specially for beginners, what a basic CRUD API that's c
 
 ## Some functionalies available in the Front-end
 
-- [ ] Angular Material components
-- [ ] List of all courses
+- ✅ Angular Material components
+- ✅ List of all courses
 - [ ] Form to update/create courses with lessons (has-many - FormArray)
 - [ ] Form asyn validation for duplicated courses and lessons
 - [ ] View only screen
 - [ ] TypedForms (Angular v14+)
-- [ ] Presentational x Smart Components
-- [ ] Unit and Integration tests for components, services, pipes, guards
+- ✅ Presentational x Smart Components
+- [In Progress] Unit and Integration tests for components, services, pipes, guards
 
 ## ❗️Excuting the code locally
 
