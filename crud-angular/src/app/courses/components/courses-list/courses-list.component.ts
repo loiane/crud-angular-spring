@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { Course } from '../../model/course';
 
 @Component({
   selector: 'app-courses-list',
@@ -6,5 +8,27 @@ import { Component } from '@angular/core';
   styleUrls: ['./courses-list.component.scss']
 })
 export class CoursesListComponent {
+  @Input() courses: Course[] = [];
+  @Output() details: EventEmitter<Course> = new EventEmitter(false);
+  @Output() edit: EventEmitter<Course> = new EventEmitter(false);
+  @Output() remove: EventEmitter<Course> = new EventEmitter(false);
+  @Output() add: EventEmitter<boolean> = new EventEmitter(false);
 
+  readonly displayedColumns = ['name', 'category', 'actions'];
+
+  onDetails(record: Course) {
+    this.details.emit(record);
+  }
+
+  onAdd() {
+    this.add.emit(true);
+  }
+
+  onEdit(record: Course) {
+    this.edit.emit(record);
+  }
+
+  onRemove(record: Course) {
+    this.remove.emit(record);
+  }
 }
