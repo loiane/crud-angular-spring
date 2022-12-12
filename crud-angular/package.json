@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --browsers=ChromeHeadless",
-    "test:ci": "ng test --no-watch --code-coverage --browsers=ChromeHeadless",
+    "test:ci": "ng test --no-watch --no-progress --code-coverage --browsers=ChromeHeadless",
     "lint": "ng lint",
     "format": "npx prettier 'src/**/*.{js,ts,html,css,scss}' --write"
   },
