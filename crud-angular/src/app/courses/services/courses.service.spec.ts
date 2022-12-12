@@ -28,8 +28,8 @@ describe('CoursesService', () => {
 
   it('should list all courses', () => {
     service.list().subscribe(courses => {
-      expect(courses).toBeTruthy('No courses returned');
-      expect(courses.length).toBe(coursesMock.length, 'incorrect number of courses');
+      expect(courses).toBeTruthy();
+      expect(courses.length).toBe(coursesMock.length);
     });
 
     const req = httpTestingController.expectOne(API);
@@ -39,7 +39,7 @@ describe('CoursesService', () => {
 
   it('should list course by id', () => {
     service.loadById('1').subscribe(course => {
-      expect(course).toBeTruthy('No course returned');
+      expect(course).toBeTruthy();
       expect(course._id).toBe('1');
     });
 
@@ -53,11 +53,11 @@ describe('CoursesService', () => {
     service['cache'] = coursesMock;
 
     service.loadById('1').subscribe(course => {
-      expect(course).toBeTruthy('No course returned');
+      expect(course).toBeTruthy();
       expect(course._id).toBe('1');
     });
 
-    const req = httpTestingController.expectNone(`${API}/1`);
+    httpTestingController.expectNone(`${API}/1`);
   });
 
   it('should list course by id by checking cache', () => {
@@ -65,7 +65,7 @@ describe('CoursesService', () => {
     service['cache'] = [coursesMock[0]];
 
     service.loadById('2').subscribe(course => {
-      expect(course).toBeTruthy('No course returned');
+      expect(course).toBeTruthy();
       expect(course._id).toBe('2');
     });
 
