@@ -1,5 +1,8 @@
 # REST API with Spring Boot and Angular
 
+![Java Build](https://github.com/loiane/crud-angular-spring/actions/workflows/maven.yml/badge.svg?branch=main)
+![Angular Build](https://github.com/loiane/crud-angular-spring/actions/workflows/angular.yml/badge.svg?branch=main)
+
 CRUD Angular + Spring demonstrating Has-Many relationship, with tests.
 
 This API is to showcase, specially for beginners, what a basic CRUD API that's close to be Production ready looks like.
