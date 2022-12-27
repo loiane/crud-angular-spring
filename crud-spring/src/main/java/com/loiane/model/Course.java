@@ -31,7 +31,6 @@ public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // @JsonProperty("_id")
     private Long id;
 
     @NotBlank
