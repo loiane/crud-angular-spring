@@ -19,6 +19,8 @@ import com.loiane.model.Course;
 import com.loiane.repository.CourseRepository;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -35,18 +37,16 @@ public class CourseService {
         this.courseMapper = courseMapper;
     }
 
-    public CoursePageDTO findAll(@PositiveOrZero int page, @Positive int pageSize, final String name) {
-        Page<Course> coursePage;
-        if (name != null && isNameValid(name)) {
-            coursePage = courseRepository.findByNameAndStatus(PageRequest.of(page, pageSize), name.trim(),
-                    Status.ACTIVE);
-        } else {
-            coursePage = courseRepository.findByStatus(PageRequest.of(page, pageSize), Status.ACTIVE);
-        }
-        List<CourseDTO> list = coursePage.stream()
+    public CoursePageDTO findAll(@PositiveOrZero int page, @Positive @Max(1000) int pageSize) {
+        Page<Course> coursePage = courseRepository.findAll(PageRequest.of(page, pageSize));
+        List<CourseDTO> list = coursePage.getContent().stream()
                 .map(courseMapper::toDTO)
                 .collect(Collectors.toList());
         return new CoursePageDTO(list, coursePage.getTotalElements(), coursePage.getTotalPages());
+    }
+
+    public List<CourseDTO> findByName(@NotNull @NotBlank String name) {
+        return courseRepository.findByName(name).stream().map(courseMapper::toDTO).collect(Collectors.toList());
     }
 
     public CourseDTO findById(@Positive @NotNull Long id) {
@@ -55,13 +55,11 @@ public class CourseService {
     }
 
     public CourseDTO create(@Valid CourseRequestDTO courseRequestDTO) {
-
         courseRepository.findByName(courseRequestDTO.name()).stream()
                 .filter(c -> c.getStatus().equals(Status.ACTIVE))
                 .findAny().ifPresent(c -> {
                     throw new BusinessException("A course with name " + courseRequestDTO.name() + " already exists.");
                 });
-
         Course course = courseMapper.toModel(courseRequestDTO);
         course.setStatus(Status.ACTIVE);
         return courseMapper.toDTO(courseRepository.save(course));
@@ -79,9 +77,5 @@ public class CourseService {
     public void delete(@Positive @NotNull Long id) {
         courseRepository.delete(courseRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id)));
-    }
-
-    public boolean isNameValid(String name) {
-        return name == null || (!name.trim().equals("") && name.length() >= 5);
     }
 }

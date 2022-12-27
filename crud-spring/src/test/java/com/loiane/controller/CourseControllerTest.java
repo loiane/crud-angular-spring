@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -27,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -75,8 +75,7 @@ class CourseControllerTest {
         CourseDTO course = TestData.createValidCourseDTO();
         List<CourseDTO> courses = List.of(course);
         CoursePageDTO pageDTO = new CoursePageDTO(courses, 1L, 1);
-        when(this.courseService.isNameValid(null)).thenReturn(true);
-        when(this.courseService.findAll(anyInt(), anyInt(), eq(null))).thenReturn(pageDTO);
+        when(this.courseService.findAll(anyInt(), anyInt())).thenReturn(pageDTO);
         MockMvcBuilders.standaloneSetup(this.courseController)
                 .build()
                 .perform(MockMvcRequestBuilders.get(API))
@@ -218,10 +217,9 @@ class CourseControllerTest {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(this.courseController).build();
         assertThrows(AssertionError.class, () -> {
-            ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.courseController)
-                    .build()
-                    .perform(requestBuilder);
+            ResultActions actualPerformResult = mockMvc.perform(requestBuilder);
             actualPerformResult.andExpect(status().isNotFound());
         });
     }

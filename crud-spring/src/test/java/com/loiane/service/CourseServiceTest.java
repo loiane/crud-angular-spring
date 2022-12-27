@@ -1,12 +1,10 @@
 package com.loiane.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -38,7 +36,6 @@ import com.loiane.dto.CourseDTO;
 import com.loiane.dto.CoursePageDTO;
 import com.loiane.dto.CourseRequestDTO;
 import com.loiane.dto.mapper.CourseMapper;
-import com.loiane.enums.Status;
 import com.loiane.exception.BusinessException;
 import com.loiane.exception.RecordNotFoundException;
 import com.loiane.model.Course;
@@ -75,41 +72,18 @@ class CourseServiceTest {
     void testFindAllPageable() {
         List<Course> courseList = List.of(TestData.createValidCourse());
         Page<Course> coursePage = new PageImpl<>(courseList);
-        when(this.courseRepository.findByStatus(any(PageRequest.class), any(Status.class))).thenReturn(coursePage);
+        when(this.courseRepository.findAll(any(PageRequest.class))).thenReturn(coursePage);
         List<CourseDTO> dtoList = new ArrayList<>(courseList.size());
         for (Course course : courseList) {
             dtoList.add(courseMapper.toDTO(course));
         }
 
-        CoursePageDTO coursePageDTO = this.courseService.findAll(0, 5, "");
+        CoursePageDTO coursePageDTO = this.courseService.findAll(0, 5);
         assertEquals(dtoList, coursePageDTO.courses());
         assertThat(coursePageDTO.courses()).isNotEmpty();
         assertEquals(1, coursePageDTO.totalElements());
         assertThat(coursePageDTO.courses().get(0).lessons()).isNotEmpty();
-        verify(this.courseRepository).findByStatus(any(PageRequest.class), any(Status.class));
-    }
-
-    /**
-     * Method under test: {@link CourseService#findAll(int, int, String)}
-     */
-    @Test
-    @DisplayName("Should return a list of courses with pagination and name filter")
-    void testFindAllPageableFilteredByName() {
-        List<Course> courseList = List.of(TestData.createValidCourse());
-        Page<Course> coursePage = new PageImpl<>(courseList);
-        when(this.courseRepository.findByNameAndStatus(any(PageRequest.class), anyString(), any(Status.class)))
-                .thenReturn(coursePage);
-        List<CourseDTO> dtoList = new ArrayList<>(courseList.size());
-        for (Course course : courseList) {
-            dtoList.add(courseMapper.toDTO(course));
-        }
-
-        CoursePageDTO coursePageDTO = this.courseService.findAll(0, 5, "Spring");
-        assertEquals(dtoList, coursePageDTO.courses());
-        assertFalse(coursePageDTO.courses().isEmpty());
-        assertEquals(1, coursePageDTO.totalElements());
-        assertThat(coursePageDTO.courses()).isNotEmpty();
-        verify(this.courseRepository).findByNameAndStatus(any(PageRequest.class), anyString(), any(Status.class));
+        verify(this.courseRepository).findAll(any(PageRequest.class));
     }
 
     /**

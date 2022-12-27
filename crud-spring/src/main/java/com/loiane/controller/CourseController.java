@@ -1,5 +1,7 @@
 package com.loiane.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +21,7 @@ import com.loiane.dto.CourseRequestDTO;
 import com.loiane.service.CourseService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -38,12 +41,13 @@ public class CourseController {
 
     @GetMapping
     public CoursePageDTO findAll(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int pageSize,
-            @RequestParam(required = false) String name) {
-        if (courseService.isNameValid(name)) {
-            return courseService.findAll(page, pageSize, name);
-        }
-        throw new IllegalArgumentException("Invalid name.");
+            @RequestParam(defaultValue = "10") int pageSize) {
+        return courseService.findAll(page, pageSize);
+    }
+
+    @GetMapping("/searchByName")
+    public List<CourseDTO> findByName(@RequestParam @NotNull @NotBlank String name) {
+        return courseService.findByName(name);
     }
 
     @GetMapping("/{id}")

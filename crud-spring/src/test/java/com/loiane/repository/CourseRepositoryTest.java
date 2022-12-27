@@ -1,16 +1,9 @@
 package com.loiane.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-
-import com.loiane.TestData;
-import com.loiane.enums.Category;
-import com.loiane.enums.Status;
-import com.loiane.model.Course;
-import com.loiane.model.Lesson;
-
-import jakarta.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.loiane.enums.Category;
+import com.loiane.enums.Status;
+import com.loiane.model.Course;
+import com.loiane.model.Lesson;
+import com.loiane.service.CourseService;
 
 /**
  * This is a sample class to test the CourseRepository.
@@ -68,15 +64,6 @@ class CourseRepositoryTest {
         assertThat(courseSaved.getId()).isPositive();
         assertThat(courseSaved.getStatus()).isEqualTo(Status.ACTIVE);
         assertThat(actual).isEqualTo(courseSaved);
-    }
-
-    @Test
-    @DisplayName("Should throw an exception when creating an invalid course")
-    void testCreateInvalid() {
-        final List<Course> courses = TestData.createInvalidCourses();
-        for (Course course : courses) {
-            assertThrows(ConstraintViolationException.class, () -> courseRepository.save(course));
-        }
     }
 
     /**
