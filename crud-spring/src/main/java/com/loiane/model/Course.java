@@ -47,7 +47,7 @@ public class Course {
     @NotNull
     @Column(length = 8, nullable = false)
     @Convert(converter = StatusConverter.class)
-    private Status status;
+    private Status status = Status.ACTIVE;
 
     // @NotNull
     // @NotEmpty
