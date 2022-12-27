@@ -80,37 +80,6 @@ class CourseRepositoryTest {
     }
 
     /**
-     * Method under test: {@link CourseService#findById(Long)}
-     */
-    @Test
-    @DisplayName("Should find a course by id and Status ACTIVE")
-    void testFindByIdAndStatus() {
-        Course course = createValidCourse();
-        entityManager.persist(course);
-
-        Optional<Course> courseFound = courseRepository.findById(course.getId());
-
-        assertThat(courseFound).isPresent();
-        assertThat(courseFound.get().getStatus()).isEqualTo(Status.ACTIVE);
-        assertThat(courseFound.get().getLessons()).isNotEmpty();
-    }
-
-    /**
-     * Method under test: {@link CourseService#findByIdAndStatus(Long, Status)}
-     */
-    @Test
-    @DisplayName("Should not find a course by id with Status INACTIVE")
-    void testFindByIdAndStatusInactive() {
-        Course course = createValidCourse();
-        course.setStatus(Status.INACTIVE);
-        entityManager.persist(course);
-
-        Optional<Course> courseFound = courseRepository.findById(course.getId());
-
-        assertThat(courseFound).isNotPresent();
-    }
-
-    /**
      * Method under test: {@link CourseService#findByIdAndStatus(Long, Status)}
      */
     @Test
@@ -130,7 +99,6 @@ class CourseRepositoryTest {
         Course course = new Course();
         course.setName("Spring");
         course.setCategory(Category.BACK_END);
-        course.setStatus(Status.ACTIVE);
 
         Lesson lesson = new Lesson();
         lesson.setName("Lesson 1");
