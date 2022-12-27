@@ -94,7 +94,7 @@ class CourseServiceTest {
      */
     @Test
     @DisplayName("Should return a list of courses with pagination and name filter")
-    void testFindAllPageableFilteredbyName() {
+    void testFindAllPageableFilteredByName() {
         List<Course> courseList = List.of(TestData.createValidCourse());
         Page<Course> coursePage = new PageImpl<>(courseList);
         when(this.courseRepository.findByNameAndStatus(any(PageRequest.class), anyString(), any(Status.class)))
@@ -121,10 +121,10 @@ class CourseServiceTest {
     void testFindById() {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
-        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(ofResult);
+        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
         CourseDTO actualFindByIdResult = this.courseService.findById(1L);
         assertEquals(courseMapper.toDTO(ofResult.get()), actualFindByIdResult);
-        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
+        verify(this.courseRepository).findById(anyLong());
     }
 
     /**
@@ -133,9 +133,9 @@ class CourseServiceTest {
     @Test
     @DisplayName("Should throw NotFound exception when course not found")
     void testFindByIdNotFound() {
-        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(Optional.empty());
+        when(this.courseRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(RecordNotFoundException.class, () -> this.courseService.findById(123L));
-        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
+        verify(this.courseRepository).findById(anyLong());
     }
 
     /**
@@ -201,12 +201,12 @@ class CourseServiceTest {
 
         Course course1 = TestData.createValidCourse();
         when(this.courseRepository.save(any())).thenReturn(course1);
-        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(ofResult);
+        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
 
         CourseRequestDTO course2 = TestData.createValidCourseRequest();
         assertEquals(courseMapper.toDTO(course1), this.courseService.update(1L, course2));
         verify(this.courseRepository).save(any());
-        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
+        verify(this.courseRepository).findById(anyLong());
     }
 
     /**
@@ -218,12 +218,12 @@ class CourseServiceTest {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
         when(this.courseRepository.save(any())).thenThrow(new RecordNotFoundException(123L));
-        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(ofResult);
+        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
 
         CourseRequestDTO course1 = TestData.createValidCourseRequest();
         assertThrows(RecordNotFoundException.class, () -> this.courseService.update(123L, course1));
         verify(this.courseRepository).save(any());
-        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
+        verify(this.courseRepository).findById(anyLong());
     }
 
     /**
@@ -263,9 +263,9 @@ class CourseServiceTest {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
         doNothing().when(this.courseRepository).delete(any());
-        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(ofResult);
+        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
         this.courseService.delete(1L);
-        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
+        verify(this.courseRepository).findById(anyLong());
         verify(this.courseRepository).delete(any());
     }
 
@@ -278,9 +278,9 @@ class CourseServiceTest {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
         doThrow(new RecordNotFoundException(1L)).when(this.courseRepository).delete(any());
-        when(this.courseRepository.findByIdAndStatus(anyLong(), any(Status.class))).thenReturn(ofResult);
+        when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
         assertThrows(RecordNotFoundException.class, () -> this.courseService.delete(1L));
-        verify(this.courseRepository).findByIdAndStatus(anyLong(), any(Status.class));
+        verify(this.courseRepository).findById(anyLong());
         verify(this.courseRepository).delete((Course) any());
     }
 

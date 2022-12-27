@@ -50,7 +50,7 @@ public class CourseService {
     }
 
     public CourseDTO findById(@Positive @NotNull Long id) {
-        return courseRepository.findByIdAndStatus(id, Status.ACTIVE).map(courseMapper::toDTO)
+        return courseRepository.findById(id).map(courseMapper::toDTO)
                 .orElseThrow(() -> new RecordNotFoundException(id));
     }
 
@@ -68,7 +68,7 @@ public class CourseService {
     }
 
     public CourseDTO update(@Positive @NotNull Long id, @Valid CourseRequestDTO courseRequestDTO) {
-        return courseRepository.findByIdAndStatus(id, Status.ACTIVE).map(actual -> {
+        return courseRepository.findById(id).map(actual -> {
             actual.setName(courseRequestDTO.name());
             actual.setCategory(courseMapper.convertCategoryValue(courseRequestDTO.category()));
             return courseMapper.toDTO(courseRepository.save(actual));
@@ -77,7 +77,7 @@ public class CourseService {
     }
 
     public void delete(@Positive @NotNull Long id) {
-        courseRepository.delete(courseRepository.findByIdAndStatus(id, Status.ACTIVE)
+        courseRepository.delete(courseRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoundException(id)));
     }
 
