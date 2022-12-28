@@ -28,4 +28,22 @@ describe('ConfirmationDialogComponent', () => {
     const okBtn = fixture.nativeElement.querySelector('button');
     expect(okBtn.textContent).toContain('Yes');
   });
+
+  it('should close the dialog when clicking on the Yes button', () => {
+    const okBtn = fixture.nativeElement.querySelector('button');
+    okBtn.click();
+    fixture.detectChanges();
+
+    const dialog = fixture.debugElement.injector.get(MatDialogRef);
+    expect(dialog.close).toHaveBeenCalledWith(true);
+  });
+
+  it('should close the dialog when clicking on the No button', () => {
+    const noBtn = fixture.nativeElement.querySelectorAll('button')[1];
+    noBtn.click();
+    fixture.detectChanges();
+
+    const dialog = fixture.debugElement.injector.get(MatDialogRef);
+    expect(dialog.close).toHaveBeenCalledWith(false);
+  });
 });
