@@ -13,5 +13,8 @@
   "files.autoSave": "onFocusChange",
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
-  "html.autoClosingTags": true
+  "html.autoClosingTags": true,
+  "cSpell.words": [
+    "maxlength"
+  ]
 }
