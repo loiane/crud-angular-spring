@@ -1,8 +1,13 @@
 <mat-card appearance="outlined">
-  <mat-toolbar color="primary">Cursos Disponíveis</mat-toolbar>
+  <mat-toolbar color="primary">Available Courses</mat-toolbar>
 
   <div class="mat-elevation-z8">
-    <app-courses-list></app-courses-list>
+    <app-courses-list
+      *ngIf="courses$ | async as courses; else loading"
+      [courses]="courses"
+      (add)="onAdd()"
+      (edit)="onEdit($event)"
+      (remove)="onRemove($event)"></app-courses-list>
 
     <ng-template #loading>
       <div class="loading-spinner">

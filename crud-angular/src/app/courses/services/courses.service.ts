@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { first, of, tap } from 'rxjs';
+import { first, map, of, tap } from 'rxjs';
 
 import { Course } from '../model/course';
+import { CoursePage } from '../model/course-page';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,9 @@ export class CoursesService {
   constructor(private http: HttpClient) { }
 
   list() {
-    return this.http.get<Course[]>(this.API).pipe(
+    return this.http.get<CoursePage>(this.API).pipe(
       first(),
+      map(data => data.courses),
       tap(data => (this.cache = data))
     );
   }
