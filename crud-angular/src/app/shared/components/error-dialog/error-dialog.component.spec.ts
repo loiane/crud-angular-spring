@@ -9,8 +9,7 @@ describe('ErrorDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatDialogModule],
-      declarations: [ErrorDialogComponent],
+      imports: [MatDialogModule, ErrorDialogComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: 'Error' },
         { provide: MatDialogRef, useValue: {} }
@@ -27,7 +26,9 @@ describe('ErrorDialogComponent', () => {
   });
 
   it('should launch an error dialog with a message and a Close button', () => {
-    const errorMessageDom = fixture.nativeElement.querySelector('.mat-dialog-content');
+    const errorMessageDom = fixture.nativeElement.querySelector(
+      '.mat-mdc-dialog-content'
+    );
     expect(errorMessageDom.textContent).toContain('Error');
 
     const okBtn = fixture.nativeElement.querySelector('button');

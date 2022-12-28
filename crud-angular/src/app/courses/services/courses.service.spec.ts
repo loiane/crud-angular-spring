@@ -6,7 +6,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 
 import { CoursesService } from './courses.service';
-import { coursesMock } from './couses.mock';
+import { coursesMock, coursesPageMock } from './courses.mock';
 
 describe('CoursesService', () => {
   let service: CoursesService;
@@ -34,7 +34,7 @@ describe('CoursesService', () => {
 
     const req = httpTestingController.expectOne(API);
     expect(req.request.method).toEqual('GET');
-    req.flush(coursesMock);
+    req.flush(coursesPageMock);
   });
 
   it('should list course by id', () => {
@@ -75,41 +75,41 @@ describe('CoursesService', () => {
   });
 
   it('should save a new course', () => {
-    const curso = { _id: undefined, name: 'Testes no Angular', category: 'front-end' };
+    const course = { _id: undefined, name: 'Testes no Angular', category: 'front-end' };
 
-    service.save(curso).subscribe(course => {
+    service.save(course).subscribe(course => {
       expect(course).toBeTruthy();
       expect(course._id).toBeTruthy();
-      expect(course.name).toEqual(curso.name);
-      expect(course.category).toEqual(curso.category);
+      expect(course.name).toEqual(course.name);
+      expect(course.category).toEqual(course.category);
     });
 
     const req = httpTestingController.expectOne(API);
-    expect(req.request.body['name']).toEqual(curso.name);
+    expect(req.request.body['name']).toEqual(course.name);
     expect(req.request.method).toEqual('POST');
-    req.flush({ ...curso, _id: 123 });
+    req.flush({ ...course, _id: 123 });
   });
 
   it('should update an existing course', () => {
-    const curso = { _id: '1', name: 'Testes no Angular', category: 'front-end' };
+    const course = { _id: '1', name: 'Testes no Angular', category: 'front-end' };
 
-    service.save(curso).subscribe(course => {
+    service.save(course).subscribe(course => {
       expect(course).toBeTruthy();
-      expect(course._id).toEqual(curso._id);
-      expect(course.name).toEqual(curso.name);
-      expect(course.category).toEqual(curso.category);
+      expect(course._id).toEqual(course._id);
+      expect(course.name).toEqual(course.name);
+      expect(course.category).toEqual(course.category);
     });
 
     const req = httpTestingController.expectOne(`${API}/1`);
-    expect(req.request.body['name']).toEqual(curso.name);
+    expect(req.request.body['name']).toEqual(course.name);
     expect(req.request.method).toEqual('PUT');
-    req.flush({ ...curso });
+    req.flush({ ...course });
   });
 
   it('should give an error if save course fails', () => {
-    const curso = { _id: '111', name: 'Testes no Angular', category: 'front-end' };
+    const course = { _id: '111', name: 'Testes no Angular', category: 'front-end' };
 
-    service.save(curso).subscribe(
+    service.save(course).subscribe(
       () => {
         fail('the save course operation should have failed');
       },
