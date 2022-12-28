@@ -8,7 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule],
   template: `
-    <h1 mat-dialog-title style="color: red;">Erro!</h1>
+    <h1 mat-dialog-title style="color: red;">Error!</h1>
     <div mat-dialog-content>{{ data }}</div>
     <div mat-dialog-actions align="center">
       <button mat-stroked-button mat-dialog-close>Close</button>
