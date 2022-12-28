@@ -11,7 +11,7 @@
     <mat-cell *matCellDef="let course">
       {{ course.category }}
       <mat-icon aria-hidden="false" aria-label="Course Category">{{
-        course.category
+        course.category | category
       }}</mat-icon>
     </mat-cell>
   </ng-container>

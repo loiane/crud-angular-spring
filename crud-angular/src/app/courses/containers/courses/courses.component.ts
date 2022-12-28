@@ -3,8 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, Observable, of } from 'rxjs';
+
+import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 import { Course } from '../../model/course';
 import { CoursesService } from '../../services/courses.service';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-courses',
@@ -34,9 +37,9 @@ export class CoursesComponent {
   }
 
   private onError(errorMsg: string) {
-    // this.dialog.open(ErrorDialogComponent, {
-    //   data: errorMsg
-    // });
+    this.dialog.open(ErrorDialogComponent, {
+      data: errorMsg
+    });
   }
 
   onAdd() {
@@ -48,24 +51,24 @@ export class CoursesComponent {
   }
 
   onRemove(course: Course) {
-    /* const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-       data: 'Are you sure you would like to remove this course?'
-     });
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: 'Are you sure you would like to remove this course?'
+    });
 
-     dialogRef.afterClosed().subscribe((result: boolean) => {
-       if (result) {
-         this.coursesService.remove(course._id).subscribe(
-           () => {
-             this.refresh();
-             this.snackBar.open('Course removed successfully!', 'X', {
-               duration: 5000,
-               verticalPosition: 'top',
-               horizontalPosition: 'center'
-             });
-           },
-           () => this.onError('Error trying to remove the course.')
-         );
-       }
-     });*/
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.coursesService.remove(course._id).subscribe(
+          () => {
+            this.refresh();
+            this.snackBar.open('Course removed successfully!', 'X', {
+              duration: 5000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center'
+            });
+          },
+          () => this.onError('Error trying to remove the course.')
+        );
+      }
+    });
   }
 }
