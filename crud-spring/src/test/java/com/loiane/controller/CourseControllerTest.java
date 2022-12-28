@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -136,6 +137,28 @@ class CourseControllerTest {
                     .perform(requestBuilder);
             actualPerformResult.andExpect(status().isBadRequest());
         });
+    }
+
+    /**
+     * Method under test: {@link CourseController#findByName(String)}
+     */
+    @Test
+    @DisplayName("Should return a course by name")
+    void testFindByName() throws Exception {
+        CourseDTO course = TestData.createValidCourseDTO();
+        List<CourseDTO> courses = List.of(course);
+        when(this.courseService.findByName(anyString())).thenReturn(courses);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(API + "/searchByName")
+                .param("name", course.name());
+        MockMvcBuilders.standaloneSetup(this.courseController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(courses.size())))
+                .andExpect(jsonPath("$[0]._id", is(course.id()), Long.class))
+                .andExpect(jsonPath("$[0].name", is(course.name())))
+                .andExpect(jsonPath("$[0].category", is(course.category())));
     }
 
     /**

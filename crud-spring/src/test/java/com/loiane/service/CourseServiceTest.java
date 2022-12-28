@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -120,6 +121,20 @@ class CourseServiceTest {
     void testFindByIdInvalid() {
         assertThrows(ConstraintViolationException.class, () -> this.courseService.findById(-1L));
         assertThrows(ConstraintViolationException.class, () -> this.courseService.findById(null));
+    }
+
+    /**
+     * Method under test: {@link CourseService#findByName(String)}
+     */
+    @Test
+    @DisplayName("Should return a course by name")
+    void testFindByName() {
+        Course course = TestData.createValidCourse();
+        when(this.courseRepository.findByName(anyString())).thenReturn(List.of(course));
+        List<CourseDTO> listByName = this.courseService.findByName("Spring");
+        assertThat(listByName).isNotEmpty();
+        assertEquals(courseMapper.toDTO(course), listByName.get(0));
+        verify(this.courseRepository).findByName(anyString());
     }
 
     /**
