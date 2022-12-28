@@ -3,6 +3,7 @@ import { of } from 'rxjs';
 
 import { CoursesService } from '../services/courses.service';
 import { CourseResolver } from './course.resolver';
+import { Course } from '../model/course';
 
 describe('CourseResolver', () => {
   let resolver: CourseResolver;
@@ -20,12 +21,6 @@ describe('CourseResolver', () => {
     expect(resolver).toBeTruthy();
   });
 
-  it('should call loadById with id', () => {
-    const courseService = TestBed.inject(CoursesService);
-    resolver.resolve({ params: { id: 1 } } as any, {} as any);
-    expect(courseService.loadById).toHaveBeenCalledWith('1');
-  });
-
   it('should return course', () => {
     const course = {
       _id: '1',
@@ -35,13 +30,13 @@ describe('CourseResolver', () => {
     };
     courseServiceSpy.loadById.and.returnValue(of(course));
     const result = resolver.resolve({ params: { id: 1 } } as any, {} as any);
-    expect(result).toEqual(of(course));
+    result.subscribe((res: Course) => expect(res).toEqual(course));
   });
 
   it('should return empty course if new', () => {
     const course = { _id: '', name: '', category: '', lessons: [] };
     courseServiceSpy.loadById.and.returnValue(of(course));
     const result = resolver.resolve({ params: {} } as any, {} as any);
-    expect(result).toEqual(of(course));
+    result.subscribe((res: Course) => expect(res).toEqual(course));
   });
 });
