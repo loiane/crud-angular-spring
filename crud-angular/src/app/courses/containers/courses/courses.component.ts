@@ -23,7 +23,9 @@ export class CoursesComponent {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar
-  ) {
+  ) { }
+
+  onInit() {
     this.refresh();
   }
 
@@ -36,7 +38,7 @@ export class CoursesComponent {
     );
   }
 
-  private onError(errorMsg: string) {
+  onError(errorMsg: string) {
     this.dialog.open(ErrorDialogComponent, {
       data: errorMsg
     });
