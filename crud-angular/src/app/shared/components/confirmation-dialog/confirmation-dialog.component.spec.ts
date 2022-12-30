@@ -7,11 +7,13 @@ describe('ConfirmationDialogComponent', () => {
   let fixture: ComponentFixture<ConfirmationDialogComponent>;
 
   beforeEach(async () => {
+    const matDialogRefMock = jasmine.createSpyObj('MatDialogRef', ['close']);
+
     await TestBed.configureTestingModule({
       imports: [MatDialogModule, ConfirmationDialogComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: 'Some title.' },
-        { provide: MatDialogRef, useValue: {} }
+        { provide: MatDialogRef, useValue: matDialogRefMock }
       ]
     }).compileComponents();
 
