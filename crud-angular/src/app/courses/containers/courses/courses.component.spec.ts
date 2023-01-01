@@ -72,19 +72,20 @@ describe('CoursesComponent', () => {
     });
   });
 
-  /*it('should display error dialog when courses are not loaded', async () => {
-    courseServiceSpy.list.and.returnValue(throwError(''));
+  it('should display error dialog when courses are not loaded', async () => {
+    courseServiceSpy.list.and.returnValue(throwError(() => new Error('test')));
     fixture.detectChanges(); // ngOnInit
-    component.courses$?.subscribe(result => {
+    component.courses$?.subscribe(async result => {
       expect(result).toEqual([]);
       expect(dialogSpy.open as jasmine.Spy).toHaveBeenCalledTimes(2); // 1 time ngOninit
+      expect(component.onError).toHaveBeenCalledWith('Error loading courses.');
+      loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+      const dialogs = await loader.getAllHarnesses(MatDialogHarness);
+      expect(dialogs.length).toBe(2);
+      dialogs[0].close(); // close so karma can see all results
+      dialogs[1].close();
     });
-    loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
-    const dialogs = await loader.getAllHarnesses(MatDialogHarness);
-    expect(dialogs.length).toBe(2);
-    dialogs[0].close(); // close so karma can see all results
-    dialogs[1].close();
-  });*/
+  });
 
   it('should navigate to new screen when onAdd', () => {
     component.onAdd(); // trigger action
