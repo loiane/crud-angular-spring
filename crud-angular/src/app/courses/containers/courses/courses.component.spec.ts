@@ -9,11 +9,11 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 import { coursesMock } from '../../services/courses.mock';
 import { CoursesService } from '../../services/courses.service';
 import { CoursesComponent } from './courses.component';
-import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
-import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 describe('CoursesComponent', () => {
   let component: CoursesComponent;
@@ -47,7 +47,7 @@ describe('CoursesComponent', () => {
         { provide: CoursesService, useValue: courseServiceSpy },
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: activatedRouteSpy },
-        { provide: MatDialog, useValue: dialogSpy },
+        { provide: MatDialog },
         { provide: MatSnackBar, useValue: dialogSpy }
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -106,12 +106,12 @@ describe('CoursesComponent', () => {
     expect(navArgs[1]).toEqual({ relativeTo: activatedRouteSpy });
   });
 
-  // it('should open ErrorDialogComponent onError', async () => {
-  //   loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
-  //   fixture.detectChanges();
-  //   component.onError('Error');
-  //   const dialogs = await loader.getAllHarnesses(MatDialogHarness);
-  //   expect(dialogs.length).toBe(1);
-  //   dialogs[0].close(); // close so karma can see all results
-  // });
+  it('should open ErrorDialogComponent onError', async () => {
+    loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+    fixture.detectChanges();
+    component.onError('Error');
+    const dialogs = await loader.getAllHarnesses(MatDialogHarness);
+    expect(dialogs.length).toBe(1);
+    dialogs[0].close(); // close so karma can see all results
+  });
 });
