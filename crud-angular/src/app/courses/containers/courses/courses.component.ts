@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { ConfirmationDialogComponent } from '../../../shared/components/confirma
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss']
 })
-export class CoursesComponent {
+export class CoursesComponent implements OnInit {
   courses$: Observable<Course[]> | null = null;
 
   constructor(
@@ -25,7 +25,7 @@ export class CoursesComponent {
     private snackBar: MatSnackBar
   ) { }
 
-  onInit() {
+  ngOnInit() {
     this.refresh();
   }
 

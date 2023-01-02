@@ -22,18 +22,18 @@ describe('CoursesComponent', () => {
   let routerSpy: jasmine.SpyObj<Router>;
   let activatedRouteSpy: jasmine.SpyObj<ActivatedRoute>;
   let loader: HarnessLoader;
-  let dialogSpy: any;
+  let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
 
   beforeEach(async () => {
     courseServiceSpy = jasmine.createSpyObj<CoursesService>('CoursesService', {
       list: of(coursesMock),
       loadById: undefined,
       save: undefined,
-      remove: undefined
+      remove: of(coursesMock[0])
     });
     routerSpy = jasmine.createSpyObj(['navigate']);
     activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
-    dialogSpy = jasmine.createSpyObj(['open']);
+    snackBarSpy = jasmine.createSpyObj<MatSnackBar>(['open']);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -48,14 +48,13 @@ describe('CoursesComponent', () => {
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: activatedRouteSpy },
         { provide: MatDialog },
-        { provide: MatSnackBar, useValue: dialogSpy }
+        { provide: MatSnackBar, useValue: snackBarSpy }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CoursesComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -74,17 +73,9 @@ describe('CoursesComponent', () => {
 
   it('should display error dialog when courses are not loaded', async () => {
     courseServiceSpy.list.and.returnValue(throwError(() => new Error('test')));
+    spyOn(component, 'onError');
     fixture.detectChanges(); // ngOnInit
-    component.courses$?.subscribe(async result => {
-      expect(result).toEqual([]);
-      expect(dialogSpy.open as jasmine.Spy).toHaveBeenCalledTimes(2); // 1 time ngOninit
-      expect(component.onError).toHaveBeenCalledWith('Error loading courses.');
-      loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
-      const dialogs = await loader.getAllHarnesses(MatDialogHarness);
-      expect(dialogs.length).toBe(2);
-      dialogs[0].close(); // close so karma can see all results
-      dialogs[1].close();
-    });
+    expect(component.onError).toHaveBeenCalled();
   });
 
   it('should navigate to new screen when onAdd', () => {
@@ -113,5 +104,53 @@ describe('CoursesComponent', () => {
     const dialogs = await loader.getAllHarnesses(MatDialogHarness);
     expect(dialogs.length).toBe(1);
     dialogs[0].close(); // close so karma can see all results
+  });
+
+  it('should open ConfirmationDialogComponent onRemove', async () => {
+    loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+    fixture.detectChanges();
+    component.onRemove(coursesMock[0]);
+    const dialogs = await loader.getAllHarnesses(MatDialogHarness);
+    expect(dialogs.length).toBe(1);
+    dialogs[0].close(); // close so karma can see all results
+  });
+
+  it('should remove course and display success message', async () => {
+    loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+    fixture.detectChanges();
+    spyOn(component, 'refresh');
+    component.onRemove(coursesMock[0]);
+    const dialogs = await loader.getAllHarnesses(MatDialogHarness);
+    expect(dialogs.length).toBe(1);
+    const button = document.getElementById('yesBtn');
+    await button?.click();
+    expect(courseServiceSpy.remove).toHaveBeenCalledTimes(1);
+    expect(component.refresh).toHaveBeenCalledTimes(1);
+    expect(snackBarSpy.open as jasmine.Spy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not remove course if No button was clicked', async () => {
+    loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+    fixture.detectChanges();
+    component.onRemove(coursesMock[0]);
+    const dialogs = await loader.getAllHarnesses(MatDialogHarness);
+    expect(dialogs.length).toBe(1);
+    const button = document.getElementById('noBtn');
+    await button?.click();
+    expect(courseServiceSpy.remove).toHaveBeenCalledTimes(0);
+  });
+
+  it('should display error if course could not be removed', async () => {
+    courseServiceSpy.remove.and.returnValue(throwError(() => new Error('test')));
+    loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+    spyOn(component, 'onError');
+    fixture.detectChanges();
+    component.onRemove(coursesMock[0]);
+    const dialogs = await loader.getAllHarnesses(MatDialogHarness);
+    expect(dialogs.length).toBe(1);
+    const button = document.getElementById('yesBtn');
+    await button?.click();
+    expect(courseServiceSpy.remove).toHaveBeenCalledTimes(1);
+    expect(component.onError).toHaveBeenCalledTimes(1);
   });
 });

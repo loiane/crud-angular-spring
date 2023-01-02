@@ -25,7 +25,7 @@ export class CoursesService {
 
   loadById(id: string) {
     if (this.cache.length > 0) {
-      const record = this.cache.find(curso => `${curso._id}` === `${id}`);
+      const record = this.cache.find(course => `${course._id}` === `${id}`);
       return record != null ? of(record) : this.getById(id);
     }
     return this.getById(id);
