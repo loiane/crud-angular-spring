@@ -8,9 +8,10 @@ import { CategoryPipe } from '../shared/pipes/category.pipe';
 import { CoursesListComponent } from './components/courses-list/courses-list.component';
 import { CoursesComponent } from './containers/courses/courses.component';
 import { CoursesRoutingModule } from './courses-routing.module';
+import { CourseFormComponent } from './containers/course-form/course-form.component';
 
 @NgModule({
-  declarations: [CoursesComponent, CoursesListComponent],
+  declarations: [CoursesComponent, CoursesListComponent, CourseFormComponent],
   imports: [
     CommonModule,
     CoursesRoutingModule,
