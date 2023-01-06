@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
+import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
 import { coursesMock } from '../../services/courses.mock';
 import { CoursesService } from '../../services/courses.service';
 import { CourseFormComponent } from './course-form.component';
@@ -17,7 +18,7 @@ describe('CourseFormComponent', () => {
   let fixture: ComponentFixture<CourseFormComponent>;
   let courseServiceSpy: jasmine.SpyObj<CoursesService>;
   let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
-  let activatedRouteSpy: jasmine.SpyObj<ActivatedRoute>;
+  let activatedRouteMock: any;
 
   beforeEach(async () => {
     courseServiceSpy = jasmine.createSpyObj<CoursesService>('CoursesService', {
@@ -27,19 +28,27 @@ describe('CourseFormComponent', () => {
       remove: of(coursesMock[0])
     });
     snackBarSpy = jasmine.createSpyObj<MatSnackBar>(['open']);
-    activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
+    activatedRouteMock = {
+      snapshot: {
+        data: {
+          course: coursesMock[0]
+        }
+      }
+    };
 
     await TestBed.configureTestingModule({
       declarations: [CourseFormComponent],
       imports: [
         MatDialogModule,
         ReactiveFormsModule,
+        AppMaterialModule,
         RouterTestingModule.withRoutes([]),
         NoopAnimationsModule
       ],
       providers: [
         { provide: CoursesService, useValue: courseServiceSpy },
         { provide: MatSnackBar, useValue: snackBarSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: MatDialog }
       ],
       schemas: [NO_ERRORS_SCHEMA]
