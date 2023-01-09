@@ -42,16 +42,16 @@ describe('Service: FormUtils', () => {
       formControl = new UntypedFormControl('');
 
       formControl.setErrors({ required: true });
-      expect(formUtils.getErrorMessageFromField(formControl)).toBe('Mandatory Field.');
+      expect(formUtils.getErrorMessageFromField(formControl)).toBe('Field is required.');
 
       formControl.setErrors({ maxlength: { requiredLength: 10 } });
       expect(formUtils.getErrorMessageFromField(formControl)).toBe(
-        'Length exceeded of maximum 10 characters.'
+        'Field cannot be more than 10 characters long.'
       );
 
       formControl.setErrors({ minlength: { requiredLength: 10 } });
       expect(formUtils.getErrorMessageFromField(formControl)).toBe(
-        'Minimum length must be of 10 characters.'
+        'Field cannot be less than 10 characters long.'
       );
 
       formControl.setErrors({ email: true });
@@ -69,17 +69,17 @@ describe('Service: FormUtils', () => {
 
       formControl?.setErrors({ required: true });
       expect(formUtils.getFieldErrorMessage(formGroup, fieldName)).toBe(
-        'Mandatory Field.'
+        'Field is required.'
       );
 
       formControl?.setErrors({ maxlength: { requiredLength: 10 } });
       expect(formUtils.getFieldErrorMessage(formGroup, fieldName)).toBe(
-        'Length exceeded of maximum 10 characters.'
+        'Field cannot be more than 10 characters long.'
       );
 
       formControl?.setErrors({ minlength: { requiredLength: 10 } });
       expect(formUtils.getFieldErrorMessage(formGroup, fieldName)).toBe(
-        'Minimum length must be of 10 characters.'
+        'Field cannot be less than 10 characters long.'
       );
 
       formControl?.setErrors({ email: true });
@@ -100,17 +100,17 @@ describe('Service: FormUtils', () => {
 
       formControl?.setErrors({ required: true });
       expect(formUtils.getFieldFormArrayErrorMessage(form, arrayName, fieldName, 0)).toBe(
-        'Mandatory Field.'
+        'Field is required.'
       );
 
       formControl?.setErrors({ maxlength: { requiredLength: 10 } });
       expect(formUtils.getFieldFormArrayErrorMessage(form, arrayName, fieldName, 0)).toBe(
-        'Length exceeded of maximum 10 characters.'
+        'Field cannot be more than 10 characters long.'
       );
 
       formControl?.setErrors({ minlength: { requiredLength: 10 } });
       expect(formUtils.getFieldFormArrayErrorMessage(form, arrayName, fieldName, 0)).toBe(
-        'Minimum length must be of 10 characters.'
+        'Field cannot be less than 10 characters long.'
       );
 
       formControl?.setErrors({ email: true });

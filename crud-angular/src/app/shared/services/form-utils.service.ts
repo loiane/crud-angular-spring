@@ -39,21 +39,21 @@ export class FormUtilsService {
 
   getErrorMessageFromField(field: UntypedFormControl) {
     if (field?.hasError('required')) {
-      return 'Mandatory Field.';
+      return 'Field is required.';
     }
 
     if (field?.hasError('maxlength')) {
       const requiredLength = field.errors
         ? field.errors['maxlength']['requiredLength']
         : 200;
-      return `Length exceeded of maximum ${requiredLength} characters.`;
+      return `Field cannot be more than ${requiredLength} characters long.`;
     }
 
     if (field?.hasError('minlength')) {
       const requiredLength = field.errors
         ? field.errors['minlength']['requiredLength']
         : 5;
-      return `Minimum length must be of ${requiredLength} characters.`;
+      return `Field cannot be less than ${requiredLength} characters long.`;
     }
 
     return 'Error';
