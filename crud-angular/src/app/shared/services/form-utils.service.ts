@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormArray, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -20,13 +20,13 @@ export class FormUtilsService {
     });
   }
 
-  getFieldErrorMessage(formGroup: UntypedFormGroup, fieldName: string): string {
-    const field = formGroup.get(fieldName) as UntypedFormControl;
+  getFieldErrorMessage(formGroup: FormGroup, fieldName: string): string {
+    const field = formGroup.get(fieldName) as FormControl;
     return this.getErrorMessageFromField(field);
   }
 
   getFieldFormArrayErrorMessage(
-    formGroup: UntypedFormGroup,
+    formGroup: FormGroup,
     formArrayName: string,
     fieldName: string,
     index: number

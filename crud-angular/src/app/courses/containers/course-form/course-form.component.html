@@ -23,6 +23,52 @@
           getErrorMessage('category')
         }}</mat-error>
       </mat-form-field>
+
+      <mat-toolbar class="lessons-toolbar">
+        <span>Lessons</span>
+        <div class="fill-remaining-space"></div>
+        <button mat-icon-button color="accent" (click)="addLesson()">
+          <mat-icon aria-label="Add a New Lesson">add</mat-icon>
+        </button>
+      </mat-toolbar>
+
+      <mat-error
+        *ngIf="formUtils.isFormArrayRequired(form, 'lessons')"
+        class="form-array-error">
+        At least one lesson is required.
+      </mat-error>
+
+      <table
+        class="full-width"
+        formArrayName="lessons"
+        *ngFor="let lesson of getLessonFormArray(); let i = index">
+        <tr [formGroupName]="i">
+          <td style="width: 65%">
+            <mat-form-field class="full-width">
+              <mat-label>Lesson Name</mat-label>
+              <input matInput formControlName="name" />
+              <mat-error *ngIf="getLessonFormArray()[i].get('name')?.invalid">
+                {{ getLessonErrorMessage('name', i) }}
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td style="width: 30%">
+            <mat-form-field class="full-width">
+              <mat-label>URL</mat-label>
+              <span matPrefix>https://youtu.be/</span>
+              <input matInput formControlName="youtubeUrl" />
+              <mat-error *ngIf="getLessonFormArray()[i].get('youtubeUrl')?.invalid">
+                {{ getLessonErrorMessage('youtubeUrl', i) }}
+              </mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <button mat-icon-button color="warn" (click)="removeLesson(i)">
+              <mat-icon aria-label="Remove Lesson">delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
     </form>
   </mat-card-content>
 
