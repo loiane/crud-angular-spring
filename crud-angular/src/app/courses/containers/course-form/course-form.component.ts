@@ -1,6 +1,11 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder, UntypedFormArray, Validators } from '@angular/forms';
+import {
+  NonNullableFormBuilder,
+  UntypedFormArray,
+  Validators,
+  FormGroup
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -17,12 +22,7 @@ import { FormUtilsService } from './../../../shared/services/form-utils.service'
   styleUrls: ['./course-form.component.scss']
 })
 export class CourseFormComponent implements OnInit {
-  form = this.formBuilder.group({
-    _id: [''],
-    name: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100)]],
-    category: ['', [Validators.required]],
-    lessons: this.formBuilder.array([], Validators.required)
-  });
+  form!: FormGroup;
 
   constructor(
     private formBuilder: NonNullableFormBuilder,
@@ -36,15 +36,19 @@ export class CourseFormComponent implements OnInit {
 
   ngOnInit(): void {
     const course: Course = this.route.snapshot.data['course'];
-    this.form.setValue({
-      _id: course._id,
-      name: course.name,
-      category: course.category,
-      lessons: this.retrieveLessons(course)
+    this.form = this.formBuilder.group({
+      _id: [course._id],
+      name: [
+        course.name,
+        [Validators.required, Validators.minLength(5), Validators.maxLength(100)]
+      ],
+      category: [course.category, [Validators.required]],
+      lessons: this.formBuilder.array(this.retrieveLessons(course), Validators.required)
     });
   }
 
   private retrieveLessons(course: Course) {
+    console.log(course);
     const lessons = [];
     if (course?.lessons) {
       course.lessons.forEach(lesson => lessons.push(this.createLesson(lesson)));
@@ -69,6 +73,7 @@ export class CourseFormComponent implements OnInit {
   }
 
   getLessonFormArray() {
+    // console.log((<UntypedFormArray>this.form.get('lessons')).controls)
     return (<UntypedFormArray>this.form.get('lessons')).controls;
   }
 
