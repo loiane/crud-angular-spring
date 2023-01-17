@@ -22,6 +22,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @SQLDelete(sql = "UPDATE Course SET status = 'Inactive' WHERE id=?")
@@ -49,12 +50,10 @@ public class Course {
     @Convert(converter = StatusConverter.class)
     private Status status = Status.ACTIVE;
 
-    // @NotNull
-    // @NotEmpty
+    @NotNull
+    @NotEmpty
     @Valid
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    // @OneToMany(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "courseID", referencedColumnName = "id")
     private Set<Lesson> lessons = new HashSet<>();
 
     public Long getId() {
