@@ -38,6 +38,7 @@ This API is to showcase, specially for beginners, what a basic CRUD API that's c
 - ✅ Spring Docs - Swagger (https://springdoc.org/v2/)
 
 ### Not implemented (maybe in a future version)
+
 - Security (Authorization and Authentication)
 - Caching
 - Data Compression
@@ -51,7 +52,7 @@ This API is to showcase, specially for beginners, what a basic CRUD API that's c
 - [ ] Form to update/create courses with lessons (has-many - FormArray)
 - [ ] Form asyn validation for duplicated courses and lessons
 - [ ] View only screen
-- [ ] TypedForms (Angular v14+)
+- ✅ TypedForms (Angular v14+)
 - ✅ Presentational x Smart Components
 - [In Progress] Unit and Integration tests for components, services, pipes, guards
 
@@ -67,13 +68,13 @@ Open the `crud-spring` project in your favorite IDE as a Maven project and execu
 
 You need to have Node.js / NPM installed locally.
 
-1) Install all the required depencencies:
+1. Install all the required depencencies:
 
 ```
 npm install
 ```
 
-2) Execute the project:
+2. Execute the project:
 
 ```
 npm run start
