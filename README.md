@@ -49,8 +49,8 @@ This API is to showcase, specially for beginners, what a basic CRUD API that's c
 
 - ✅ Angular Material components
 - ✅ List of all courses
-- [ ] Form to update/create courses with lessons (has-many - FormArray)
-- [ ] Form asyn validation for duplicated courses and lessons
+- ✅ Form to update/create courses with lessons (has-many - FormArray)
+- [ ] Form async validation for duplicated courses and lessons
 - [ ] View only screen
 - ✅ TypedForms (Angular v14+)
 - ✅ Presentational x Smart Components
