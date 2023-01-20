@@ -73,7 +73,6 @@ export class CourseFormComponent implements OnInit {
   }
 
   getLessonFormArray() {
-    // console.log((<UntypedFormArray>this.form.get('lessons')).controls)
     return (<UntypedFormArray>this.form.get('lessons')).controls;
   }
 
