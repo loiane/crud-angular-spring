@@ -13,6 +13,7 @@ import { AppMaterialModule } from '../../../shared/app-material/app-material.mod
 import { coursesMock } from '../../services/courses.mock';
 import { CoursesService } from '../../services/courses.service';
 import { CourseFormComponent } from './course-form.component';
+import { Course } from '../../model/course';
 
 describe('CourseFormComponent', () => {
   let component: CourseFormComponent;
@@ -26,7 +27,7 @@ describe('CourseFormComponent', () => {
     courseServiceSpy = jasmine.createSpyObj<CoursesService>('CoursesService', {
       list: of(coursesMock),
       loadById: undefined,
-      save: undefined,
+      save: of(coursesMock[0]),
       remove: of(coursesMock[0])
     });
     snackBarSpy = jasmine.createSpyObj<MatSnackBar>(['open']);
@@ -136,5 +137,27 @@ describe('CourseFormComponent', () => {
   it('should call location.back when onCancel is called', () => {
     component.onCancel();
     expect(locationSpy.back).toHaveBeenCalled();
+  });
+
+  it('should call `CoursesService.save` when onSubmit is called and form is valid', () => {
+    component.form.setValue(coursesMock[0]);
+    component.onSubmit();
+    expect(courseServiceSpy.save).toHaveBeenCalled();
+  });
+
+  it('should load empty form when no course is passed', () => {
+    activatedRouteMock.snapshot.data.course = {
+      _id: '',
+      name: '',
+      category: '',
+      lessons: undefined
+    } as Course;
+    component.ngOnInit();
+    expect(component.form.value).toEqual({
+      _id: '',
+      name: '',
+      category: '',
+      lessons: [{ _id: '', name: '', youtubeUrl: '' }]
+    });
   });
 });
