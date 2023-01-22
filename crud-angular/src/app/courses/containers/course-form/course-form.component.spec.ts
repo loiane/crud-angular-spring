@@ -145,6 +145,22 @@ describe('CourseFormComponent', () => {
     expect(courseServiceSpy.save).toHaveBeenCalled();
   });
 
+  it('should call formUtils.validateAllFormFields when onSubmit is called and form is invalid', () => {
+    const validateAllFormFieldsSpy = spyOn(
+      component.formUtils,
+      'validateAllFormFields'
+    ).and.callThrough();
+    activatedRouteMock.snapshot.data.course = {
+      _id: '',
+      name: '',
+      category: '',
+      lessons: undefined
+    } as Course;
+    component.ngOnInit();
+    component.onSubmit();
+    expect(validateAllFormFieldsSpy).toHaveBeenCalled();
+  });
+
   it('should load empty form when no course is passed', () => {
     activatedRouteMock.snapshot.data.course = {
       _id: '',
