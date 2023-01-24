@@ -37,7 +37,7 @@ export class FormUtilsService {
     );
   }
 
-  getErrorMessageFromField(field: UntypedFormControl) {
+  getErrorMessageFromField(field: UntypedFormControl): string {
     if (field?.hasError('required')) {
       return 'Field is required.';
     }
@@ -56,7 +56,7 @@ export class FormUtilsService {
       return `Field cannot be less than ${requiredLength} characters long.`;
     }
 
-    return 'Error';
+    return field['errors'] ? field['errors']['message'] : null;
   }
 
   isFormArrayRequired(formGroup: UntypedFormGroup, fieldName: string) {

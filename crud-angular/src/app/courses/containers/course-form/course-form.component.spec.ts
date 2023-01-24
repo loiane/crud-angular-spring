@@ -1,13 +1,13 @@
 import { Location } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormArray } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
 import { coursesMock } from '../../services/courses.mock';
@@ -68,10 +68,11 @@ describe('CourseFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a form with 3 fields', () => {
+  it('should have a form with 4 fields', () => {
     expect(component.form.contains('_id')).toBeTruthy();
     expect(component.form.contains('name')).toBeTruthy();
     expect(component.form.contains('category')).toBeTruthy();
+    expect(component.form.contains('lessons')).toBeTruthy();
   });
 
   it('should have a form with a `name` field and 3 validators', () => {
@@ -96,6 +97,15 @@ describe('CourseFormComponent', () => {
     expect(categoryControl?.errors).toBeNull();
   });
 
+  it('should have a form with a `lessons` field and one validator', () => {
+    component.removeLesson(0);
+    const lessonsControl = component.form.get('lessons');
+    expect(lessonsControl?.valid).toBeFalsy();
+    expect(lessonsControl?.errors?.['required']).toBeTruthy();
+    component.addLesson();
+    expect(lessonsControl?.errors).toBeNull();
+  });
+
   it('should return the error message then the `name` field is invalid', () => {
     const nameControl = component.form.get('name');
     nameControl?.setValue('');
@@ -114,6 +124,40 @@ describe('CourseFormComponent', () => {
     const categoryControl = component.form.get('category');
     categoryControl?.setValue('');
     expect(component.getErrorMessage('category')).toEqual('Field is required.');
+  });
+
+  it('should return the error message then the `lessons.name` field is invalid', () => {
+    const formArray = component.form.get('lessons') as UntypedFormArray;
+    const lessonNameControl = formArray.controls[0].get('name');
+    lessonNameControl?.setValue('');
+    expect(component.getLessonErrorMessage('name', 0)).toEqual('Field is required.');
+
+    lessonNameControl?.setValue('a');
+    expect(component.getLessonErrorMessage('name', 0)).toEqual(
+      'Field cannot be less than 5 characters long.'
+    );
+
+    lessonNameControl?.setValue('a'.repeat(101));
+    expect(component.getLessonErrorMessage('name', 0)).toEqual(
+      'Field cannot be more than 100 characters long.'
+    );
+  });
+
+  it('should return the error message then the `lessons.youtubeUrl` field is invalid', () => {
+    const formArray = component.form.get('lessons') as UntypedFormArray;
+    const lessonUrlControl = formArray.controls[0].get('youtubeUrl');
+    lessonUrlControl?.setValue('');
+    expect(component.getLessonErrorMessage('youtubeUrl', 0)).toEqual('Field is required.');
+
+    lessonUrlControl?.setValue('a');
+    expect(component.getLessonErrorMessage('youtubeUrl', 0)).toEqual(
+      'Field cannot be less than 10 characters long.'
+    );
+
+    lessonUrlControl?.setValue('a'.repeat(101));
+    expect(component.getLessonErrorMessage('youtubeUrl', 0)).toEqual(
+      'Field cannot be more than 11 characters long.'
+    );
   });
 
   it('should call `CoursesService.save` when the form is submitted', () => {
@@ -160,6 +204,14 @@ describe('CourseFormComponent', () => {
     component.onSubmit();
     expect(validateAllFormFieldsSpy).toHaveBeenCalled();
   });
+
+  // it('should call onError when onSubmit save fails', () => {
+  //   const onErrorSpy = spyOn(component, 'onError');
+  //   courseServiceSpy.save.and.returnValue(throwError(() => new Error('test')));
+  //   component.form.setValue(coursesMock[0]);
+  //   component.onSubmit();
+  //   expect(onErrorSpy).toHaveBeenCalled();
+  // });
 
   it('should load empty form when no course is passed', () => {
     activatedRouteMock.snapshot.data.course = {
