@@ -10,10 +10,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
 import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
+import { Course } from '../../model/course';
 import { coursesMock } from '../../services/courses.mock';
 import { CoursesService } from '../../services/courses.service';
 import { CourseFormComponent } from './course-form.component';
-import { Course } from '../../model/course';
 
 describe('CourseFormComponent', () => {
   let component: CourseFormComponent;
@@ -22,6 +22,7 @@ describe('CourseFormComponent', () => {
   let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
   let activatedRouteMock: any;
   let locationSpy: jasmine.SpyObj<Location>;
+  let matDialogSpy: jasmine.SpyObj<MatDialog>;
 
   beforeEach(async () => {
     courseServiceSpy = jasmine.createSpyObj<CoursesService>('CoursesService', {
@@ -31,6 +32,7 @@ describe('CourseFormComponent', () => {
       remove: of(coursesMock[0])
     });
     snackBarSpy = jasmine.createSpyObj<MatSnackBar>(['open']);
+    matDialogSpy = jasmine.createSpyObj<MatDialog>(['open']);
     locationSpy = jasmine.createSpyObj<Location>('Location', ['back']);
     activatedRouteMock = {
       snapshot: {
@@ -54,7 +56,7 @@ describe('CourseFormComponent', () => {
         { provide: MatSnackBar, useValue: snackBarSpy },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: Location, useValue: locationSpy },
-        { provide: MatDialog }
+        { provide: MatDialog, useValue: matDialogSpy }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -147,7 +149,9 @@ describe('CourseFormComponent', () => {
     const formArray = component.form.get('lessons') as UntypedFormArray;
     const lessonUrlControl = formArray.controls[0].get('youtubeUrl');
     lessonUrlControl?.setValue('');
-    expect(component.getLessonErrorMessage('youtubeUrl', 0)).toEqual('Field is required.');
+    expect(component.getLessonErrorMessage('youtubeUrl', 0)).toEqual(
+      'Field is required.'
+    );
 
     lessonUrlControl?.setValue('a');
     expect(component.getLessonErrorMessage('youtubeUrl', 0)).toEqual(
@@ -205,13 +209,12 @@ describe('CourseFormComponent', () => {
     expect(validateAllFormFieldsSpy).toHaveBeenCalled();
   });
 
-  // it('should call onError when onSubmit save fails', () => {
-  //   const onErrorSpy = spyOn(component, 'onError');
-  //   courseServiceSpy.save.and.returnValue(throwError(() => new Error('test')));
-  //   component.form.setValue(coursesMock[0]);
-  //   component.onSubmit();
-  //   expect(onErrorSpy).toHaveBeenCalled();
-  // });
+  it('should call onError and open dialog when onSubmit save fails', async () => {
+    courseServiceSpy.save.and.returnValue(throwError(() => new Error('test')));
+    component.form.setValue(coursesMock[0]);
+    component.onSubmit();
+    expect(matDialogSpy.open).toHaveBeenCalled();
+  });
 
   it('should load empty form when no course is passed', () => {
     activatedRouteMock.snapshot.data.course = {

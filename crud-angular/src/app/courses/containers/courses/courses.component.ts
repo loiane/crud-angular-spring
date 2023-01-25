@@ -59,8 +59,8 @@ export class CoursesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-        this.coursesService.remove(course._id).subscribe(
-          () => {
+        this.coursesService.remove(course._id).subscribe({
+          next: () => {
             this.refresh();
             this.snackBar.open('Course removed successfully!', 'X', {
               duration: 5000,
@@ -68,8 +68,8 @@ export class CoursesComponent implements OnInit {
               horizontalPosition: 'center'
             });
           },
-          () => this.onError('Error trying to remove the course.')
-        );
+          error: () => this.onError('Error trying to remove the course.')
+        });
       }
     });
   }

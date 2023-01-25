@@ -56,7 +56,7 @@ export class FormUtilsService {
       return `Field cannot be less than ${requiredLength} characters long.`;
     }
 
-    return field['errors'] ? field['errors']['message'] : null;
+    return field['errors'] ? 'Error' : '';
   }
 
   isFormArrayRequired(formGroup: UntypedFormGroup, fieldName: string) {

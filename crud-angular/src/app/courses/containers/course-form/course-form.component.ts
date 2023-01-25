@@ -101,10 +101,10 @@ export class CourseFormComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.service.save(this.form.value as Course).subscribe(
-        () => this.onSuccess(),
-        () => this.onError()
-      );
+      this.service.save(this.form.value as Course).subscribe({
+        next: () => this.onSuccess(),
+        error: () => this.onError()
+      });
     } else {
       this.formUtils.validateAllFormFields(this.form);
     }
