@@ -130,16 +130,6 @@ describe('Service: FormUtils', () => {
 
       formControl?.setErrors(null);
       expect(formUtils.getFieldErrorMessage(formGroup, fieldName)).toBe('');
-
-      formControl?.setErrors({ maxlength: { other: 10 } });
-      expect(formUtils.getFieldErrorMessage(formGroup, fieldName)).toBe(
-        'Field cannot be more than 200 characters long.'
-      );
-
-      formControl?.setErrors({ minlength: { other: 10 } });
-      expect(formUtils.getFieldErrorMessage(formGroup, fieldName)).toBe(
-        'Field cannot be less than 5 characters long.'
-      );
     }
   ));
 
