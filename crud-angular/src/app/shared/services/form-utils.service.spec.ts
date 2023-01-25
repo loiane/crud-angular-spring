@@ -120,6 +120,29 @@ describe('Service: FormUtils', () => {
     }
   ));
 
+  it('should return empty string when calling getFieldFormArrayErrorMessage with a valid field', inject(
+    [FormUtilsService],
+    (formUtils: FormUtilsService) => {
+      const fb = new UntypedFormBuilder();
+      const formGroup = fb.group({ name: new UntypedFormControl('') });
+      const fieldName = 'name';
+      const formControl = formGroup.get(fieldName);
+
+      formControl?.setErrors(null);
+      expect(formUtils.getFieldErrorMessage(formGroup, fieldName)).toBe('');
+
+      formControl?.setErrors({ maxlength: { other: 10 } });
+      expect(formUtils.getFieldErrorMessage(formGroup, fieldName)).toBe(
+        'Field cannot be more than 200 characters long.'
+      );
+
+      formControl?.setErrors({ minlength: { other: 10 } });
+      expect(formUtils.getFieldErrorMessage(formGroup, fieldName)).toBe(
+        'Field cannot be less than 5 characters long.'
+      );
+    }
+  ));
+
   it('should validate if formArray is required', inject(
     [FormUtilsService],
     (formUtils: FormUtilsService) => {

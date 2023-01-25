@@ -42,17 +42,13 @@ export class FormUtilsService {
       return 'Field is required.';
     }
 
-    if (field?.hasError('maxlength')) {
-      const requiredLength = field.errors
-        ? field.errors['maxlength']['requiredLength']
-        : 200;
+    if (field?.hasError('maxlength') && field.errors) {
+      const requiredLength = field.errors['maxlength']['requiredLength'];
       return `Field cannot be more than ${requiredLength} characters long.`;
     }
 
-    if (field?.hasError('minlength')) {
-      const requiredLength = field.errors
-        ? field.errors['minlength']['requiredLength']
-        : 5;
+    if (field?.hasError('minlength') && field.errors) {
+      const requiredLength = field.errors['minlength']['requiredLength'];
       return `Field cannot be less than ${requiredLength} characters long.`;
     }
 
