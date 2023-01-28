@@ -53,7 +53,7 @@ public class Course {
     @NotNull
     @NotEmpty
     @Valid
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Lesson> lessons = new HashSet<>();
 
     public Long getId() {
