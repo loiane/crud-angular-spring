@@ -14,7 +14,7 @@ This API is to showcase, specially for beginners, what a basic CRUD API that's c
 - JPA + Hibernate
 - JUnit 5 + Mockito (back-end tests)
 - Maven
-- Angular v15
+- Angular v16
 - Angular Material
 - Karma + Jasmine (front-end tests)
 
