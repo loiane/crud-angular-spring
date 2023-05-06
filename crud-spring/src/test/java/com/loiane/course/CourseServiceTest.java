@@ -32,9 +32,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.loiane.config.ValidationAdvice;
-import com.loiane.course.Course;
-import com.loiane.course.CourseRepository;
-import com.loiane.course.CourseService;
 import com.loiane.course.dto.CourseDTO;
 import com.loiane.course.dto.CoursePageDTO;
 import com.loiane.course.dto.CourseRequestDTO;

@@ -14,10 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.loiane.course.Course;
-import com.loiane.course.CourseRepository;
-import com.loiane.course.CourseService;
-import com.loiane.course.Lesson;
 import com.loiane.course.enums.Category;
 import com.loiane.course.enums.Status;
 

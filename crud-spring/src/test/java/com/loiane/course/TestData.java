@@ -3,8 +3,6 @@ package com.loiane.course;
 import java.util.List;
 import java.util.Set;
 
-import com.loiane.course.Course;
-import com.loiane.course.Lesson;
 import com.loiane.course.dto.CourseDTO;
 import com.loiane.course.dto.CourseRequestDTO;
 import com.loiane.course.dto.LessonDTO;
