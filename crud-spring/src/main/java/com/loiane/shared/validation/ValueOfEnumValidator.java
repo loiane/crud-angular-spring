@@ -1,4 +1,4 @@
-package com.loiane.shared.constraints;
+package com.loiane.shared.validation;
 
 import java.util.List;
 import java.util.stream.Collectors;

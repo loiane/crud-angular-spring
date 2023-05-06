@@ -1,4 +1,4 @@
-package com.loiane.shared.constraints;
+package com.loiane.shared.validation;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
