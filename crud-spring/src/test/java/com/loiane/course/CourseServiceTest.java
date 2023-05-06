@@ -31,7 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.loiane.ValidationAdvice;
+import com.loiane.config.ValidationAdvice;
 import com.loiane.course.Course;
 import com.loiane.course.CourseRepository;
 import com.loiane.course.CourseService;

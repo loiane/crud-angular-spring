@@ -35,7 +35,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.loiane.ValidationAdvice;
+import com.loiane.config.ValidationAdvice;
 import com.loiane.course.Course;
 import com.loiane.course.CourseController;
 import com.loiane.course.CourseService;

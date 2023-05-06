@@ -1,4 +1,4 @@
-package com.loiane;
+package com.loiane.config;
 
 import java.lang.reflect.Method;
 import java.util.Set;
