@@ -1,4 +1,4 @@
-package com.loiane.controller;
+package com.loiane.shared.controller;
 
 import java.util.List;
 

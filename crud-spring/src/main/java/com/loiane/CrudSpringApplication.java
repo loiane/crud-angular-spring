@@ -9,11 +9,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
-import com.loiane.enums.Category;
-import com.loiane.enums.Status;
-import com.loiane.model.Course;
-import com.loiane.model.Lesson;
-import com.loiane.repository.CourseRepository;
+import com.loiane.course.Course;
+import com.loiane.course.CourseRepository;
+import com.loiane.course.Lesson;
+import com.loiane.course.enums.Category;
+import com.loiane.course.enums.Status;
 
 @SpringBootApplication
 public class CrudSpringApplication {

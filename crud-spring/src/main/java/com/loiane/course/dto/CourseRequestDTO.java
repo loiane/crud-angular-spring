@@ -1,11 +1,11 @@
-package com.loiane.dto;
+package com.loiane.course.dto;
 
 import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.loiane.enums.Category;
-import com.loiane.enums.constraints.ValueOfEnum;
+import com.loiane.course.enums.Category;
+import com.loiane.shared.constraints.ValueOfEnum;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.loiane.enums.constraints;
+package com.loiane.shared.constraints;
 
 import java.util.List;
 import java.util.stream.Collectors;

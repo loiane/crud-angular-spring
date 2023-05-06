@@ -1,4 +1,4 @@
-package com.loiane.repository;
+package com.loiane.course;
 
 import java.util.List;
 
@@ -6,8 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.loiane.enums.Status;
-import com.loiane.model.Course;
+import com.loiane.course.enums.Status;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
 

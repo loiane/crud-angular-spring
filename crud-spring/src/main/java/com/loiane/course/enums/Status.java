@@ -1,11 +1,11 @@
-package com.loiane.enums;
+package com.loiane.course.enums;
 
-public enum Category {
-    FRONT_END("Front-end"), BACK_END("Back-end");
+public enum Status {
+    ACTIVE("Active"), INACTIVE("Inactive");
 
     private String value;
 
-    private Category(String value) {
+    private Status(String value) {
         this.value = value;
     }
 
@@ -17,5 +17,4 @@ public enum Category {
     public String toString() {
         return value; // required for @ValueOfEnum
     }
-
 }

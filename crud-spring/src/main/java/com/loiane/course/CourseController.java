@@ -1,4 +1,4 @@
-package com.loiane.controller;
+package com.loiane.course;
 
 import java.util.List;
 
@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.loiane.dto.CourseDTO;
-import com.loiane.dto.CoursePageDTO;
-import com.loiane.dto.CourseRequestDTO;
-import com.loiane.service.CourseService;
+import com.loiane.course.dto.CourseDTO;
+import com.loiane.course.dto.CoursePageDTO;
+import com.loiane.course.dto.CourseRequestDTO;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

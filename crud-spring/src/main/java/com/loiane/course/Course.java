@@ -1,4 +1,4 @@
-package com.loiane.model;
+package com.loiane.course;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,10 +7,10 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 
-import com.loiane.enums.Category;
-import com.loiane.enums.Status;
-import com.loiane.enums.converters.CategoryConverter;
-import com.loiane.enums.converters.StatusConverter;
+import com.loiane.course.enums.Category;
+import com.loiane.course.enums.Status;
+import com.loiane.course.enums.converters.CategoryConverter;
+import com.loiane.course.enums.converters.StatusConverter;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

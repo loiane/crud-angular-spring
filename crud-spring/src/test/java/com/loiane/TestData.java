@@ -3,13 +3,13 @@ package com.loiane;
 import java.util.List;
 import java.util.Set;
 
-import com.loiane.dto.CourseDTO;
-import com.loiane.dto.CourseRequestDTO;
-import com.loiane.dto.LessonDTO;
-import com.loiane.enums.Category;
-import com.loiane.enums.Status;
-import com.loiane.model.Course;
-import com.loiane.model.Lesson;
+import com.loiane.course.Course;
+import com.loiane.course.Lesson;
+import com.loiane.course.dto.CourseDTO;
+import com.loiane.course.dto.CourseRequestDTO;
+import com.loiane.course.dto.LessonDTO;
+import com.loiane.course.enums.Category;
+import com.loiane.course.enums.Status;
 
 public class TestData {
 

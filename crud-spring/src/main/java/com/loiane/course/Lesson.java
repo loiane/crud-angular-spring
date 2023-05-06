@@ -1,4 +1,4 @@
-package com.loiane.model;
+package com.loiane.course;
 
 import org.hibernate.validator.constraints.Length;
 

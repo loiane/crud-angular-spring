@@ -1,4 +1,4 @@
-package com.loiane.dto.mapper;
+package com.loiane.course.dto.mapper;
 
 import java.util.List;
 import java.util.Set;
@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.loiane.dto.CourseRequestDTO;
-import com.loiane.dto.LessonDTO;
-import com.loiane.enums.Category;
-import com.loiane.dto.CourseDTO;
-import com.loiane.model.Course;
-import com.loiane.model.Lesson;
+import com.loiane.course.Course;
+import com.loiane.course.Lesson;
+import com.loiane.course.dto.CourseDTO;
+import com.loiane.course.dto.CourseRequestDTO;
+import com.loiane.course.dto.LessonDTO;
+import com.loiane.course.enums.Category;
 
 /**
  * Class to map the Course entity to the CourseRequestDTO and vice-versa.

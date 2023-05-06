@@ -1,17 +1,17 @@
-package com.loiane.enums.converters;
+package com.loiane.course.enums.converters;
 
 import java.util.stream.Stream;
 
-import com.loiane.enums.Category;
+import com.loiane.course.enums.Status;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 @Converter(autoApply = true)
-public class CategoryConverter implements AttributeConverter<Category, String> {
+public class StatusConverter implements AttributeConverter<Status, String> {
 
     @Override
-    public String convertToDatabaseColumn(Category status) {
+    public String convertToDatabaseColumn(Status status) {
         if (status == null) {
             return null;
         }
@@ -19,11 +19,11 @@ public class CategoryConverter implements AttributeConverter<Category, String> {
     }
 
     @Override
-    public Category convertToEntityAttribute(String value) {
+    public Status convertToEntityAttribute(String value) {
         if (value == null) {
             return null;
         }
-        return Stream.of(Category.values())
+        return Stream.of(Status.values())
                 .filter(c -> c.getValue().equals(value))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

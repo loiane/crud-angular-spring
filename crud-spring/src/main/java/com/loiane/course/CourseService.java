@@ -1,4 +1,4 @@
-package com.loiane.service;
+package com.loiane.course;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,15 +8,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import com.loiane.dto.CourseDTO;
-import com.loiane.dto.CoursePageDTO;
-import com.loiane.dto.CourseRequestDTO;
-import com.loiane.dto.mapper.CourseMapper;
-import com.loiane.enums.Status;
+import com.loiane.course.dto.CourseDTO;
+import com.loiane.course.dto.CoursePageDTO;
+import com.loiane.course.dto.CourseRequestDTO;
+import com.loiane.course.dto.mapper.CourseMapper;
+import com.loiane.course.enums.Status;
 import com.loiane.exception.BusinessException;
 import com.loiane.exception.RecordNotFoundException;
-import com.loiane.model.Course;
-import com.loiane.repository.CourseRepository;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;

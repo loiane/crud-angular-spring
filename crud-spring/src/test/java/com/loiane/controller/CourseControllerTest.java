@@ -37,12 +37,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loiane.TestData;
 import com.loiane.ValidationAdvice;
-import com.loiane.dto.CourseDTO;
-import com.loiane.dto.CoursePageDTO;
-import com.loiane.dto.CourseRequestDTO;
+import com.loiane.course.Course;
+import com.loiane.course.CourseController;
+import com.loiane.course.CourseService;
+import com.loiane.course.dto.CourseDTO;
+import com.loiane.course.dto.CoursePageDTO;
+import com.loiane.course.dto.CourseRequestDTO;
 import com.loiane.exception.RecordNotFoundException;
-import com.loiane.model.Course;
-import com.loiane.service.CourseService;
 
 import jakarta.servlet.ServletException;
 
