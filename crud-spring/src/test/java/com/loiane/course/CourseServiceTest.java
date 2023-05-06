@@ -1,4 +1,4 @@
-package com.loiane.service;
+package com.loiane.course;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +31,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.loiane.TestData;
 import com.loiane.ValidationAdvice;
 import com.loiane.course.Course;
 import com.loiane.course.CourseRepository;

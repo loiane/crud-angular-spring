@@ -1,4 +1,4 @@
-package com.loiane;
+package com.loiane.course;
 
 import java.util.List;
 import java.util.Set;

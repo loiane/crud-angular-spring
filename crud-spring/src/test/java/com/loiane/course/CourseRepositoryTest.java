@@ -1,4 +1,4 @@
-package com.loiane.repository;
+package com.loiane.course;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

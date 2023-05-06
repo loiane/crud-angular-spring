@@ -1,4 +1,4 @@
-package com.loiane.controller;
+package com.loiane.course;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -35,7 +35,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.loiane.TestData;
 import com.loiane.ValidationAdvice;
 import com.loiane.course.Course;
 import com.loiane.course.CourseController;
