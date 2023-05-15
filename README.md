@@ -56,7 +56,7 @@ This API is to showcase, specially for beginners, what a basic CRUD API that's c
 - ✅ Presentational x Smart Components
 - [In Progress] Unit and Integration tests for components, services, pipes, guards
 
-## ❗️Excuting the code locally
+## ❗️Executing the code locally
 
 ### Executing the back-end
 
