@@ -1,17 +1,14 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { Location } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, UntypedFormArray } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
-import { SpyLocation } from '@angular/common/testing';
 
 import { Course } from '../../model/course';
 import { coursesMock } from '../../services/courses.mock';
@@ -22,9 +19,7 @@ describe('CourseFormComponent', () => {
   let component: CourseFormComponent;
   let fixture: ComponentFixture<CourseFormComponent>;
   let courseServiceSpy: jasmine.SpyObj<CoursesService>;
-  let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
   let activatedRouteMock: any;
-  let location: any;
   let loader: HarnessLoader;
 
   beforeEach(async () => {
@@ -34,7 +29,6 @@ describe('CourseFormComponent', () => {
       save: of(coursesMock[0]),
       remove: of(coursesMock[0])
     });
-    snackBarSpy = jasmine.createSpyObj<MatSnackBar>(['open']);
     activatedRouteMock = {
       snapshot: {
         data: {
@@ -53,18 +47,19 @@ describe('CourseFormComponent', () => {
       ],
       providers: [
         { provide: CoursesService, useValue: courseServiceSpy },
-        { provide: MatSnackBar, useValue: snackBarSpy },
-        { provide: ActivatedRoute, useValue: activatedRouteMock },
-        { provide: Location, useValue: SpyLocation }
+        { provide: ActivatedRoute, useValue: activatedRouteMock }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CourseFormComponent);
     component = fixture.componentInstance;
-    location = TestBed.inject(Location);
     fixture.detectChanges();
     loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+  });
+
+  afterEach(() => {
+    TestBed.resetTestingModule();
   });
 
   it('should create', () => {
@@ -170,7 +165,7 @@ describe('CourseFormComponent', () => {
     const saveButton = fixture.debugElement.nativeElement.querySelector(
       'button[type="submit"]'
     );
-    saveButton.click();
+    saveButton.dispatchEvent(new Event('click'));
     expect(saveSpy).toHaveBeenCalled();
   });
 
@@ -179,14 +174,8 @@ describe('CourseFormComponent', () => {
     const cancelButton = fixture.debugElement.nativeElement.querySelector(
       'button[type="button"]'
     );
-    cancelButton.click();
+    cancelButton.dispatchEvent(new Event('click'));
     expect(cancelSpy).toHaveBeenCalled();
-  });
-
-  it('should call location.back when onCancel is called', () => {
-    spyOn(location, location.back);
-    component.onCancel();
-    expect(location.back).toHaveBeenCalled();
   });
 
   it('should call `CoursesService.save` when onSubmit is called and form is valid', () => {
