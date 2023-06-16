@@ -7,8 +7,8 @@ import { AppComponent } from './app.component';
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, MatToolbarModule, AppComponent]
-}).compileComponents();
+      imports: [RouterTestingModule, MatToolbarModule, AppComponent]
+    }).compileComponents();
   });
 
   it('should create the app', () => {
@@ -21,7 +21,7 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('CRUD Angular');
+    expect(compiled.querySelector('h1').textContent).toContain('Courses App');
   });
 
   it('should render toolbar', () => {
