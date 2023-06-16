@@ -1,13 +1,17 @@
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { Location } from '@angular/common';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, UntypedFormArray } from '@angular/forms';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
+import { SpyLocation } from '@angular/common/testing';
 
 import { Course } from '../../model/course';
 import { coursesMock } from '../../services/courses.mock';
@@ -20,8 +24,8 @@ describe('CourseFormComponent', () => {
   let courseServiceSpy: jasmine.SpyObj<CoursesService>;
   let snackBarSpy: jasmine.SpyObj<MatSnackBar>;
   let activatedRouteMock: any;
-  let locationSpy: jasmine.SpyObj<Location>;
-  let matDialogSpy: jasmine.SpyObj<MatDialog>;
+  let location: any;
+  let loader: HarnessLoader;
 
   beforeEach(async () => {
     courseServiceSpy = jasmine.createSpyObj<CoursesService>('CoursesService', {
@@ -31,8 +35,6 @@ describe('CourseFormComponent', () => {
       remove: of(coursesMock[0])
     });
     snackBarSpy = jasmine.createSpyObj<MatSnackBar>(['open']);
-    matDialogSpy = jasmine.createSpyObj<MatDialog>(['open']);
-    locationSpy = jasmine.createSpyObj<Location>('Location', ['back']);
     activatedRouteMock = {
       snapshot: {
         data: {
@@ -53,15 +55,16 @@ describe('CourseFormComponent', () => {
         { provide: CoursesService, useValue: courseServiceSpy },
         { provide: MatSnackBar, useValue: snackBarSpy },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
-        { provide: Location, useValue: locationSpy },
-        { provide: MatDialog, useValue: matDialogSpy }
+        { provide: Location, useValue: SpyLocation }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CourseFormComponent);
     component = fixture.componentInstance;
+    location = TestBed.inject(Location);
     fixture.detectChanges();
+    loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
   });
 
   it('should create', () => {
@@ -181,8 +184,9 @@ describe('CourseFormComponent', () => {
   });
 
   it('should call location.back when onCancel is called', () => {
+    spyOn(location, location.back);
     component.onCancel();
-    expect(locationSpy.back).toHaveBeenCalled();
+    expect(location.back).toHaveBeenCalled();
   });
 
   it('should call `CoursesService.save` when onSubmit is called and form is valid', () => {
@@ -211,7 +215,9 @@ describe('CourseFormComponent', () => {
     courseServiceSpy.save.and.returnValue(throwError(() => new Error('test')));
     component.form.setValue(coursesMock[0]);
     component.onSubmit();
-    expect(matDialogSpy.open).toHaveBeenCalled();
+    const dialogs = await loader.getAllHarnesses(MatDialogHarness);
+    expect(dialogs.length).toBe(1);
+    await dialogs[0].close(); // close the dialog
   });
 
   it('should load empty form when no course is passed', () => {
