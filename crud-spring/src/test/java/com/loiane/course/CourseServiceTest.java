@@ -20,7 +20,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,9 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.loiane.config.ValidationAdvice;
 import com.loiane.course.dto.CourseDTO;
 import com.loiane.course.dto.CoursePageDTO;
@@ -42,8 +39,7 @@ import com.loiane.exception.RecordNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 
 @ActiveProfiles("test")
-@ContextConfiguration(classes = { CourseService.class, CourseMapper.class })
-@ExtendWith(SpringExtension.class)
+@SpringJUnitConfig(classes = { CourseService.class, CourseMapper.class })
 class CourseServiceTest {
 
     @MockBean
@@ -103,7 +99,7 @@ class CourseServiceTest {
      * Method under test: {@link CourseService#findById(Long)}
      */
     @Test
-    @DisplayName("Should throw NotFound exception when course not found")
+            @DisplayName("Should throw NotFound exception when course not found")
     void testFindByIdNotFound() {
         when(this.courseRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(RecordNotFoundException.class, () -> this.courseService.findById(123L));

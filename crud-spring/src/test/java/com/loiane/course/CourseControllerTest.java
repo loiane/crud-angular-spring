@@ -19,14 +19,12 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -44,8 +42,7 @@ import com.loiane.exception.RecordNotFoundException;
 import jakarta.servlet.ServletException;
 
 @ActiveProfiles("test")
-@ContextConfiguration(classes = { CourseController.class })
-@ExtendWith(SpringExtension.class)
+@SpringJUnitConfig(classes = { CourseController.class })
 class CourseControllerTest {
 
     private final static String API = "/api/courses";
@@ -109,7 +106,7 @@ class CourseControllerTest {
      * Method under test: {@link CourseController#findById(Long)}
      */
     @Test
-    @DisplayName("Should return a 404 status code when course is not found")
+            @DisplayName("Should return a 404 status code when course is not found")
     void testFindByIdNotFound() {
         when(this.courseService.findById(anyLong())).thenThrow(new RecordNotFoundException(1L));
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(API_ID, 1);
