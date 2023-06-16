@@ -1,8 +1,22 @@
-import { Location, NgIf, NgFor } from '@angular/common';
+import { Location, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder, UntypedFormArray, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  FormGroup,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  UntypedFormArray,
+  Validators
+} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { ActivatedRoute } from '@angular/router';
 
 import { Course } from '../../model/course';
@@ -10,21 +24,27 @@ import { Lesson } from '../../model/lesson';
 import { CoursesService } from '../../services/courses.service';
 import { ErrorDialogComponent } from './../../../shared/components/error-dialog/error-dialog.component';
 import { FormUtilsService } from './../../../shared/services/form-utils.service';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatOptionModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCardModule } from '@angular/material/card';
 
 @Component({
-    selector: 'app-course-form',
-    templateUrl: './course-form.component.html',
-    styleUrls: ['./course-form.component.scss'],
-    standalone: true,
-    imports: [MatCardModule, MatToolbarModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, NgIf, MatSelectModule, MatOptionModule, MatButtonModule, MatIconModule, NgFor]
+  selector: 'app-course-form',
+  templateUrl: './course-form.component.html',
+  styleUrls: ['./course-form.component.scss'],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatToolbarModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    NgIf,
+    MatSelectModule,
+    MatOptionModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    NgFor
+  ]
 })
 export class CourseFormComponent implements OnInit {
   form!: FormGroup;

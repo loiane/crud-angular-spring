@@ -4,6 +4,6 @@ export const APP_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'courses' },
   {
     path: 'courses',
-    loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule)
+    loadChildren: () => import('./courses/courses.routes').then(m => m.COURSES_ROUTES)
   }
 ];
