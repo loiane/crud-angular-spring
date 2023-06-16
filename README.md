@@ -5,7 +5,7 @@
 
 CRUD Angular + Spring demonstrating Has-Many relationship, with tests.
 
-This API is to showcase, specially for beginners, what a basic CRUD API that's close to be Production ready looks like.
+This API is to showcase, especially for beginners, what a basic CRUD API that's close to being Production-ready looks like.
 
 ## 💻 Tecnologies
 
@@ -24,13 +24,13 @@ This API is to showcase, specially for beginners, what a basic CRUD API that's c
 - Java Extensions [link](https://marketplace.visualstudio.com/items?itemName=loiane.java-spring-extension-pack)
 - Angular Extensions [link](https://marketplace.visualstudio.com/items?itemName=loiane.angular-extension-pack)
 
-## Some functionalies available in the API
+## Some functionalities available in the API
 
 - ✅ Java model class with validation
 - ✅ JPA repository
 - ✅ JPA Pagination
-- ✅ Controller, Service and Repository layers
-- ✅ Has-Many relationship (Course-Lessons)
+- ✅ Controller, Service, and Repository layers
+- ✅ Has-Many relationships (Course-Lessons)
 - ✅ Java 17 Records as DTO (Data Transfer Object)
 - ✅ Hibernate / Jakarta Validation
 - ✅ Unit tests for all layers (repository, service, controller)
@@ -45,8 +45,9 @@ This API is to showcase, specially for beginners, what a basic CRUD API that's c
 - Throttling e Rate-limiting
 - Profiling the app
 
-## Some functionalies available in the Front-end
+## Some functionalities available in the Front-end
 
+- ✅ Angular Standalone components (Angular v16+)
 - ✅ Angular Material components
 - ✅ List of all courses
 - ✅ Form to update/create courses with lessons (has-many - FormArray)
@@ -68,7 +69,7 @@ Open the `crud-spring` project in your favorite IDE as a Maven project and execu
 
 You need to have Node.js / NPM installed locally.
 
-1. Install all the required depencencies:
+1. Install all the required dependencies:
 
 ```
 npm install
