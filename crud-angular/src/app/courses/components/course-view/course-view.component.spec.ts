@@ -12,9 +12,9 @@ describe('CourseViewComponent', () => {
   beforeEach(async(() => {
     activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['']);
     TestBed.configureTestingModule({
-      declarations: [CourseViewComponent],
-      providers: [{ provide: ActivatedRoute, useValue: activatedRouteSpy }]
-    }).compileComponents();
+    declarations: [CourseViewComponent],
+    providers: [{ provide: ActivatedRoute, useValue: activatedRouteSpy }]
+}).compileComponents();
   }));
 
   beforeEach(() => {

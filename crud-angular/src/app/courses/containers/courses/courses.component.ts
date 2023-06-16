@@ -8,11 +8,18 @@ import { ErrorDialogComponent } from '../../../shared/components/error-dialog/er
 import { Course } from '../../model/course';
 import { CoursesService } from '../../services/courses.service';
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CoursesListComponent } from '../../components/courses-list/courses-list.component';
+import { NgIf, AsyncPipe } from '@angular/common';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'app-courses',
-  templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.scss']
+    selector: 'app-courses',
+    templateUrl: './courses.component.html',
+    styleUrls: ['./courses.component.scss'],
+    standalone: true,
+    imports: [MatCardModule, MatToolbarModule, NgIf, CoursesListComponent, MatProgressSpinnerModule, AsyncPipe]
 })
 export class CoursesComponent implements OnInit {
   courses$: Observable<Course[]> | null = null;

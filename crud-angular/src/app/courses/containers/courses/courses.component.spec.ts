@@ -36,22 +36,22 @@ describe('CoursesComponent', () => {
     snackBarSpy = jasmine.createSpyObj<MatSnackBar>(['open']);
 
     await TestBed.configureTestingModule({
-      imports: [
+    imports: [
         MatDialogModule,
         NoopAnimationsModule,
         ErrorDialogComponent,
-        ConfirmationDialogComponent
-      ],
-      declarations: [CoursesComponent],
-      providers: [
+        ConfirmationDialogComponent,
+        CoursesComponent
+    ],
+    providers: [
         { provide: CoursesService, useValue: courseServiceSpy },
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: activatedRouteSpy },
         { provide: MatDialog },
         { provide: MatSnackBar, useValue: snackBarSpy }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
+}).compileComponents();
 
     fixture = TestBed.createComponent(CoursesComponent);
     component = fixture.componentInstance;

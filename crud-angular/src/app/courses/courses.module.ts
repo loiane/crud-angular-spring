@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { AppMaterialModule } from '../shared/app-material/app-material.module';
+
 import { ConfirmationDialogComponent } from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { ErrorDialogComponent } from '../shared/components/error-dialog/error-dialog.component';
 import { CategoryPipe } from '../shared/pipes/category.pipe';
@@ -12,15 +12,14 @@ import { CoursesComponent } from './containers/courses/courses.component';
 import { CoursesRoutingModule } from './courses-routing.module';
 
 @NgModule({
-  declarations: [CoursesComponent, CoursesListComponent, CourseFormComponent],
-  imports: [
+    imports: [
     CommonModule,
     CoursesRoutingModule,
-    AppMaterialModule,
     ReactiveFormsModule,
     CategoryPipe,
     ErrorDialogComponent,
-    ConfirmationDialogComponent
-  ]
+    ConfirmationDialogComponent,
+    CoursesComponent, CoursesListComponent, CourseFormComponent
+]
 })
 export class CoursesModule { }

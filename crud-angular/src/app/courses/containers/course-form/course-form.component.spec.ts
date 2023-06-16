@@ -9,7 +9,6 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
-import { AppMaterialModule } from '../../../shared/app-material/app-material.module';
 import { Course } from '../../model/course';
 import { coursesMock } from '../../services/courses.mock';
 import { CoursesService } from '../../services/courses.service';
@@ -43,13 +42,12 @@ describe('CourseFormComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [CourseFormComponent],
       imports: [
         MatDialogModule,
         ReactiveFormsModule,
-        AppMaterialModule,
         RouterTestingModule.withRoutes([]),
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        CourseFormComponent
       ],
       providers: [
         { provide: CoursesService, useValue: courseServiceSpy },
