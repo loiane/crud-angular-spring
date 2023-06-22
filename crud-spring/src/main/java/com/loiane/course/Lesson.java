@@ -74,11 +74,28 @@ public class Lesson {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        return obj instanceof Lesson lesson && id == lesson.id && name.equals(lesson.name)
+                && youtubeUrl.equals(lesson.youtubeUrl);
+    }
+
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Lesson [id=").append(id).append(", name=").append(name).append(", youtubeUrl=")
                 .append(youtubeUrl).append(", course=").append(course).append("]");
         return builder.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * id + name.hashCode() + youtubeUrl.hashCode();
     }
 
 }

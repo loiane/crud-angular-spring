@@ -64,4 +64,16 @@ public class CourseMapper {
             default -> throw new IllegalArgumentException("Invalid Category.");
         };
     }
+
+    public Lesson convertLessonDTOToLesson(LessonDTO lessonDTO) {
+        Lesson lesson = new Lesson();
+        lesson.setId(lessonDTO._id());
+        lesson.setName(lessonDTO.name());
+        lesson.setYoutubeUrl(lessonDTO.youtubeUrl());
+        return lesson;
+    }
+
+    public LessonDTO convertLessonToLessonDTO(Lesson lesson) {
+        return new LessonDTO(lesson.getId(), lesson.getName(), lesson.getYoutubeUrl());
+    }
 }

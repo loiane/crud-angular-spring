@@ -96,7 +96,24 @@ public class Course {
         if (lessons == null) {
             throw new IllegalArgumentException("Lessons cannot be null.");
         }
-        this.lessons = lessons;
+        this.lessons.clear();
+        this.lessons.addAll(lessons);
+    }
+
+    public void addLesson(Lesson lesson) {
+        if (lesson == null) {
+            throw new IllegalArgumentException("Lesson cannot be null.");
+        }
+        lesson.setCourse(this);
+        this.lessons.add(lesson);
+    }
+
+    public void removeLesson(Lesson lesson) {
+        if (lesson == null) {
+            throw new IllegalArgumentException("Lesson cannot be null.");
+        }
+        lesson.setCourse(null);
+        this.lessons.remove(lesson);
     }
 
 }

@@ -67,9 +67,37 @@ public class CourseService {
         return courseRepository.findById(id).map(actual -> {
             actual.setName(courseRequestDTO.name());
             actual.setCategory(courseMapper.convertCategoryValue(courseRequestDTO.category()));
+            mergeLessonsForUpdate(actual, courseRequestDTO);
             return courseMapper.toDTO(courseRepository.save(actual));
         })
                 .orElseThrow(() -> new RecordNotFoundException(id));
+    }
+
+    private void mergeLessonsForUpdate(Course updatedCourse, CourseRequestDTO courseRequestDTO) {
+
+        // find the lessons that were removed
+        updatedCourse.getLessons().stream().forEach(lesson -> {
+            if (!courseRequestDTO.lessons().stream()
+                    .anyMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId())) {
+                updatedCourse.removeLesson(lesson);
+            }
+        });
+
+        courseRequestDTO.lessons().stream().forEach(lessonDto -> {
+            // new lesson, add it
+            if (lessonDto._id() == 0) {
+                updatedCourse.addLesson(courseMapper.convertLessonDTOToLesson(lessonDto));
+            } else {
+                // existing lesson, find it and update
+                updatedCourse.getLessons().stream()
+                        .filter(lesson -> lesson.getId() == lessonDto._id())
+                        .findAny()
+                        .ifPresent(lesson -> {
+                            lesson.setName(lessonDto.name());
+                            lesson.setYoutubeUrl(lessonDto.youtubeUrl());
+                        });
+            }
+        });
     }
 
     public void delete(@Positive @NotNull Long id) {
