@@ -8,7 +8,7 @@ import { CoursesService } from '../services/courses.service';
 @Injectable({
   providedIn: 'root'
 })
-export class CourseResolver  {
+export class CourseResolver {
   constructor(private service: CoursesService) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Course> {

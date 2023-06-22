@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { first, map, of, tap } from 'rxjs';
+import { first, of, tap } from 'rxjs';
 
 import { Course } from '../model/course';
 import { CoursePage } from '../model/course-page';
@@ -15,11 +15,11 @@ export class CoursesService {
 
   constructor(private http: HttpClient) { }
 
-  list() {
-    return this.http.get<CoursePage>(this.API).pipe(
+  list(page = 0, pageSize = 10) {
+    return this.http.get<CoursePage>(this.API, { params: { page, pageSize } }).pipe(
       first(),
-      map(data => data.courses),
-      tap(data => (this.cache = data))
+      // map(data => data.courses),
+      tap(data => (this.cache = data.courses))
     );
   }
 

@@ -1,17 +1,19 @@
 import { AsyncPipe, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 import { CoursesListComponent } from '../../components/courses-list/courses-list.component';
 import { Course } from '../../model/course';
+import { CoursePage } from '../../model/course-page';
 import { CoursesService } from '../../services/courses.service';
 
 @Component({
@@ -27,11 +29,17 @@ import { CoursesService } from '../../services/courses.service';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatPaginatorModule,
     AsyncPipe
   ]
 })
-export class CoursesComponent implements OnInit {
-  courses$: Observable<Course[]> | null = null;
+export class CoursesComponent implements AfterViewInit {
+  courses$: Observable<CoursePage> | null = null;
+
+  pageIndex = 0;
+  pageSize = 10;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private coursesService: CoursesService,
@@ -41,17 +49,23 @@ export class CoursesComponent implements OnInit {
     private snackBar: MatSnackBar
   ) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.refresh();
   }
 
-  refresh() {
-    this.courses$ = this.coursesService.list().pipe(
-      catchError(() => {
-        this.onError('Error loading courses.');
-        return of([]);
-      })
-    );
+  refresh(pageEvent: PageEvent = { length: 0, pageIndex: 0, pageSize: 10 }) {
+    this.courses$ = this.coursesService
+      .list(this.paginator?.pageIndex, this.paginator?.pageSize)
+      .pipe(
+        tap(() => {
+          this.pageIndex = pageEvent.pageIndex;
+          this.pageSize = pageEvent.pageSize;
+        }),
+        catchError(() => {
+          this.onError('Error loading courses.');
+          return of({ courses: [], totalElements: 0 } as CoursePage);
+        })
+      );
   }
 
   onError(errorMsg: string) {

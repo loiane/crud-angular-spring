@@ -49,7 +49,7 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 
 - ✅ Angular Standalone components (Angular v16+)
 - ✅ Angular Material components
-- ✅ List of all courses
+- ✅ List of all courses with pagination
 - ✅ Form to update/create courses with lessons (has-many - FormArray)
 - [ ] Form async validation for duplicated courses and lessons
 - [ ] View only screen
