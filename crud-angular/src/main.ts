@@ -3,7 +3,7 @@ import { importProvidersFrom } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { PreloadAllModules, provideRouter, withDebugTracing, withPreloading } from '@angular/router';
+import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
 
 import { AppComponent } from './app/app.component';
 import { APP_ROUTES } from './app/app.routes';
@@ -13,6 +13,6 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(BrowserModule, MatToolbarModule),
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
-    provideRouter(APP_ROUTES, withPreloading(PreloadAllModules), withDebugTracing())
+    provideRouter(APP_ROUTES, withPreloading(PreloadAllModules)) //, withDebugTracing())
   ]
 }).catch(err => console.error(err));
