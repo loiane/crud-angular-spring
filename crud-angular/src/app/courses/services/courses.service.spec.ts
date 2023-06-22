@@ -27,9 +27,9 @@ describe('CoursesService', () => {
   });
 
   it('should list all courses', () => {
-    service.list().subscribe(courses => {
-      expect(courses).toBeTruthy();
-      expect(courses.length).toBe(coursesMock.length);
+    service.list().subscribe(coursePage => {
+      expect(coursePage).toBeTruthy();
+      expect(coursePage.courses.length).toBe(coursesMock.length);
     });
 
     const req = httpTestingController.expectOne(API);

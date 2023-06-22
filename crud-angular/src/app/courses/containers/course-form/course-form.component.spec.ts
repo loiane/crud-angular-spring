@@ -11,7 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
 import { Course } from '../../model/course';
-import { coursesMock } from '../../services/courses.mock';
+import { coursesMock, coursesPageMock } from '../../services/courses.mock';
 import { CoursesService } from '../../services/courses.service';
 import { CourseFormComponent } from './course-form.component';
 
@@ -24,7 +24,7 @@ describe('CourseFormComponent', () => {
 
   beforeEach(async () => {
     courseServiceSpy = jasmine.createSpyObj<CoursesService>('CoursesService', {
-      list: of(coursesMock),
+      list: of(coursesPageMock),
       loadById: undefined,
       save: of(coursesMock[0]),
       remove: of(coursesMock[0])
