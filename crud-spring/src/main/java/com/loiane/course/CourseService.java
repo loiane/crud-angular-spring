@@ -78,9 +78,9 @@ public class CourseService {
         // find the lessons that were removed
         List<Lesson> lessonsToRemove = updatedCourse.getLessons().stream()
                 .filter(lesson -> !courseRequestDTO.lessons().stream()
-                        .anyMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId()))
+                        .noneMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId()))
                 .collect(Collectors.toList());
-        lessonsToRemove.stream().forEach(lesson -> updatedCourse.removeLesson(lesson));
+        lessonsToRemove.stream().forEach(updatedCourse::removeLesson);
 
         courseRequestDTO.lessons().stream().forEach(lessonDto -> {
             // new lesson, add it
