@@ -1,5 +1,5 @@
 import { AsyncPipe, NgIf } from '@angular/common';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -33,7 +33,7 @@ import { CoursesService } from '../../services/courses.service';
     AsyncPipe
   ]
 })
-export class CoursesComponent implements AfterViewInit {
+export class CoursesComponent implements OnInit {
   courses$: Observable<CoursePage> | null = null;
 
   pageIndex = 0;
@@ -49,13 +49,13 @@ export class CoursesComponent implements AfterViewInit {
     private snackBar: MatSnackBar
   ) { }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     this.refresh();
   }
 
   refresh(pageEvent: PageEvent = { length: 0, pageIndex: 0, pageSize: 10 }) {
     this.courses$ = this.coursesService
-      .list(this.paginator?.pageIndex, this.paginator?.pageSize)
+      .list(pageEvent.pageIndex, pageEvent.pageSize)
       .pipe(
         tap(() => {
           this.pageIndex = pageEvent.pageIndex;
