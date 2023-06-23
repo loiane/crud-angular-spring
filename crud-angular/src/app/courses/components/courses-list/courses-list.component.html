@@ -2,7 +2,9 @@
   <!-- Name Column -->
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef>Course</mat-header-cell>
-    <mat-cell *matCellDef="let course">{{ course.name }}</mat-cell>
+    <mat-cell *matCellDef="let course"
+      ><a (click)="onView(course)">{{ course.name }}</a></mat-cell
+    >
   </ng-container>
 
   <!-- Category Column -->

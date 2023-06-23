@@ -82,6 +82,10 @@ export class CoursesComponent implements OnInit {
     this.router.navigate(['edit', course._id], { relativeTo: this.route });
   }
 
+  onView(course: Course) {
+    this.router.navigate(['view', course._id], { relativeTo: this.route });
+  }
+
   onRemove(course: Course) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       data: 'Are you sure you would like to remove this course?'
