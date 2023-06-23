@@ -10,9 +10,9 @@ describe('CoursesListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [CoursesListComponent],
-    schemas: [NO_ERRORS_SCHEMA]
-}).compileComponents();
+      imports: [CoursesListComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CoursesListComponent);
     component = fixture.componentInstance;

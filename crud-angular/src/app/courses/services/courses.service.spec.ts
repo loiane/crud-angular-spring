@@ -12,6 +12,7 @@ describe('CoursesService', () => {
   let service: CoursesService;
   let httpTestingController: HttpTestingController;
   const API = '/api/courses';
+  const API_PAGE = `${API}?page=0&pageSize=10`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -32,7 +33,7 @@ describe('CoursesService', () => {
       expect(coursePage.courses.length).toBe(coursesMock.length);
     });
 
-    const req = httpTestingController.expectOne(API);
+    const req = httpTestingController.expectOne(API_PAGE);
     expect(req.request.method).toEqual('GET');
     req.flush(coursesPageMock);
   });
