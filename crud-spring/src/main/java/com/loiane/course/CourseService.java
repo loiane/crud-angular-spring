@@ -76,12 +76,11 @@ public class CourseService {
     private void mergeLessonsForUpdate(Course updatedCourse, CourseRequestDTO courseRequestDTO) {
 
         // find the lessons that were removed
-        updatedCourse.getLessons().stream().forEach(lesson -> {
-            if (!courseRequestDTO.lessons().stream()
-                    .anyMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId())) {
-                updatedCourse.removeLesson(lesson);
-            }
-        });
+        List<Lesson> lessonsToRemove = updatedCourse.getLessons().stream()
+                .filter(lesson -> !courseRequestDTO.lessons().stream()
+                        .anyMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId()))
+                .collect(Collectors.toList());
+        lessonsToRemove.stream().forEach(lesson -> updatedCourse.removeLesson(lesson));
 
         courseRequestDTO.lessons().stream().forEach(lessonDto -> {
             // new lesson, add it
