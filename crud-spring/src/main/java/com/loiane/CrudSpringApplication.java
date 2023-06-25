@@ -1,8 +1,5 @@
 package com.loiane;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,19 +27,18 @@ public class CrudSpringApplication {
 
 	private void extracted(CourseRepository courseRepository) {
 		courseRepository.deleteAll();
-		for (int i = 1; i < 20; i++) {
+		for (int i = 1; i < 5; i++) {
 			Course c = new Course();
 			c.setName("Course " + i);
 			c.setCategory(Category.FRONT_END);
 			c.setStatus(Status.ACTIVE);
 
-			Set<Lesson> lessons = new HashSet<>();
-			Lesson lesson = new Lesson();
-			lesson.setName("Lesson " + i);
-			lesson.setYoutubeUrl("abcdefgh123");
-			lesson.setCourse(c);
-			lessons.add(lesson);
-			c.setLessons(lessons);
+			for (int j = 1; j < 10; j++) {
+				Lesson lesson = new Lesson();
+				lesson.setName("Lesson " + j);
+				lesson.setYoutubeUrl("abcdefgh12" + j);
+				c.addLesson(lesson);
+			}
 
 			courseRepository.save(c);
 		}
