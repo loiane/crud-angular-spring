@@ -73,7 +73,6 @@ export class CourseFormComponent implements OnInit {
   }
 
   private retrieveLessons(course: Course) {
-    console.log(course);
     const lessons = [];
     if (course?.lessons) {
       course.lessons.forEach(lesson => lessons.push(this.createLesson(lesson)));
