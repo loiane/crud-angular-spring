@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.loiane.course.enums.Category;
@@ -32,7 +33,7 @@ class CourseRepositoryTest {
     CourseRepository courseRepository;
 
     /**
-     * Method under test: {@link CourseService#findByStatus(int, int)}
+     * Method under test: {@link CourseRepository#findByStatus(Pageable, Status)}
      */
     @Test
     @DisplayName("Should find all courses in the database by Status with pagination")
@@ -44,7 +45,7 @@ class CourseRepositoryTest {
         assertThat(coursePage).isNotNull();
         assertThat(coursePage.getContent()).isNotEmpty();
         assertThat(coursePage.getContent().get(0).getLessons()).isNotEmpty();
-        coursePage.getContent().stream().forEach(c -> {
+        coursePage.getContent().forEach(c -> {
             assertThat(c.getStatus()).isEqualTo(Status.ACTIVE);
             assertThat(c.getLessons()).isNotEmpty();
         });
@@ -64,7 +65,7 @@ class CourseRepositoryTest {
     }
 
     /**
-     * Method under test: {@link CourseService#findByIdAndStatus(Long, Status)}
+     * Method under test: {@link CourseRepository#findByName(String)}
      */
     @Test
     @DisplayName("Should find a course by name")
