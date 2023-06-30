@@ -59,7 +59,7 @@ class CourseServiceTest {
     }
 
     /**
-     * Method under test: {@link CourseService#findAll(int, int, String)}
+     * Method under test: {@link CourseService#findAll(int, int)}
      */
     @Test
     @DisplayName("Should return a list of courses with pagination")
@@ -141,7 +141,7 @@ class CourseServiceTest {
         when(this.courseRepository.save(any())).thenReturn(course);
 
         assertEquals(courseMapper.toDTO(course), this.courseService.create(courseDTO));
-        verify(this.courseRepository).save((Course) any());
+        verify(this.courseRepository).save(any());
     }
 
     /**
@@ -263,7 +263,7 @@ class CourseServiceTest {
         when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
         assertThrows(RecordNotFoundException.class, () -> this.courseService.delete(1L));
         verify(this.courseRepository).findById(anyLong());
-        verify(this.courseRepository).delete((Course) any());
+        verify(this.courseRepository).delete(any());
     }
 
     /**
