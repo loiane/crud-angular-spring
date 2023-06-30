@@ -62,7 +62,7 @@ class CourseControllerTest {
     }
 
     /**
-     * Method under test: {@link CourseController#findAll()}
+     * Method under test: {@link CourseController#findAll(int, int)}
      */
     @Test
     @DisplayName("Should return a list of courses in JSON format")
@@ -199,7 +199,7 @@ class CourseControllerTest {
     }
 
     /**
-     * Method under test: {@link CourseController#update(Long, CourseDTO)}
+     * Method under test: {@link CourseController#update(Long, CourseRequestDTO)}
      */
     @Test
     @DisplayName("Should update a course when valid")
@@ -222,7 +222,7 @@ class CourseControllerTest {
     }
 
     /**
-     * Method under test: {@link CourseController#update(Long, CourseDTO)}
+     * Method under test: {@link CourseController#update(Long, CourseRequestDTO)}
      */
     @Test
     @DisplayName("Should throw an exception when updating an invalid course ID")
@@ -242,7 +242,7 @@ class CourseControllerTest {
     }
 
     /**
-     * Method under test: {@link CourseController#update(Long, CourseDTO)}
+     * Method under test: {@link CourseController#update(Long, CourseRequestDTO)}
      */
     @Test
     @DisplayName("Should throw exception when id is not valid - update")
