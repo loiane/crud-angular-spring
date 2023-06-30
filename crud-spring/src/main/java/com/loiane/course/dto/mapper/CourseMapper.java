@@ -49,7 +49,7 @@ public class CourseMapper {
         List<LessonDTO> lessonDTOList = course.getLessons()
                 .stream()
                 .map(lesson -> new LessonDTO(lesson.getId(), lesson.getName(), lesson.getYoutubeUrl()))
-                .collect(Collectors.toList());
+                .toList();
         return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(),
                 lessonDTOList);
     }
@@ -73,7 +73,4 @@ public class CourseMapper {
         return lesson;
     }
 
-    public LessonDTO convertLessonToLessonDTO(Lesson lesson) {
-        return new LessonDTO(lesson.getId(), lesson.getName(), lesson.getYoutubeUrl());
-    }
 }
