@@ -3,9 +3,9 @@ package com.loiane.course.enums;
 public enum Category {
     FRONT_END("Front-end"), BACK_END("Back-end");
 
-    private String value;
+    private final String value;
 
-    private Category(String value) {
+    Category(String value) {
         this.value = value;
     }
 
