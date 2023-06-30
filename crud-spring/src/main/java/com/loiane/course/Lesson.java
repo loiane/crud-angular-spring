@@ -81,8 +81,8 @@ public class Lesson {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        return obj instanceof Lesson lesson && id == lesson.id && name.equals(lesson.name)
-                && youtubeUrl.equals(lesson.youtubeUrl);
+        Lesson lesson = (Lesson) obj;
+        return id == lesson.id && name.equals(lesson.name) && youtubeUrl.equals(lesson.youtubeUrl);
     }
 
     @Override
