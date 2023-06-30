@@ -1,7 +1,6 @@
 package com.loiane.course;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,12 +38,12 @@ public class CourseService {
         Page<Course> coursePage = courseRepository.findAll(PageRequest.of(page, pageSize));
         List<CourseDTO> list = coursePage.getContent().stream()
                 .map(courseMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
         return new CoursePageDTO(list, coursePage.getTotalElements(), coursePage.getTotalPages());
     }
 
     public List<CourseDTO> findByName(@NotNull @NotBlank String name) {
-        return courseRepository.findByName(name).stream().map(courseMapper::toDTO).collect(Collectors.toList());
+        return courseRepository.findByName(name).stream().map(courseMapper::toDTO).toList();
     }
 
     public CourseDTO findById(@Positive @NotNull Long id) {
@@ -77,12 +76,12 @@ public class CourseService {
 
         // find the lessons that were removed
         List<Lesson> lessonsToRemove = updatedCourse.getLessons().stream()
-                .filter(lesson -> !courseRequestDTO.lessons().stream()
-                        .noneMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId()))
-                .collect(Collectors.toList());
-        lessonsToRemove.stream().forEach(updatedCourse::removeLesson);
+                .filter(lesson -> courseRequestDTO.lessons().stream()
+                        .anyMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId()))
+                .toList();
+        lessonsToRemove.forEach(updatedCourse::removeLesson);
 
-        courseRequestDTO.lessons().stream().forEach(lessonDto -> {
+        courseRequestDTO.lessons().forEach(lessonDto -> {
             // new lesson, add it
             if (lessonDto._id() == 0) {
                 updatedCourse.addLesson(courseMapper.convertLessonDTOToLesson(lessonDto));
