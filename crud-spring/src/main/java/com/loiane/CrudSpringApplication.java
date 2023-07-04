@@ -20,7 +20,7 @@ public class CrudSpringApplication {
 	}
 
 	@Bean
-	@Profile("dev")
+	@Profile("test")
 	CommandLineRunner initDatabase(CourseRepository courseRepository) {
 		return args -> extracted(courseRepository);
 	}
