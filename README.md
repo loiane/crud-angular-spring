@@ -46,6 +46,8 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 - Data Compression
 - Throttling e Rate-limiting
 - Profiling the app
+- Test Containers
+- Docker Build
 
 ## Some functionalities available in the Front-end
 
@@ -54,10 +56,30 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 - ✅ List of all courses with pagination
 - ✅ Form to update/create courses with lessons (has-many - FormArray)
 - [ ] Form async validation for duplicated courses and lessons
-- [In Progress] View only screen
+- ✅ View only screen
 - ✅ TypedForms (Angular v14+)
 - ✅ Presentational x Smart Components
 - [In Progress] Unit and Integration tests for components, services, pipes, guards
+
+## Screenshots
+
+Main Page with Pagination
+
+<p align="center">
+  <img src="./images/main.png" alt="Main Page" width="100%">
+</p>
+
+Form with One to Many (Course-Lessons)
+
+<p align="center">
+  <img src="./images/form.png" alt="Form Page" width="100%">
+</p>
+
+View Page with Youtube Player
+
+<p align="center">
+  <img src="./images/view.png" alt="View Page" width="100%">
+</p>
 
 ## ❗️Executing the code locally
 
