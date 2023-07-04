@@ -45,4 +45,8 @@ export class CourseViewComponent implements OnInit {
   display(lesson: Lesson) {
     this.selectedLesson = lesson;
   }
+
+  displaySelectedLesson(lesson: Lesson) {
+    return this.selectedLesson === lesson;
+  }
 }

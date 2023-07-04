@@ -36,7 +36,7 @@ public class CrudSpringApplication {
 			for (int j = 1; j < 10; j++) {
 				Lesson lesson = new Lesson();
 				lesson.setName("Lesson " + j);
-				lesson.setYoutubeUrl("abcdefgh12" + j);
+				lesson.setYoutubeUrl("Fj3Zvf-N4bk");
 				c.addLesson(lesson);
 			}
 

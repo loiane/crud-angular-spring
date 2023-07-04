@@ -20,3 +20,9 @@
 .list-with-border {
   border: 1px solid #f2f2f2;
 }
+
+.selected-lesson {
+  font-style: italic;
+  font-weight: bold !important;
+  background-color: whitesmoke;
+}

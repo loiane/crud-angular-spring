@@ -5,7 +5,10 @@
     </div>
     <mat-nav-list dense *ngIf="course.lessons">
       <ng-template ngFor let-lesson [ngForOf]="course.lessons">
-        <mat-list-item class="list-with-border" (click)="display(lesson)">
+        <mat-list-item
+          class="list-with-border"
+          (click)="display(lesson)"
+          [activated]="displaySelectedLesson(lesson)">
           <span mat-line>{{ lesson.name }}</span>
         </mat-list-item>
       </ng-template>
