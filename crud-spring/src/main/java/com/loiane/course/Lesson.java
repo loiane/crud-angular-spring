@@ -20,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
 public class Lesson {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotBlank
