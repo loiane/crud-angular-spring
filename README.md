@@ -11,9 +11,10 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 
 - Java 17
 - Spring Boot 3 (Spring 6)
-- JPA + Hibernate
-- JUnit 5 + Mockito (back-end tests)
 - Maven
+- JPA + Hibernate
+- MySQL
+- JUnit 5 + Mockito (back-end tests)
 - Angular v16
 - Angular Material
 - Karma + Jasmine (front-end tests)
@@ -29,6 +30,7 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 - ✅ Java model class with validation
 - ✅ JPA repository
 - ✅ JPA Pagination
+- ✅ MySQL database (can you any database of your preference)
 - ✅ Controller, Service, and Repository layers
 - ✅ Has-Many relationships (Course-Lessons)
 - ✅ Java 17 Records as DTO (Data Transfer Object)
@@ -52,7 +54,7 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 - ✅ List of all courses with pagination
 - ✅ Form to update/create courses with lessons (has-many - FormArray)
 - [ ] Form async validation for duplicated courses and lessons
-- [ ] View only screen
+- [In Progress] View only screen
 - ✅ TypedForms (Angular v14+)
 - ✅ Presentational x Smart Components
 - [In Progress] Unit and Integration tests for components, services, pipes, guards
