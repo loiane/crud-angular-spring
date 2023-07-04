@@ -15,7 +15,10 @@
     </mat-nav-list>
   </mat-drawer>
 
-  <div class="example-sidenav-content">
-    <youtube-player #ytPlayer [videoId]="selectedLesson.youtubeUrl"></youtube-player>
+  <div class="example-sidenav-content" #youTubePlayer>
+    <youtube-player
+      [width]="videoWidth"
+      [height]="videoHeight"
+      [videoId]="selectedLesson.youtubeUrl"></youtube-player>
   </div>
 </mat-drawer-container>
