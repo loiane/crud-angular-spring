@@ -66,19 +66,19 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 Main Page with Pagination
 
 <p align="center">
-  <img src="./images/main.png" alt="Main Page" width="100%">
+  <img src="./images/main.jpeg" alt="Main Page" width="100%">
 </p>
 
 Form with One to Many (Course-Lessons)
 
 <p align="center">
-  <img src="./images/form.png" alt="Form Page" width="100%">
+  <img src="./images/form.jpeg" alt="Form Page" width="100%">
 </p>
 
 View Page with Youtube Player
 
 <p align="center">
-  <img src="./images/view.png" alt="View Page" width="100%">
+  <img src="./images/view.jpeg" alt="View Page" width="100%">
 </p>
 
 ## ❗️Executing the code locally
