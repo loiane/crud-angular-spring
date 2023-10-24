@@ -9,7 +9,7 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 
 ## 💻 Tecnologies
 
-- Java 17
+- Java 21
 - Spring Boot 3 (Spring 6)
 - Maven
 - JPA + Hibernate
