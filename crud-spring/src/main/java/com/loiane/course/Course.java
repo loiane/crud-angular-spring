@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.validator.constraints.Length;
 
 import com.loiane.course.enums.Category;
@@ -27,7 +27,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @SQLDelete(sql = "UPDATE Course SET status = 'Inactive' WHERE id=?")
-@Where(clause = "status <> 'Inactive'")
+@SQLRestriction("status <> 'Inactive'")
 @Entity
 public class Course {
 
