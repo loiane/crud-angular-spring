@@ -20,7 +20,7 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 ## Updating this project to higher versions
 
-Run `ng update @angular/cli @angular/core @angular/cdk @angular/material @angular/youtube-player --force` to execute the automated update using Angular CLI.
+Run `ng update @angular/cli @angular/core @angular/cdk @angular/material @angular/youtube-player @angular-eslint/schematics --force` to execute the automated update using Angular CLI.
 
 ## Further help
 
