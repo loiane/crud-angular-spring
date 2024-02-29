@@ -38,6 +38,7 @@ import com.loiane.exception.RecordNotFoundException;
 
 import jakarta.validation.ConstraintViolationException;
 
+@SuppressWarnings("null")
 @ActiveProfiles("test")
 @SpringJUnitConfig(classes = { CourseService.class, CourseMapper.class })
 class CourseServiceTest {
@@ -99,7 +100,7 @@ class CourseServiceTest {
      * Method under test: {@link CourseService#findById(Long)}
      */
     @Test
-            @DisplayName("Should throw NotFound exception when course not found")
+    @DisplayName("Should throw NotFound exception when course not found")
     void testFindByIdNotFound() {
         when(this.courseRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(RecordNotFoundException.class, () -> this.courseService.findById(123L));

@@ -24,6 +24,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 
 @Service
 @Validated
+@SuppressWarnings("null")
 public class CourseService {
 
     private final CourseRepository courseRepository;

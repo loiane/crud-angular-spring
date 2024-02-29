@@ -24,6 +24,7 @@ import com.loiane.course.enums.Status;
  */
 @ActiveProfiles("test")
 @DataJpaTest
+@SuppressWarnings("null")
 class CourseRepositoryTest {
 
     @Autowired

@@ -22,6 +22,7 @@ public class ValidationAdvice implements MethodBeforeAdvice {
         factory.close();
     }
 
+    @SuppressWarnings("null")
     @Override
     public void before(Method method, Object[] args, @Nullable Object target) {
         Set<ConstraintViolation<Object>> violations = executableValidator.validateParameters(target, method, args);

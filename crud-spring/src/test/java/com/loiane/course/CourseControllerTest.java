@@ -41,6 +41,7 @@ import com.loiane.exception.RecordNotFoundException;
 
 import jakarta.servlet.ServletException;
 
+@SuppressWarnings("null")
 @ActiveProfiles("test")
 @SpringJUnitConfig(classes = { CourseController.class })
 class CourseControllerTest {
@@ -106,7 +107,7 @@ class CourseControllerTest {
      * Method under test: {@link CourseController#findById(Long)}
      */
     @Test
-            @DisplayName("Should return a 404 status code when course is not found")
+    @DisplayName("Should return a 404 status code when course is not found")
     void testFindByIdNotFound() {
         when(this.courseService.findById(anyLong())).thenThrow(new RecordNotFoundException(1L));
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(API_ID, 1);
