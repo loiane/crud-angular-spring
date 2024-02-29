@@ -1,6 +1,7 @@
 name: "Update Angular Action"
 on: # when the action should run. Can also be a CRON or in response to external events. see https://git.io/JeBz1
-  push
+  schedule:
+    - cron: '30 5 * * 1,3,5'
 
 jobs:
   ngxUptodate:
