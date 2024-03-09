@@ -41,7 +41,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: crud-angular/package-lock.json
       - name: Install dependencies
-        run: npm install
+        run: npm ci
         working-directory: crud-angular
       - name: Run tests
         run: npm run test:ci
