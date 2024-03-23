@@ -1,0 +1,21 @@
+GET http://127.0.0.1:8080/api/courses
+
+###
+
+GET http://127.0.0.1:8080/api/courses/1
+
+###
+
+POST http://127.0.0.1:8080/api/courses
+content-type: application/json
+
+{
+  "name": "Course XXXXXXXXXXX",
+  "category": "Front-end",
+  "lessons": [
+    {
+      "name": "Lesson XXXXXXXXXXX",
+      "youtubeUrl": "Fj3Zvf-N4bk"
+    }
+  ]
+}
