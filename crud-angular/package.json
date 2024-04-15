@@ -40,6 +40,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "prettier": "^3.2.5",
-    "typescript": "~5.4.4"
+    "typescript": "~5.4.5"
   }
 }
