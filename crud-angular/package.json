@@ -19,7 +19,7 @@
     "@angular/compiler": "^17.3.4",
     "@angular/core": "^17.3.4",
     "@angular/forms": "^17.3.4",
-    "@angular/material": "^17.3.4",
+    "@angular/material": "^17.3.5",
     "@angular/platform-browser": "^17.3.4",
     "@angular/platform-browser-dynamic": "^17.3.4",
     "@angular/router": "^17.3.4",
