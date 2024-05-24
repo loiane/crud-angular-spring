@@ -14,7 +14,7 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 - JPA + Hibernate
 - MySQL
 - JUnit 5 + Mockito (back-end tests)
-- Angular v17
+- Angular v18
 - Angular Material
 - Karma + Jasmine (front-end tests)
 
@@ -29,7 +29,7 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 - ✅ Java model class with validation
 - ✅ JPA repository
 - ✅ JPA Pagination
-- ✅ MySQL database (can you any database of your preference)
+- ✅ MySQL database (you can use any database of your preference)
 - ✅ Controller, Service, and Repository layers
 - ✅ Has-Many relationships (Course-Lessons)
 - ✅ Java 17 Records as DTO (Data Transfer Object)
@@ -48,7 +48,7 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 - Test Containers
 - Docker Build
 
-## Some functionalities available in the Front-end
+## Some functionalities available in the front end
 
 - ✅ Angular Standalone components (Angular v16+)
 - ✅ Angular Material components
@@ -73,7 +73,7 @@ Form with One to Many (Course-Lessons)
   <img src="./docs/form.jpeg" alt="Form Page" width="100%">
 </p>
 
-View Page with Youtube Player
+View Page with YouTube Player
 
 <p align="center">
   <img src="./docs/view.jpeg" alt="View Page" width="100%">
