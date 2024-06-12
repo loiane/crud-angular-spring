@@ -8,8 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test --browsers=ChromeHeadless",
     "test:ci": "ng test --no-watch --no-progress --code-coverage --browsers=ChromeHeadless",
-    "lint": "ng lint",
-    "format": "npx prettier 'src/**/*.{js,ts,html,css,scss}' --write"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -39,7 +38,6 @@
     "karma-coverage": "~2.2.1",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "prettier": "^3.2.5",
     "typescript": "~5.4.5"
   }
 }
