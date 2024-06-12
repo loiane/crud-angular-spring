@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -16,7 +16,7 @@ describe('CourseViewComponent', () => {
   let fixture: ComponentFixture<CourseViewComponent>;
   let activatedRouteMock: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     activatedRouteMock = {
       snapshot: {
         data: {
