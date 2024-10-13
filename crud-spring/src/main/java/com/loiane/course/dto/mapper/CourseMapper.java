@@ -29,7 +29,7 @@ public class CourseMapper {
         Set<Lesson> lessons = courseRequestDTO.lessons().stream()
                 .map(lessonDTO -> {
                     Lesson lesson = new Lesson();
-                    if (lesson.getId() > 0) {
+                    if (lessonDTO._id() > 0) {
                         lesson.setId(lessonDTO._id());
                     }
                     lesson.setName(lessonDTO.name());
