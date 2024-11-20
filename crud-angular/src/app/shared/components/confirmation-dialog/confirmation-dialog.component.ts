@@ -4,10 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-confirmation-dialog',
-  standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule],
-  template: `
+    selector: 'app-confirmation-dialog',
+    imports: [CommonModule, MatDialogModule, MatButtonModule],
+    template: `
     <div mat-dialog-content>
       <p>{{ data }}</p>
     </div>
