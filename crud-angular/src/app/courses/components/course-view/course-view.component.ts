@@ -19,20 +19,19 @@ import { Lesson } from '../../model/lesson';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @Component({
-  selector: 'app-course-view',
-  templateUrl: './course-view.component.html',
-  styleUrls: ['./course-view.component.scss'],
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    NgIf,
-    NgFor,
-    MatSidenavModule,
-    MatButtonModule,
-    MatListModule,
-    YouTubePlayerModule
-  ],
-  schemas: [NO_ERRORS_SCHEMA]
+    selector: 'app-course-view',
+    templateUrl: './course-view.component.html',
+    styleUrls: ['./course-view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        NgIf,
+        NgFor,
+        MatSidenavModule,
+        MatButtonModule,
+        MatListModule,
+        YouTubePlayerModule
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 export class CourseViewComponent implements OnInit, AfterViewInit {
   course!: Course;
