@@ -26,25 +26,24 @@ import { ErrorDialogComponent } from './../../../shared/components/error-dialog/
 import { FormUtilsService } from './../../../shared/services/form-utils.service';
 
 @Component({
-  selector: 'app-course-form',
-  templateUrl: './course-form.component.html',
-  styleUrls: ['./course-form.component.scss'],
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatToolbarModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgIf,
-    MatSelectModule,
-    MatOptionModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    NgFor
-  ]
+    selector: 'app-course-form',
+    templateUrl: './course-form.component.html',
+    styleUrls: ['./course-form.component.scss'],
+    imports: [
+        MatCardModule,
+        MatToolbarModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgIf,
+        MatSelectModule,
+        MatOptionModule,
+        MatButtonModule,
+        MatIconModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        NgFor
+    ]
 })
 export class CourseFormComponent implements OnInit {
   form!: FormGroup;

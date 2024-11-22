@@ -17,21 +17,20 @@ import { CoursePage } from '../../model/course-page';
 import { CoursesService } from '../../services/courses.service';
 
 @Component({
-  selector: 'app-courses',
-  templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.scss'],
-  standalone: true,
-  imports: [
-    MatCardModule,
-    MatToolbarModule,
-    NgIf,
-    CoursesListComponent,
-    MatProgressSpinnerModule,
-    MatSnackBarModule,
-    MatDialogModule,
-    MatPaginatorModule,
-    AsyncPipe
-  ]
+    selector: 'app-courses',
+    templateUrl: './courses.component.html',
+    styleUrls: ['./courses.component.scss'],
+    imports: [
+        MatCardModule,
+        MatToolbarModule,
+        NgIf,
+        CoursesListComponent,
+        MatProgressSpinnerModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        MatPaginatorModule,
+        AsyncPipe
+    ]
 })
 export class CoursesComponent implements OnInit {
   courses$: Observable<CoursePage> | null = null;
