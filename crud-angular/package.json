@@ -20,7 +20,7 @@
     "@angular/forms": "^19.0.5",
     "@angular/material": "^19.0.4",
     "@angular/platform-browser": "^19.0.5",
-    "@angular/platform-browser-dynamic": "^19.0.5",
+    "@angular/platform-browser-dynamic": "^19.0.6",
     "@angular/router": "^19.0.5",
     "@angular/youtube-player": "^19.0.4",
     "rxjs": "~7.8.1",
