@@ -22,11 +22,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.loiane.config.ValidationAdvice;
 import com.loiane.course.dto.CourseDTO;
@@ -43,7 +43,7 @@ import jakarta.validation.ConstraintViolationException;
 @SpringJUnitConfig(classes = { CourseService.class, CourseMapper.class })
 class CourseServiceTest {
 
-    @MockBean
+    @MockitoBean
     private CourseRepository courseRepository;
 
     @Autowired

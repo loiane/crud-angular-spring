@@ -21,9 +21,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -46,13 +46,13 @@ import jakarta.servlet.ServletException;
 @SpringJUnitConfig(classes = { CourseController.class })
 class CourseControllerTest {
 
-    private final static String API = "/api/courses";
-    private final static String API_ID = "/api/courses/{id}";
+    private static final String API = "/api/courses";
+    private static final String API_ID = "/api/courses/{id}";
 
     @Autowired
     private CourseController courseController;
 
-    @MockBean
+    @MockitoBean
     private CourseService courseService;
 
     @BeforeEach
