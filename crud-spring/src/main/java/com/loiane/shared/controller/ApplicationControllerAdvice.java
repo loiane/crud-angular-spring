@@ -36,7 +36,20 @@ public class ApplicationControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleConstraintViolationException(ConstraintViolationException e) {
-        return "not valid due to validation error: " + e.getMessage();
+    public ValidationErrorResponse handleConstraintViolationException(ConstraintViolationException e) {
+        List<FieldValidationError> errors = e.getConstraintViolations().stream()
+                .map(violation -> new FieldValidationError(
+                        violation.getPropertyPath().toString(),
+                        violation.getMessage()))
+                .toList();
+
+        return new ValidationErrorResponse("Validation failed", errors);
+    }
+
+    // Helper record for better error response structure
+    public record ValidationErrorResponse(String message, List<FieldValidationError> errors) {
+    }
+
+    public record FieldValidationError(String field, String message) {
     }
 }

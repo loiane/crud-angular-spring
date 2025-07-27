@@ -12,7 +12,6 @@ import com.loiane.course.dto.CoursePageDTO;
 import com.loiane.course.dto.CourseRequestDTO;
 import com.loiane.course.dto.mapper.CourseMapper;
 import com.loiane.course.enums.Status;
-import com.loiane.exception.BusinessException;
 import com.loiane.exception.RecordNotFoundException;
 
 import jakarta.validation.Valid;
@@ -53,11 +52,6 @@ public class CourseService {
     }
 
     public CourseDTO create(@Valid CourseRequestDTO courseRequestDTO) {
-        courseRepository.findByName(courseRequestDTO.name()).stream()
-                .filter(c -> c.getStatus().equals(Status.ACTIVE))
-                .findAny().ifPresent(c -> {
-                    throw new BusinessException("A course with name " + courseRequestDTO.name() + " already exists.");
-                });
         Course course = courseMapper.toModel(courseRequestDTO);
         course.setStatus(Status.ACTIVE);
         return courseMapper.toDTO(courseRepository.save(course));

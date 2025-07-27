@@ -5,6 +5,9 @@ import java.util.List;
 import org.hibernate.validator.constraints.Length;
 
 import com.loiane.course.enums.Category;
+import com.loiane.shared.validation.UniqueCourseNameValidation;
+import com.loiane.shared.validation.ValidCourseName;
+import com.loiane.shared.validation.ValidLessonCollection;
 import com.loiane.shared.validation.ValueOfEnum;
 
 import jakarta.validation.Valid;
@@ -15,8 +18,9 @@ import jakarta.validation.constraints.NotNull;
 /**
  * Used as request object that represents a Course.
  */
+@UniqueCourseNameValidation
 public record CourseRequestDTO(
-        @NotBlank @NotNull @Length(min = 5, max = 200) String name,
+        @NotBlank @NotNull @Length(min = 5, max = 200) @ValidCourseName String name,
         @NotBlank @NotNull @ValueOfEnum(enumClass = Category.class) String category,
-        @NotNull @NotEmpty @Valid List<LessonDTO> lessons) {
+        @NotNull @NotEmpty @Valid @ValidLessonCollection List<LessonDTO> lessons) {
 }

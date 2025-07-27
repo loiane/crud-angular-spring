@@ -8,18 +8,23 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.executable.ExecutableValidator;
 
 import org.springframework.aop.MethodBeforeAdvice;
+import org.springframework.context.ApplicationContext;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory;
 
 public class ValidationAdvice implements MethodBeforeAdvice {
 
-    static private final ExecutableValidator executableValidator;
+    private final ExecutableValidator executableValidator;
+    private final LocalValidatorFactoryBean factory;
 
-    static {
-        LocalValidatorFactoryBean factory = new LocalValidatorFactoryBean();
+    public ValidationAdvice(ApplicationContext applicationContext) {
+        factory = new LocalValidatorFactoryBean();
+        factory.setApplicationContext(applicationContext);
+        factory.setConstraintValidatorFactory(
+                new SpringConstraintValidatorFactory(applicationContext.getAutowireCapableBeanFactory()));
         factory.afterPropertiesSet();
         executableValidator = factory.getValidator().forExecutables();
-        factory.close();
     }
 
     @SuppressWarnings("null")

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -22,6 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -33,14 +33,13 @@ import com.loiane.course.dto.CourseDTO;
 import com.loiane.course.dto.CoursePageDTO;
 import com.loiane.course.dto.CourseRequestDTO;
 import com.loiane.course.dto.mapper.CourseMapper;
-import com.loiane.exception.BusinessException;
 import com.loiane.exception.RecordNotFoundException;
 
 import jakarta.validation.ConstraintViolationException;
 
 @SuppressWarnings("null")
 @ActiveProfiles("test")
-@SpringJUnitConfig(classes = { CourseService.class, CourseMapper.class })
+@SpringJUnitConfig(classes = { CourseService.class, CourseMapper.class, com.loiane.config.ValidationConfig.class })
 class CourseServiceTest {
 
     @MockitoBean
@@ -52,10 +51,13 @@ class CourseServiceTest {
     @Autowired
     private CourseService courseService;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @BeforeEach
     void setUp() {
         ProxyFactory factory = new ProxyFactory(new CourseService(courseRepository, courseMapper));
-        factory.addAdvice(new ValidationAdvice());
+        factory.addAdvice(new ValidationAdvice(applicationContext));
         courseService = (CourseService) factory.getProxy();
     }
 
@@ -155,7 +157,8 @@ class CourseServiceTest {
         for (CourseRequestDTO course : courses) {
             assertThrows(ConstraintViolationException.class, () -> this.courseService.create(course));
         }
-        then(courseRepository).shouldHaveNoInteractions();
+        // Note: repository interactions are expected because UniqueCourseNameValidator
+        // calls findByName
     }
 
     /**
@@ -168,7 +171,7 @@ class CourseServiceTest {
         when(this.courseRepository.findByName(any()))
                 .thenReturn(List.of(TestData.createValidCourse()));
 
-        assertThrows(BusinessException.class, () -> this.courseService.create(courseRequestDTO));
+        assertThrows(ConstraintViolationException.class, () -> this.courseService.create(courseRequestDTO));
         verify(this.courseRepository).findByName(any());
         verify(this.courseRepository, times(0)).save(any());
     }
@@ -234,7 +237,8 @@ class CourseServiceTest {
             assertThrows(ConstraintViolationException.class, () -> this.courseService.update(null, course));
         }
 
-        then(courseRepository).shouldHaveNoInteractions();
+        // Note: repository interactions are expected because UniqueCourseNameValidator
+        // calls findByName
     }
 
     /**

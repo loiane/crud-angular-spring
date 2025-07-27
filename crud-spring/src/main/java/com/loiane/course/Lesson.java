@@ -3,6 +3,7 @@ package com.loiane.course;
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.loiane.shared.validation.ValidYouTubeUrl;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,6 +32,7 @@ public class Lesson {
     @NotBlank
     @NotNull
     @Length(min = 10, max = 11)
+    @ValidYouTubeUrl
     @Column(length = 11, nullable = false)
     private String youtubeUrl;
 

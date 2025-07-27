@@ -11,6 +11,7 @@ import com.loiane.course.enums.Category;
 import com.loiane.course.enums.Status;
 import com.loiane.course.enums.converters.CategoryConverter;
 import com.loiane.course.enums.converters.StatusConverter;
+import com.loiane.shared.validation.ValidCourseName;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -38,6 +39,7 @@ public class Course {
     @NotBlank
     @NotNull
     @Length(min = 5, max = 200)
+    @ValidCourseName
     @Column(length = 200, nullable = false)
     private String name;
 

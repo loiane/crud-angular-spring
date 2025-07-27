@@ -21,6 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -43,7 +44,11 @@ import jakarta.servlet.ServletException;
 
 @SuppressWarnings("null")
 @ActiveProfiles("test")
-@SpringJUnitConfig(classes = { CourseController.class })
+@SpringJUnitConfig(classes = {
+        CourseController.class,
+        com.loiane.config.ValidationConfig.class,
+        com.loiane.shared.validation.UniqueCourseNameValidator.class
+})
 class CourseControllerTest {
 
     private static final String API = "/api/courses";
@@ -55,10 +60,16 @@ class CourseControllerTest {
     @MockitoBean
     private CourseService courseService;
 
+    @MockitoBean
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
     @BeforeEach
     void setUp() {
         ProxyFactory factory = new ProxyFactory(new CourseController(courseService));
-        factory.addAdvice(new ValidationAdvice());
+        factory.addAdvice(new ValidationAdvice(applicationContext));
         courseController = (CourseController) factory.getProxy();
     }
 
