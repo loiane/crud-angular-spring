@@ -1,0 +1,8 @@
+-- Test data for integration tests
+INSERT INTO course (id, name, category, status) VALUES (1, 'Spring Boot Fundamentals', 'Back-end', 'Active');
+INSERT INTO course (id, name, category, status) VALUES (2, 'Angular Basics', 'Front-end', 'Active');
+INSERT INTO course (id, name, category, status) VALUES (3, 'Database Design', 'Back-end', 'Active');
+
+INSERT INTO lesson (id, name, youtube_url, course_id) VALUES (1, 'Introduction to Spring Boot Fundamentals', 'dQw4w9WgXcQ', 1);
+INSERT INTO lesson (id, name, youtube_url, course_id) VALUES (2, 'Introduction to Angular Basics', 'dQw4w9WgXcQ', 2);
+INSERT INTO lesson (id, name, youtube_url, course_id) VALUES (3, 'Introduction to Database Design', 'dQw4w9WgXcQ', 3);

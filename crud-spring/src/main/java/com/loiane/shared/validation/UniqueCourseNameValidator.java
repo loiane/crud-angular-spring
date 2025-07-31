@@ -28,6 +28,7 @@ public class UniqueCourseNameValidator implements ConstraintValidator<UniqueCour
     }
 
     // Constructor injection for Spring context
+    @Autowired
     public UniqueCourseNameValidator(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
     }

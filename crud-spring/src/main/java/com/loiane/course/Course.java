@@ -27,7 +27,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-@SQLDelete(sql = "UPDATE Course SET status = 'Inactive' WHERE id=?")
+@SQLDelete(sql = "UPDATE course SET status = 'Inactive' WHERE id=?")
 @SQLRestriction("status <> 'Inactive'")
 @Entity
 public class Course {
@@ -40,7 +40,7 @@ public class Course {
     @NotNull
     @Length(min = 5, max = 200)
     @ValidCourseName
-    @Column(length = 200, nullable = false)
+    @Column(length = 200, nullable = false, unique = true)
     private String name;
 
     @NotNull

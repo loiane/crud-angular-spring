@@ -28,10 +28,15 @@ public class ApplicationControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public FieldError[] validationError(MethodArgumentNotValidException ex) {
+    public ValidationErrorResponse validationError(MethodArgumentNotValidException ex) {
         BindingResult result = ex.getBindingResult();
         final List<FieldError> fieldErrors = result.getFieldErrors();
-        return fieldErrors.toArray(new FieldError[0]);
+
+        List<FieldValidationError> errors = fieldErrors.stream()
+                .map(error -> new FieldValidationError(error.getField(), error.getDefaultMessage()))
+                .toList();
+
+        return new ValidationErrorResponse("Validation failed", errors);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
