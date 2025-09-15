@@ -19,7 +19,7 @@
     "@angular/core": "^20.2.4",
     "@angular/forms": "^20.2.4",
     "@angular/material": "^20.2.2",
-    "@angular/platform-browser": "^20.2.4",
+    "@angular/platform-browser": "^20.3.0",
     "@angular/platform-browser-dynamic": "^20.2.4",
     "@angular/router": "^20.2.4",
     "@angular/youtube-player": "^20.2.2",
