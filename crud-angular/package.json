@@ -21,7 +21,7 @@
     "@angular/material": "^20.2.13",
     "@angular/platform-browser": "^20.3.11",
     "@angular/platform-browser-dynamic": "^20.3.11",
-    "@angular/router": "^20.3.11",
+    "@angular/router": "^20.3.12",
     "@angular/youtube-player": "^20.2.13",
     "rxjs": "~7.8.2",
     "tslib": "^2.7.0",
