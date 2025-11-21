@@ -14,7 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 
 import { Course } from '../../model/course';
-import { NgFor, NgIf } from '@angular/common';
+
 import { Lesson } from '../../model/lesson';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
@@ -24,13 +24,11 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     styleUrls: ['./course-view.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
-        NgIf,
-        NgFor,
-        MatSidenavModule,
-        MatButtonModule,
-        MatListModule,
-        YouTubePlayerModule
-    ],
+    MatSidenavModule,
+    MatButtonModule,
+    MatListModule,
+    YouTubePlayerModule
+],
     schemas: [NO_ERRORS_SCHEMA]
 })
 export class CourseViewComponent implements OnInit, AfterViewInit {
