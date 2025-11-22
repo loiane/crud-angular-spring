@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -21,16 +21,15 @@ import { CoursesService } from '../../services/courses.service';
     templateUrl: './courses.component.html',
     styleUrls: ['./courses.component.scss'],
     imports: [
-        MatCardModule,
-        MatToolbarModule,
-        NgIf,
-        CoursesListComponent,
-        MatProgressSpinnerModule,
-        MatSnackBarModule,
-        MatDialogModule,
-        MatPaginatorModule,
-        AsyncPipe
-    ]
+    MatCardModule,
+    MatToolbarModule,
+    CoursesListComponent,
+    MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatDialogModule,
+    MatPaginatorModule,
+    AsyncPipe
+]
 })
 export class CoursesComponent implements OnInit {
   courses$: Observable<CoursePage> | null = null;

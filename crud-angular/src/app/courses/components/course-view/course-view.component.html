@@ -3,22 +3,24 @@
     <div>
       <h3>{{ course.name }}</h3>
     </div>
-    <mat-nav-list dense *ngIf="course.lessons">
-      <ng-template ngFor let-lesson [ngForOf]="course.lessons">
-        <mat-list-item
-          class="list-with-border"
-          (click)="display(lesson)"
-          [activated]="displaySelectedLesson(lesson)">
-          <span mat-line>{{ lesson.name }}</span>
-        </mat-list-item>
-      </ng-template>
-    </mat-nav-list>
+    @if (course.lessons) {
+      <mat-nav-list dense>
+        @for (lesson of course.lessons; track lesson) {
+          <mat-list-item
+            class="list-with-border"
+            (click)="display(lesson)"
+            [activated]="displaySelectedLesson(lesson)">
+            <span mat-line>{{ lesson.name }}</span>
+          </mat-list-item>
+        }
+      </mat-nav-list>
+    }
   </mat-drawer>
 
   <div class="example-sidenav-content" #youTubePlayer>
     <youtube-player
       [width]="videoWidth"
       [height]="videoHeight"
-      [videoId]="selectedLesson.youtubeUrl"></youtube-player>
+    [videoId]="selectedLesson.youtubeUrl"></youtube-player>
   </div>
 </mat-drawer-container>

@@ -7,9 +7,11 @@
         <mat-label>Name</mat-label>
         <input matInput formControlName="name" #name />
         <mat-hint align="end">{{ name.value.length }} / 100</mat-hint>
-        <mat-error *ngIf="form.get('name')?.invalid">
-          {{ getErrorMessage('name') }}
-        </mat-error>
+        @if (form.get('name')?.invalid) {
+          <mat-error>
+            {{ getErrorMessage('name') }}
+          </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field class="full-width">
@@ -19,9 +21,11 @@
           <mat-option value="Front-end">Front-End</mat-option>
           <mat-option value="Back-end">Back-End</mat-option>
         </mat-select>
-        <mat-error *ngIf="form.get('category')?.invalid">{{
-          getErrorMessage('category')
-        }}</mat-error>
+        @if (form.get('category')?.invalid) {
+          <mat-error>{{
+            getErrorMessage('category')
+          }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-toolbar class="lessons-toolbar">
@@ -32,43 +36,50 @@
         </button>
       </mat-toolbar>
 
-      <mat-error
-        *ngIf="formUtils.isFormArrayRequired(form, 'lessons')"
-        class="form-array-error">
-        At least one lesson is required.
-      </mat-error>
+      @if (formUtils.isFormArrayRequired(form, 'lessons')) {
+        <mat-error
+          class="form-array-error">
+          At least one lesson is required.
+        </mat-error>
+      }
 
-      <table
-        class="full-width"
-        formArrayName="lessons"
-        *ngFor="let lesson of getLessonFormArray(); let i = index">
-        <tr [formGroupName]="i">
-          <td style="width: 65%">
-            <mat-form-field class="full-width">
-              <mat-label>Lesson Name</mat-label>
-              <input matInput formControlName="name" />
-              <mat-error *ngIf="getLessonFormArray()[i].get('name')?.invalid">
-                {{ getLessonErrorMessage('name', i) }}
-              </mat-error>
-            </mat-form-field>
-          </td>
-          <td style="width: 30%">
-            <mat-form-field class="full-width">
-              <mat-label>URL</mat-label>
-              <span matPrefix>https://youtu.be/</span>
-              <input matInput formControlName="youtubeUrl" />
-              <mat-error *ngIf="getLessonFormArray()[i].get('youtubeUrl')?.invalid">
-                {{ getLessonErrorMessage('youtubeUrl', i) }}
-              </mat-error>
-            </mat-form-field>
-          </td>
-          <td>
-            <button mat-icon-button color="warn" (click)="removeLesson(i)">
-              <mat-icon aria-label="Remove Lesson">delete</mat-icon>
-            </button>
-          </td>
-        </tr>
-      </table>
+      @for (lesson of getLessonFormArray(); track lesson; let i = $index) {
+        <table
+          class="full-width"
+          formArrayName="lessons"
+          >
+          <tr [formGroupName]="i">
+            <td style="width: 65%">
+              <mat-form-field class="full-width">
+                <mat-label>Lesson Name</mat-label>
+                <input matInput formControlName="name" />
+                @if (getLessonFormArray()[i].get('name')?.invalid) {
+                  <mat-error>
+                    {{ getLessonErrorMessage('name', i) }}
+                  </mat-error>
+                }
+              </mat-form-field>
+            </td>
+            <td style="width: 30%">
+              <mat-form-field class="full-width">
+                <mat-label>URL</mat-label>
+                <span matPrefix>https://youtu.be/</span>
+                <input matInput formControlName="youtubeUrl" />
+                @if (getLessonFormArray()[i].get('youtubeUrl')?.invalid) {
+                  <mat-error>
+                    {{ getLessonErrorMessage('youtubeUrl', i) }}
+                  </mat-error>
+                }
+              </mat-form-field>
+            </td>
+            <td>
+              <button mat-icon-button color="warn" (click)="removeLesson(i)">
+                <mat-icon aria-label="Remove Lesson">delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </table>
+      }
     </form>
   </mat-card-content>
 
