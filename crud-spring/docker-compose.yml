@@ -1,0 +1,28 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: crud-spring-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: courses
+      MYSQL_ROOT_PASSWORD: rootroot
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: crud-spring-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
