@@ -30,7 +30,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.0.1",
     "@angular/cli": "~21.0.1",
-    "@angular/compiler-cli": "^21.0.2",
+    "@angular/compiler-cli": "^21.0.3",
     "@types/jasmine": "~5.1.12",
     "jasmine-core": "~5.12.1",
     "karma": "~6.4.4",
