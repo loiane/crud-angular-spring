@@ -37,7 +37,6 @@ import com.loiane.exception.RecordNotFoundException;
 
 import jakarta.validation.ConstraintViolationException;
 
-@SuppressWarnings("null")
 @ActiveProfiles("test")
 @SpringJUnitConfig(classes = { CourseService.class, CourseMapper.class, com.loiane.config.ValidationConfig.class })
 class CourseServiceTest {
