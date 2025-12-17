@@ -20,6 +20,7 @@ public class TestContainersConfiguration {
      */
     @Bean
     @ServiceConnection
+    @SuppressWarnings("resource")
     MySQLContainer mysqlContainer() {
         return new MySQLContainer(DockerImageName.parse("mysql:8.0"))
                 .withDatabaseName("testdb")
