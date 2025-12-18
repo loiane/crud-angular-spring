@@ -9,12 +9,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.loiane.config.TestContainersConfiguration;
 import com.loiane.course.enums.Category;
 import com.loiane.course.enums.Status;
 
@@ -22,8 +24,9 @@ import com.loiane.course.enums.Status;
  * This is a sample class to test the CourseRepository.
  * In practice, only additional methods to the interface should be tested.
  */
-@ActiveProfiles("test")
+@ActiveProfiles("integration-test")
 @DataJpaTest
+@Import(TestContainersConfiguration.class)
 class CourseRepositoryTest {
 
     @Autowired

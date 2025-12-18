@@ -6,6 +6,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import com.loiane.config.TestContainersConfiguration;
 
@@ -23,7 +25,13 @@ public abstract class AbstractIntegrationTest {
     @LocalServerPort
     protected int port;
 
-    protected TestRestTemplate restTemplate = new TestRestTemplate();
+    protected TestRestTemplate restTemplate;
+
+    @BeforeEach
+    void setUpRestTemplate() {
+        restTemplate = new TestRestTemplate();
+        restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:" + port));
+    }
 
     /**
      * Helper method to build the full URL for API endpoints
