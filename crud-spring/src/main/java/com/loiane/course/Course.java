@@ -44,12 +44,12 @@ public class Course {
     private String name;
 
     @NotNull
-    @Column(length = 10, nullable = false)
+    @Column(length = 10, nullable = false, columnDefinition = "VARCHAR(10)")
     @Convert(converter = CategoryConverter.class)
     private Category category;
 
     @NotNull
-    @Column(length = 8, nullable = false)
+    @Column(length = 10, nullable = false, columnDefinition = "VARCHAR(10)")
     @Convert(converter = StatusConverter.class)
     private Status status = Status.ACTIVE;
 

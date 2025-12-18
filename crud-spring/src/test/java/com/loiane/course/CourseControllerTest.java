@@ -33,7 +33,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.loiane.config.ValidationAdvice;
 import com.loiane.course.dto.CourseDTO;
 import com.loiane.course.dto.CoursePageDTO;
@@ -42,7 +42,6 @@ import com.loiane.exception.RecordNotFoundException;
 
 import jakarta.servlet.ServletException;
 
-@SuppressWarnings("null")
 @ActiveProfiles("test")
 @SpringJUnitConfig(classes = {
         CourseController.class,

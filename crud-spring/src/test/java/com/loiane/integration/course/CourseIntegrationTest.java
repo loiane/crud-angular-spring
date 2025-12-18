@@ -13,7 +13,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -41,9 +40,6 @@ class CourseIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private CourseRepository courseRepository;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
 
     @AfterEach
     void cleanUp() {

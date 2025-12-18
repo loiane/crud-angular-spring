@@ -8,8 +8,8 @@ This API is to showcase, especially for beginners, what a basic CRUD API that's 
 
 ## 💻 Tecnologies
 
-- Java 21
-- Spring Boot 3 (Spring 6)
+- Java 25
+- Spring Boot 4 (Spring 7)
 - Maven
 - JPA + Hibernate
 - MySQL
