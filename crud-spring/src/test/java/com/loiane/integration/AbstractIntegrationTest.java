@@ -7,7 +7,11 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+
+import java.io.IOException;
 
 import com.loiane.config.TestContainersConfiguration;
 
@@ -31,6 +35,14 @@ public abstract class AbstractIntegrationTest {
     void setUpRestTemplate() {
         restTemplate = new RestTemplate();
         restTemplate.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:" + port));
+        restTemplate.setErrorHandler(new NoOpResponseErrorHandler());
+    }
+
+    static class NoOpResponseErrorHandler implements ResponseErrorHandler {
+        @Override
+        public boolean hasError(ClientHttpResponse response) throws IOException {
+            return false;
+        }
     }
 
     /**
