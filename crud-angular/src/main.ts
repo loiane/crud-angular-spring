@@ -1,4 +1,4 @@
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
@@ -12,7 +12,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     provideZoneChangeDetection(),importProvidersFrom(BrowserModule, MatToolbarModule),
     provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
     provideRouter(APP_ROUTES, withPreloading(PreloadAllModules)) //, withDebugTracing())
   ]
 }).catch(err => console.error(err));
