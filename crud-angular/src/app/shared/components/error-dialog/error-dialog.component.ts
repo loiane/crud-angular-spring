@@ -1,11 +1,12 @@
 
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-error-dialog',
     imports: [MatDialogModule, MatButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
     <h1 mat-dialog-title style="color: red;">Error!</h1>
     <div mat-dialog-content>{{ data }}</div>

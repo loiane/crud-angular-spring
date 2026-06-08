@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import {
   FormGroup,
   NonNullableFormBuilder,
@@ -29,6 +29,7 @@ import { FormUtilsService } from './../../../shared/services/form-utils.service'
     selector: 'app-course-form',
     templateUrl: './course-form.component.html',
     styleUrls: ['./course-form.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
     MatCardModule,
     MatToolbarModule,
