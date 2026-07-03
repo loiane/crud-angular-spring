@@ -65,4 +65,36 @@ describe('CoursesList', () => {
     (component as any).onDetails(mockCourses[0]);
     expect(emitted).toEqual(mockCourses[0]);
   });
+
+  it('should emit view when the course name link is clicked', () => {
+    let emitted: Course | undefined;
+    component.view.subscribe(v => (emitted = v));
+    const nameLink = fixture.nativeElement.querySelector('mat-cell a');
+    nameLink?.click();
+    expect(emitted).toEqual(mockCourses[0]);
+  });
+
+  it('should emit add when the Add button in the header is clicked', () => {
+    let emitted: boolean | undefined;
+    component.add.subscribe(v => (emitted = v));
+    const addBtn = fixture.nativeElement.querySelector('button[aria-label="Add a new Course"]');
+    addBtn?.click();
+    expect(emitted).toBe(true);
+  });
+
+  it('should emit edit when the Edit button in a row is clicked', () => {
+    let emitted: Course | undefined;
+    component.edit.subscribe(v => (emitted = v));
+    const editBtn = fixture.nativeElement.querySelector('button[aria-label="Update Course"]');
+    editBtn?.click();
+    expect(emitted).toEqual(mockCourses[0]);
+  });
+
+  it('should emit remove when the Remove button in a row is clicked', () => {
+    let emitted: Course | undefined;
+    component.remove.subscribe(v => (emitted = v));
+    const removeBtn = fixture.nativeElement.querySelector('button[aria-label="Remove Course"]');
+    removeBtn?.click();
+    expect(emitted).toEqual(mockCourses[0]);
+  });
 });

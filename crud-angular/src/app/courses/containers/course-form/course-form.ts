@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import {
   FormGroup,
   NonNullableFormBuilder,
@@ -45,8 +45,8 @@ import { FormUtilsService } from '../../../shared/services/form-utils';
     MatDialogModule
   ]
 })
-export class CourseForm implements OnInit {
-  protected form!: FormGroup;
+export class CourseForm {
+  protected form: FormGroup;
   protected formUtils = inject(FormUtilsService);
 
   private formBuilder = inject(NonNullableFormBuilder);
@@ -56,7 +56,7 @@ export class CourseForm implements OnInit {
   private location = inject(Location);
   private route = inject(ActivatedRoute);
 
-  ngOnInit(): void {
+  constructor() {
     const course: Course = this.route.snapshot.data['course'];
     this.form = this.formBuilder.group({
       _id: [course._id],

@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  OnInit,
   afterNextRender,
   inject,
   signal,
@@ -31,11 +30,14 @@ import { Lesson } from '../../model/lesson';
     YouTubePlayerModule
   ]
 })
-export class CourseView implements OnInit {
+export class CourseView {
   private route = inject(ActivatedRoute);
+  private readonly courseData: Course = this.route.snapshot.data['course'];
 
-  protected course = signal<Course | null>(null);
-  protected selectedLesson = signal<Lesson | null>(null);
+  protected course = signal<Course>(this.courseData);
+  protected selectedLesson = signal<Lesson | null>(
+    this.courseData.lessons?.[0] ?? null
+  );
   protected videoHeight = signal(0);
   protected videoWidth = signal(0);
   protected youTubePlayer = viewChild<ElementRef<HTMLDivElement>>('youTubePlayer');
@@ -47,19 +49,7 @@ export class CourseView implements OnInit {
       .subscribe(() => this.onResize());
   }
 
-  ngOnInit() {
-    const courseData: Course = this.route.snapshot.data['course'];
-    this.course.set(courseData);
-    if (courseData.lessons?.length) {
-      this.selectedLesson.set(courseData.lessons[0]);
-    }
-
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.body.appendChild(tag);
-  }
-
-  private onResize(): void {
+  protected onResize(): void {
     const el = this.youTubePlayer();
     if (!el) return;
     const width = el.nativeElement.clientWidth * 0.9;

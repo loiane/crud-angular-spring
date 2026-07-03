@@ -32,13 +32,13 @@ describe('ConfirmationDialog', () => {
     expect(el.textContent).toContain('Are you sure?');
   });
 
-  it('should close dialog with true when Yes is clicked', () => {
-    (component as any).onConfirm(true);
+  it('should close dialog with true when Yes button is clicked', () => {
+    fixture.nativeElement.querySelector('#yesBtn')?.click();
     expect(dialogRefSpy.close).toHaveBeenCalledWith(true);
   });
 
-  it('should close dialog with false when No is clicked', () => {
-    (component as any).onConfirm(false);
+  it('should close dialog with false when No button is clicked', () => {
+    fixture.nativeElement.querySelector('#noBtn')?.click();
     expect(dialogRefSpy.close).toHaveBeenCalledWith(false);
   });
 });

@@ -70,6 +70,13 @@ describe('CourseForm — new course', () => {
     httpMock.expectNone('/api/courses');
   });
 
+  it('should display name error in template when field is touched and invalid', () => {
+    (component as any).form.get('name').markAsTouched();
+    fixture.detectChanges();
+    const errors = fixture.nativeElement.querySelectorAll('mat-error');
+    expect(errors.length).toBeGreaterThan(0);
+  });
+
   it('getLessonFormArray should return controls', () => {
     const arr = (component as any).getLessonFormArray();
     expect(Array.isArray(arr)).toBe(true);
@@ -114,11 +121,35 @@ describe('CourseForm — edit course', () => {
     expect(lessons[0].get('name').value).toBe('Intro Lesson');
   });
 
+  it('should call snackBar and navigate back on successful save', async () => {
+    const snackBarSpy = vi.spyOn((component as any).snackBar, 'open');
+    const locationSpy = vi.spyOn((component as any).location, 'back');
+    const submitPromise = (component as any).onSubmit();
+    httpMock.expectOne('/api/courses/1').flush(existingCourse);
+    await submitPromise;
+    expect(snackBarSpy).toHaveBeenCalled();
+    expect(locationSpy).toHaveBeenCalled();
+  });
+
   it('should PUT on valid form submit', async () => {
     const submitPromise = (component as any).onSubmit();
     const req = httpMock.expectOne('/api/courses/1');
     expect(req.request.method).toBe('PUT');
     req.flush(existingCourse);
     await submitPromise;
+  });
+
+  it('should open error dialog when save throws', async () => {
+    const dialogSpy = vi.spyOn((component as any).dialog, 'open');
+    const submitPromise = (component as any).onSubmit();
+    httpMock.expectOne('/api/courses/1').error(new ProgressEvent('error'));
+    await submitPromise;
+    expect(dialogSpy).toHaveBeenCalled();
+  });
+
+  it('should call location.back() on onCancel()', () => {
+    const spy = vi.spyOn((component as any).location, 'back');
+    (component as any).onCancel();
+    expect(spy).toHaveBeenCalled();
   });
 });
