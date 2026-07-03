@@ -1,12 +1,14 @@
 import { Location } from '@angular/common';
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import {
-  FormGroup,
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  UntypedFormArray,
-  Validators
-} from '@angular/forms';
+  FormField,
+  applyEach,
+  form,
+  maxLength,
+  minLength,
+  required,
+  submit
+} from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatOptionModule } from '@angular/material/core';
@@ -24,7 +26,19 @@ import { Course } from '../../model/course';
 import { Lesson } from '../../model/lesson';
 import { CoursesService } from '../../services/courses';
 import { ErrorDialog } from '../../../shared/components/error-dialog/error-dialog';
-import { FormUtilsService } from '../../../shared/services/form-utils';
+
+interface CourseModel {
+  _id: string;
+  name: string;
+  category: string;
+  lessons: Lesson[];
+}
+
+const REQUIRED_MESSAGE = 'Field is required.';
+const minLengthMessage = (length: number) =>
+  `Field cannot be less than ${length} characters long.`;
+const maxLengthMessage = (length: number) =>
+  `Field cannot be more than ${length} characters long.`;
 
 @Component({
   selector: 'app-course-form',
@@ -32,9 +46,9 @@ import { FormUtilsService } from '../../../shared/services/form-utils';
   styleUrl: './course-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    FormField,
     MatCardModule,
     MatToolbarModule,
-    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -46,91 +60,67 @@ import { FormUtilsService } from '../../../shared/services/form-utils';
   ]
 })
 export class CourseForm {
-  protected form: FormGroup;
-  protected formUtils = inject(FormUtilsService);
-
-  private formBuilder = inject(NonNullableFormBuilder);
   private service = inject(CoursesService);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
   private location = inject(Location);
   private route = inject(ActivatedRoute);
 
-  constructor() {
-    const course: Course = this.route.snapshot.data['course'];
-    this.form = this.formBuilder.group({
-      _id: [course._id],
-      name: [
-        course.name,
-        [Validators.required, Validators.minLength(5), Validators.maxLength(100)]
-      ],
-      category: [course.category, [Validators.required]],
-      lessons: this.formBuilder.array(this.retrieveLessons(course), Validators.required)
+  private model = signal<CourseModel>(
+    this.toModel(this.route.snapshot.data['course'])
+  );
+
+  protected courseForm = form(this.model, path => {
+    required(path.name, { message: REQUIRED_MESSAGE });
+    minLength(path.name, 5, { message: minLengthMessage(5) });
+    maxLength(path.name, 100, { message: maxLengthMessage(100) });
+    required(path.category, { message: REQUIRED_MESSAGE });
+    minLength(path.lessons, 1, { message: 'At least one lesson is required.' });
+    applyEach(path.lessons, lesson => {
+      required(lesson.name, { message: REQUIRED_MESSAGE });
+      minLength(lesson.name, 5, { message: minLengthMessage(5) });
+      maxLength(lesson.name, 100, { message: maxLengthMessage(100) });
+      required(lesson.youtubeUrl, { message: REQUIRED_MESSAGE });
+      minLength(lesson.youtubeUrl, 10, { message: minLengthMessage(10) });
+      maxLength(lesson.youtubeUrl, 11, { message: maxLengthMessage(11) });
     });
+  });
+
+  private toModel(course: Course): CourseModel {
+    return {
+      _id: course._id ?? '',
+      name: course.name ?? '',
+      category: course.category ?? '',
+      lessons: course.lessons?.length
+        ? course.lessons
+        : [{ _id: '', name: '', youtubeUrl: '' }]
+    };
   }
 
-  private retrieveLessons(course: Course) {
-    const lessons = [];
-    if (course?.lessons) {
-      course.lessons.forEach(lesson => lessons.push(this.createLesson(lesson)));
-    } else {
-      lessons.push(this.createLesson());
-    }
-    return lessons;
-  }
-
-  private createLesson(lesson: Lesson = { _id: '', name: '', youtubeUrl: '' }) {
-    return this.formBuilder.group({
-      _id: [lesson._id],
-      name: [
-        lesson.name,
-        [Validators.required, Validators.minLength(5), Validators.maxLength(100)]
-      ],
-      youtubeUrl: [
-        lesson.youtubeUrl,
-        [Validators.required, Validators.minLength(10), Validators.maxLength(11)]
-      ]
-    });
-  }
-
-  protected getLessonFormArray() {
-    return (<UntypedFormArray>this.form.get('lessons')).controls;
-  }
-
-  protected getErrorMessage(fieldName: string): string {
-    return this.formUtils.getFieldErrorMessage(this.form, fieldName);
-  }
-
-  protected getLessonErrorMessage(fieldName: string, index: number) {
-    return this.formUtils.getFieldFormArrayErrorMessage(
-      this.form,
-      'lessons',
-      fieldName,
-      index
-    );
-  }
-
-  protected addLesson(): void {
-    const lessons = this.form.get('lessons') as UntypedFormArray;
-    lessons.push(this.createLesson());
+  protected addLesson() {
+    this.model.update(course => ({
+      ...course,
+      lessons: [...course.lessons, { _id: '', name: '', youtubeUrl: '' }]
+    }));
   }
 
   protected removeLesson(index: number) {
-    const lessons = this.form.get('lessons') as UntypedFormArray;
-    lessons.removeAt(index);
+    this.model.update(course => ({
+      ...course,
+      lessons: course.lessons.filter((_, i) => i !== index)
+    }));
   }
 
-  protected async onSubmit() {
-    if (this.form.valid) {
+  protected onSubmit() {
+    return submit(this.courseForm, async () => {
       try {
-        await firstValueFrom(this.service.save(this.form.value as Course));
+        await firstValueFrom(this.service.save(this.model()));
         this.onSuccess();
       } catch {
         this.onError();
       }
-    } else {
-      this.formUtils.validateAllFormFields(this.form);
-    }
+      return undefined;
+    });
   }
 
   protected onCancel() {
