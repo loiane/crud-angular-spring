@@ -22,8 +22,7 @@
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef class="action-column">
       <button
-        mat-mini-fab
-        color="accent"
+        matMiniFab
         aria-label="Add a new Course"
         (click)="onAdd()"
         class="action-column-header">
@@ -33,16 +32,15 @@
 
     <mat-cell *matCellDef="let course" class="action-column">
       <button
-        mat-icon-button
-        color="primary"
+        matIconButton
         aria-label="Update Course"
         (click)="onEdit(course)">
         <mat-icon>edit</mat-icon>
       </button>
 
       <button
-        mat-icon-button
-        color="warn"
+        matIconButton
+        class="danger-action"
         aria-label="Remove Course"
         (click)="onRemove(course)">
         <mat-icon>delete</mat-icon>

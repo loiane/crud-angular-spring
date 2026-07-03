@@ -10,7 +10,7 @@
             class="list-with-border"
             (click)="display(lesson)"
             [activated]="displaySelectedLesson(lesson)">
-            <span mat-line>{{ lesson.name }}</span>
+            <span matListItemTitle>{{ lesson.name }}</span>
           </mat-list-item>
         }
       </mat-nav-list>

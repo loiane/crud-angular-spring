@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-toolbar color="primary">Course Details</mat-toolbar>
+  <mat-toolbar>Course Details</mat-toolbar>
 
   <mat-card-content>
     <form [formGroup]="form" class="min-width">
@@ -29,7 +29,7 @@
       <mat-toolbar class="lessons-toolbar">
         <span>Lessons</span>
         <div class="fill-remaining-space"></div>
-        <button mat-icon-button color="accent" (click)="addLesson()">
+        <button matIconButton (click)="addLesson()">
           <mat-icon aria-label="Add a New Lesson">add</mat-icon>
         </button>
       </mat-toolbar>
@@ -67,7 +67,7 @@
               </mat-form-field>
             </td>
             <td>
-              <button mat-icon-button color="warn" (click)="removeLesson(i)">
+              <button matIconButton class="danger-action" (click)="removeLesson(i)">
                 <mat-icon aria-label="Remove Lesson">delete</mat-icon>
               </button>
             </td>
@@ -78,10 +78,10 @@
   </mat-card-content>
 
   <mat-card-actions class="actions-center">
-    <button mat-raised-button color="primary" (click)="onSubmit()" type="submit">
+    <button matButton="filled" (click)="onSubmit()" type="submit">
       Save
     </button>
-    <button mat-raised-button (click)="onCancel()" class="btn-space" type="button">
+    <button matButton="outlined" (click)="onCancel()" class="btn-space" type="button">
       Cancel
     </button>
   </mat-card-actions>

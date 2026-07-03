@@ -11,10 +11,10 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
       <p>{{ data }}</p>
     </div>
     <div mat-dialog-actions align="center">
-      <button mat-raised-button (click)="onConfirm(true)" color="primary" id="yesBtn">
+      <button matButton="filled" (click)="onConfirm(true)" id="yesBtn">
         Yes
       </button>
-      <button mat-raised-button (click)="onConfirm(false)" color="warn" id="noBtn">
+      <button matButton="outlined" (click)="onConfirm(false)" id="noBtn">
         No
       </button>
     </div>

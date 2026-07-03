@@ -16,6 +16,13 @@ html {
   ));
 }
 
+.danger-action {
+  @include mat.icon-button-overrides((
+    icon-color: var(--mat-sys-error),
+    state-layer-color: var(--mat-sys-error),
+  ));
+}
+
 html,
 body {
   height: 100%;
