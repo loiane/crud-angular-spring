@@ -59,13 +59,6 @@ describe('CoursesList', () => {
     expect(emitted).toEqual(mockCourses[1]);
   });
 
-  it('should emit course on details output when onDetails() is called', () => {
-    let emitted: Course | undefined;
-    component.details.subscribe(v => (emitted = v));
-    (component as any).onDetails(mockCourses[0]);
-    expect(emitted).toEqual(mockCourses[0]);
-  });
-
   it('should emit view when the course name link is clicked', () => {
     let emitted: Course | undefined;
     component.view.subscribe(v => (emitted = v));

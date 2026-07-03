@@ -15,17 +15,12 @@ import { MatTableModule } from '@angular/material/table';
 })
 export class CoursesList {
   courses = input<Course[]>([]);
-  details = output<Course>();
   edit = output<Course>();
   remove = output<Course>();
   add = output<boolean>();
   view = output<Course>();
 
   protected readonly displayedColumns = ['name', 'category', 'actions'];
-
-  protected onDetails(record: Course) {
-    this.details.emit(record);
-  }
 
   protected onAdd() {
     this.add.emit(true);

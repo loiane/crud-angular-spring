@@ -19,6 +19,11 @@ describe('CategoryPipe', () => {
     expect(pipe.transform('back-end')).toBe('computer');
   });
 
+  it('should match categories regardless of casing', () => {
+    expect(pipe.transform('Front-end')).toBe('code');
+    expect(pipe.transform('Back-end')).toBe('computer');
+  });
+
   it('should return "code" as default for unknown category', () => {
     expect(pipe.transform('full-stack')).toBe('code');
   });
