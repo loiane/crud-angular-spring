@@ -6,11 +6,10 @@
     "start": "ng serve --proxy-config proxy.conf.js -o",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test --browsers=ChromeHeadless",
-    "test:ci": "ng test --no-watch --no-progress --code-coverage --browsers=ChromeHeadless",
-    "lint": "ng lint"
+    "test": "ng test"
   },
   "private": true,
+  "packageManager": "npm@11.12.1",
   "dependencies": {
     "@angular/animations": "^22.0.3",
     "@angular/cdk": "^22.0.3",
@@ -20,25 +19,18 @@
     "@angular/forms": "^22.0.3",
     "@angular/material": "^22.0.3",
     "@angular/platform-browser": "^22.0.3",
-    "@angular/platform-browser-dynamic": "^22.0.3",
     "@angular/router": "^22.0.3",
     "@angular/youtube-player": "^22.0.3",
     "rxjs": "~7.8.2",
-    "tslib": "^2.7.0",
-    "zone.js": "~0.16.2"
+    "tslib": "^2.7.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^22.0.5",
-    "@angular/cli": "~22.0.5",
+    "@angular/build": "^22.0.0",
+    "@angular/cli": "^22.0.0",
     "@angular/compiler-cli": "^22.0.3",
-    "@types/jasmine": "~6.0.0",
-    "istanbul-lib-instrument": "^6.0.3",
-    "jasmine-core": "~6.2.0",
-    "karma": "~6.4.4",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.1",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.2.0",
-    "typescript": "~6.0.3"
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~6.0.3",
+    "vitest": "^4.0.8"
   }
 }
