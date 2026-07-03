@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ActivatedRoute } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 import { Course } from '../../model/course';
 import { Lesson } from '../../model/lesson';
@@ -29,7 +30,7 @@ import { FormUtilsService } from '../../../shared/services/form-utils';
   selector: 'app-course-form',
   templateUrl: './course-form.html',
   styleUrl: './course-form.scss',
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatCardModule,
     MatToolbarModule,
@@ -45,17 +46,15 @@ import { FormUtilsService } from '../../../shared/services/form-utils';
   ]
 })
 export class CourseForm implements OnInit {
-  form!: FormGroup;
-  public formUtils = inject(FormUtilsService);
+  protected form!: FormGroup;
+  protected formUtils = inject(FormUtilsService);
 
-  constructor(
-    private formBuilder: NonNullableFormBuilder,
-    private service: CoursesService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog,
-    private location: Location,
-    private route: ActivatedRoute
-  ) { }
+  private formBuilder = inject(NonNullableFormBuilder);
+  private service = inject(CoursesService);
+  private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+  private location = inject(Location);
+  private route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     const course: Course = this.route.snapshot.data['course'];
@@ -94,15 +93,15 @@ export class CourseForm implements OnInit {
     });
   }
 
-  getLessonFormArray() {
+  protected getLessonFormArray() {
     return (<UntypedFormArray>this.form.get('lessons')).controls;
   }
 
-  getErrorMessage(fieldName: string): string {
+  protected getErrorMessage(fieldName: string): string {
     return this.formUtils.getFieldErrorMessage(this.form, fieldName);
   }
 
-  getLessonErrorMessage(fieldName: string, index: number) {
+  protected getLessonErrorMessage(fieldName: string, index: number) {
     return this.formUtils.getFieldFormArrayErrorMessage(
       this.form,
       'lessons',
@@ -111,28 +110,30 @@ export class CourseForm implements OnInit {
     );
   }
 
-  addLesson(): void {
+  protected addLesson(): void {
     const lessons = this.form.get('lessons') as UntypedFormArray;
     lessons.push(this.createLesson());
   }
 
-  removeLesson(index: number) {
+  protected removeLesson(index: number) {
     const lessons = this.form.get('lessons') as UntypedFormArray;
     lessons.removeAt(index);
   }
 
-  onSubmit() {
+  protected async onSubmit() {
     if (this.form.valid) {
-      this.service.save(this.form.value as Course).subscribe({
-        next: () => this.onSuccess(),
-        error: () => this.onError()
-      });
+      try {
+        await firstValueFrom(this.service.save(this.form.value as Course));
+        this.onSuccess();
+      } catch {
+        this.onError();
+      }
     } else {
       this.formUtils.validateAllFormFields(this.form);
     }
   }
 
-  onCancel() {
+  protected onCancel() {
     this.location.back();
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -7,9 +7,7 @@ import {
   UntypedFormGroup
 } from '@angular/forms';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class FormUtilsService {
   validateAllFormFields(formGroup: UntypedFormGroup | UntypedFormArray) {
     Object.keys(formGroup.controls).forEach(field => {

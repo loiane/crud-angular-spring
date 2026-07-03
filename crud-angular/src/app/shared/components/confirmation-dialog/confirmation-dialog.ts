@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
@@ -21,12 +21,10 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
   `
 })
 export class ConfirmationDialog {
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmationDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: string
-  ) { }
+  private dialogRef = inject(MatDialogRef<ConfirmationDialog>);
+  protected data = inject<string>(MAT_DIALOG_DATA);
 
-  onConfirm(result: boolean): void {
+  protected onConfirm(result: boolean): void {
     this.dialogRef.close(result);
   }
 }

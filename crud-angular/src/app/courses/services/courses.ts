@@ -1,19 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { first, of, tap } from 'rxjs';
 
 import { Course } from '../model/course';
 import { CoursePage } from '../model/course-page';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Service()
 export class CoursesService {
   private readonly API = '/api/courses';
-
   private cache: Course[] = [];
-
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
 
   list(page = 0, pageSize = 10) {
     return this.http.get<CoursePage>(this.API, { params: { page, pageSize } }).pipe(

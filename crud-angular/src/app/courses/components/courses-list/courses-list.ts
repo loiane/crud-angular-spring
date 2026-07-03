@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 
 import { Course } from '../../model/course';
 import { CategoryPipe } from '../../../shared/pipes/category-pipe';
@@ -14,32 +14,32 @@ import { MatTableModule } from '@angular/material/table';
   imports: [MatTableModule, MatIconModule, MatButtonModule, CategoryPipe]
 })
 export class CoursesList {
-  @Input() courses: Course[] = [];
-  @Output() details: EventEmitter<Course> = new EventEmitter(false);
-  @Output() edit: EventEmitter<Course> = new EventEmitter(false);
-  @Output() remove: EventEmitter<Course> = new EventEmitter(false);
-  @Output() add: EventEmitter<boolean> = new EventEmitter(false);
-  @Output() view: EventEmitter<Course> = new EventEmitter(false);
+  courses = input<Course[]>([]);
+  details = output<Course>();
+  edit = output<Course>();
+  remove = output<Course>();
+  add = output<boolean>();
+  view = output<Course>();
 
-  readonly displayedColumns = ['name', 'category', 'actions'];
+  protected readonly displayedColumns = ['name', 'category', 'actions'];
 
-  onDetails(record: Course) {
+  protected onDetails(record: Course) {
     this.details.emit(record);
   }
 
-  onAdd() {
+  protected onAdd() {
     this.add.emit(true);
   }
 
-  onEdit(record: Course) {
+  protected onEdit(record: Course) {
     this.edit.emit(record);
   }
 
-  onRemove(record: Course) {
+  protected onRemove(record: Course) {
     this.remove.emit(record);
   }
 
-  onView(record: Course) {
+  protected onView(record: Course) {
     this.view.emit(record);
   }
 }

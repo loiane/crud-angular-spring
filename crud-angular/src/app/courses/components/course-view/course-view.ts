@@ -1,20 +1,23 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   OnInit,
-  ViewChild
+  afterNextRender,
+  inject,
+  signal,
+  viewChild
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ActivatedRoute } from '@angular/router';
-import { MatListModule } from '@angular/material/list';
+import { fromEvent } from 'rxjs';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 
 import { Course } from '../../model/course';
 import { Lesson } from '../../model/lesson';
-import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @Component({
   selector: 'app-course-view',
@@ -28,43 +31,47 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     YouTubePlayerModule
   ]
 })
-export class CourseView implements OnInit, AfterViewInit {
-  course!: Course;
-  selectedLesson!: Lesson;
-  videoHeight!: number;
-  videoWidth!: number;
+export class CourseView implements OnInit {
+  private route = inject(ActivatedRoute);
 
-  @ViewChild('youTubePlayer') youTubePlayer!: ElementRef<HTMLDivElement>;
+  protected course = signal<Course | null>(null);
+  protected selectedLesson = signal<Lesson | null>(null);
+  protected videoHeight = signal(0);
+  protected videoWidth = signal(0);
+  protected youTubePlayer = viewChild<ElementRef<HTMLDivElement>>('youTubePlayer');
 
-  constructor(
-    private route: ActivatedRoute,
-    private changeDetectorRef: ChangeDetectorRef) { }
+  constructor() {
+    afterNextRender(() => this.onResize());
+    fromEvent(window, 'resize')
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.onResize());
+  }
 
   ngOnInit() {
-    this.course = this.route.snapshot.data['course'];
-    if (this.course.lessons) this.selectedLesson = this.course.lessons[0];
+    const courseData: Course = this.route.snapshot.data['course'];
+    this.course.set(courseData);
+    if (courseData.lessons?.length) {
+      this.selectedLesson.set(courseData.lessons[0]);
+    }
 
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     document.body.appendChild(tag);
   }
 
-  ngAfterViewInit(): void {
-    this.onResize();
-    window.addEventListener('resize', this.onResize.bind(this));
+  private onResize(): void {
+    const el = this.youTubePlayer();
+    if (!el) return;
+    const width = el.nativeElement.clientWidth * 0.9;
+    this.videoWidth.set(width);
+    this.videoHeight.set(width * 0.6);
   }
 
-  onResize(): void {
-    this.videoWidth = this.youTubePlayer.nativeElement.clientWidth * 0.9;
-    this.videoHeight = this.videoWidth * 0.6;
-    this.changeDetectorRef.detectChanges();
+  protected display(lesson: Lesson) {
+    this.selectedLesson.set(lesson);
   }
 
-  display(lesson: Lesson) {
-    this.selectedLesson = lesson;
-  }
-
-  displaySelectedLesson(lesson: Lesson) {
-    return this.selectedLesson === lesson;
+  protected displaySelectedLesson(lesson: Lesson) {
+    return this.selectedLesson() === lesson;
   }
 }

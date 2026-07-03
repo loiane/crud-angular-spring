@@ -1,7 +1,7 @@
 <mat-card appearance="outlined">
   <mat-toolbar color="primary">Available Courses</mat-toolbar>
 
-  @if (courses$ | async; as coursePage) {
+  @if (coursesResource.value(); as coursePage) {
     <div class="mat-elevation-z8">
       <app-courses-list
         [courses]="coursePage.courses"
@@ -13,12 +13,12 @@
         [pageSizeOptions]="[5, 10, 15]"
         showFirstLastButtons
         [length]="coursePage.totalElements"
-        [pageIndex]="pageIndex"
-        [pageSize]="pageSize"
-        (page)="refresh($event)"
+        [pageIndex]="pageIndex()"
+        [pageSize]="pageSize()"
+        (page)="onPageChange($event)"
         aria-label="Select page of courses"></mat-paginator>
     </div>
-  } @else {
+  } @else if (coursesResource.isLoading()) {
     <div class="loading-spinner">
       <mat-spinner></mat-spinner>
     </div>

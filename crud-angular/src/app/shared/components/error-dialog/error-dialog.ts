@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
@@ -15,5 +15,5 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
   `
 })
 export class ErrorDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: string) { }
+  protected data = inject<string>(MAT_DIALOG_DATA);
 }
