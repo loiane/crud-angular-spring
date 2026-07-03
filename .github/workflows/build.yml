@@ -28,6 +28,13 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file crud-spring/pom.xml
+    - name: Publish Maven Test Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Maven Test Report
+        path: crud-spring/target/surefire-reports/TEST-*.xml
+        reporter: java-junit
   angular:
     name: Angular Build
     runs-on: ubuntu-latest
