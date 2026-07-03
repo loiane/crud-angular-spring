@@ -1,5 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { TestBed } from '@angular/core/testing';
 import { CourseView } from './course-view';
 import { Course } from '../../model/course';
 import { Lesson } from '../../model/lesson';
@@ -16,13 +15,11 @@ const courseWithoutLessons: Course = { _id: '2', name: 'No Lessons', category: '
 
 const buildComponent = async (course: Course) => {
   await TestBed.configureTestingModule({
-    imports: [CourseView],
-    providers: [
-      { provide: ActivatedRoute, useValue: { snapshot: { data: { course } } } }
-    ]
+    imports: [CourseView]
   }).compileComponents();
 
   const fixture = TestBed.createComponent(CourseView);
+  fixture.componentRef.setInput('course', course);
   fixture.detectChanges();
   return { fixture, component: fixture.componentInstance };
 };
@@ -33,9 +30,9 @@ describe('CourseView', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set course signal from route data', async () => {
+  it('should expose the course input', async () => {
     const { component } = await buildComponent(mockCourse);
-    expect((component as any).course()).toEqual(mockCourse);
+    expect(component.course()).toEqual(mockCourse);
   });
 
   it('should set selectedLesson to first lesson when lessons exist', async () => {

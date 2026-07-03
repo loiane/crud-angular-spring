@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, input, linkedSignal } from '@angular/core';
 import {
   FormField,
   applyEach,
@@ -19,7 +19,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { Course } from '../../model/course';
@@ -60,15 +59,14 @@ const maxLengthMessage = (length: number) =>
   ]
 })
 export class CourseForm {
+  course = input.required<Course>();
+
   private service = inject(CoursesService);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
   private location = inject(Location);
-  private route = inject(ActivatedRoute);
 
-  private model = signal<CourseModel>(
-    this.toModel(this.route.snapshot.data['course'])
-  );
+  private model = linkedSignal<CourseModel>(() => this.toModel(this.course()));
 
   protected courseForm = form(this.model, path => {
     required(path.name, { message: REQUIRED_MESSAGE });

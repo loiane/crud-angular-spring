@@ -4,7 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { CourseForm } from './course-form';
 import { Course } from '../../model/course';
 
@@ -16,15 +16,10 @@ const existingCourse: Course = {
   lessons: [{ _id: 'l1', name: 'Intro Lesson', youtubeUrl: 'abcdefghij' }]
 };
 
-const buildModule = async (course: Course) => {
+const buildModule = async () => {
   await TestBed.configureTestingModule({
     imports: [CourseForm],
-    providers: [
-      provideHttpClient(),
-      provideHttpClientTesting(),
-      provideRouter([]),
-      { provide: ActivatedRoute, useValue: { snapshot: { data: { course } } } }
-    ]
+    providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])]
   }).compileComponents();
 };
 
@@ -37,9 +32,10 @@ describe('CourseForm — new course', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(async () => {
-    await buildModule(emptyCourse);
+    await buildModule();
     fixture = TestBed.createComponent(CourseForm);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('course', emptyCourse);
     httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
     await fixture.whenStable();
@@ -109,8 +105,9 @@ describe('CourseForm — edit course', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(async () => {
-    await buildModule(existingCourse);
+    await buildModule();
     fixture = TestBed.createComponent(CourseForm);
+    fixture.componentRef.setInput('course', existingCourse);
     httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
     await fixture.whenStable();

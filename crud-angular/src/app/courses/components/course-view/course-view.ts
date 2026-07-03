@@ -3,7 +3,8 @@ import {
   Component,
   ElementRef,
   afterNextRender,
-  inject,
+  input,
+  linkedSignal,
   signal,
   viewChild
 } from '@angular/core';
@@ -11,7 +12,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { ActivatedRoute } from '@angular/router';
 import { fromEvent } from 'rxjs';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
@@ -31,12 +31,10 @@ import { Lesson } from '../../model/lesson';
   ]
 })
 export class CourseView {
-  private route = inject(ActivatedRoute);
-  private readonly courseData: Course = this.route.snapshot.data['course'];
+  course = input.required<Course>();
 
-  protected course = signal<Course>(this.courseData);
-  protected selectedLesson = signal<Lesson | null>(
-    this.courseData.lessons?.[0] ?? null
+  protected selectedLesson = linkedSignal<Lesson | null>(
+    () => this.course().lessons?.[0] ?? null
   );
   protected videoHeight = signal(0);
   protected videoWidth = signal(0);
