@@ -1,7 +1,8 @@
 <mat-card appearance="outlined">
   <mat-toolbar>Available Courses</mat-toolbar>
 
-  @if (coursesResource.value(); as coursePage) {
+  @if (coursesResource.hasValue()) {
+    @let coursePage = coursesResource.value();
     <div class="mat-elevation-z8">
       <app-courses-list
         [courses]="coursePage.courses"

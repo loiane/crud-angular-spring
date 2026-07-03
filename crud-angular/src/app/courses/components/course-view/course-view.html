@@ -5,7 +5,7 @@
     </div>
     @if (course().lessons; as lessons) {
       <mat-nav-list dense>
-        @for (lesson of lessons; track lesson) {
+        @for (lesson of lessons; track lesson._id) {
           <mat-list-item
             class="list-with-border"
             (click)="display(lesson)"

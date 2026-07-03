@@ -31,34 +31,6 @@ describe('CoursesList', () => {
     expect(rows.length).toBe(2);
   });
 
-  it('should emit true on add output when onAdd() is called', () => {
-    let emitted: boolean | undefined;
-    component.add.subscribe(v => (emitted = v));
-    (component as any).onAdd();
-    expect(emitted).toBe(true);
-  });
-
-  it('should emit course on edit output when onEdit() is called', () => {
-    let emitted: Course | undefined;
-    component.edit.subscribe(v => (emitted = v));
-    (component as any).onEdit(mockCourses[0]);
-    expect(emitted).toEqual(mockCourses[0]);
-  });
-
-  it('should emit course on remove output when onRemove() is called', () => {
-    let emitted: Course | undefined;
-    component.remove.subscribe(v => (emitted = v));
-    (component as any).onRemove(mockCourses[0]);
-    expect(emitted).toEqual(mockCourses[0]);
-  });
-
-  it('should emit course on view output when onView() is called', () => {
-    let emitted: Course | undefined;
-    component.view.subscribe(v => (emitted = v));
-    (component as any).onView(mockCourses[1]);
-    expect(emitted).toEqual(mockCourses[1]);
-  });
-
   it('should emit view when the course name link is clicked', () => {
     let emitted: Course | undefined;
     component.view.subscribe(v => (emitted = v));

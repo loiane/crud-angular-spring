@@ -43,7 +43,7 @@
       @for (lesson of getLessonFormArray(); track lesson; let i = $index) {
         <table class="full-width" formArrayName="lessons">
           <tr [formGroupName]="i">
-            <td style="width: 65%">
+            <td class="lesson-name-cell">
               <mat-form-field class="full-width">
                 <mat-label>Lesson Name</mat-label>
                 <input matInput formControlName="name" />
@@ -54,7 +54,7 @@
                 }
               </mat-form-field>
             </td>
-            <td style="width: 30%">
+            <td class="lesson-url-cell">
               <mat-form-field class="full-width">
                 <mat-label>URL</mat-label>
                 <span matPrefix>https://youtu.be/</span>
