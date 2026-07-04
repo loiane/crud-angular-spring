@@ -37,16 +37,17 @@ public class CourseService {
 
     @Transactional(readOnly = true)
     public CoursePageDTO findAll(@PositiveOrZero int page, @Positive @Max(1000) int pageSize) {
-        Page<Course> coursePage = courseRepository.findAll(PageRequest.of(page, pageSize));
-        List<CourseDTO> list = coursePage.getContent().stream()
-                .map(courseMapper::toDTO)
-                .toList();
-        return new CoursePageDTO(list, coursePage.getTotalElements(), coursePage.getTotalPages());
+        Page<CourseDTO> coursePage = courseRepository.findAll(PageRequest.of(page, pageSize))
+                .map(courseMapper::toDTO);
+        return new CoursePageDTO(coursePage.getContent(), coursePage.getTotalElements(),
+                coursePage.getTotalPages());
     }
 
     @Transactional(readOnly = true)
     public List<CourseDTO> findByName(@NotNull @NotBlank String name) {
-        return courseRepository.findByName(name).stream().map(courseMapper::toDTO).toList();
+        return courseRepository.findByNameContainingIgnoreCase(name).stream()
+                .map(courseMapper::toDTO)
+                .toList();
     }
 
     @Transactional(readOnly = true)

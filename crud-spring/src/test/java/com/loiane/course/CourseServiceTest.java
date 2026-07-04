@@ -128,11 +128,11 @@ class CourseServiceTest {
     @DisplayName("Should return a course by name")
     void testFindByName() {
         Course course = TestData.createValidCourse();
-        when(this.courseRepository.findByName(anyString())).thenReturn(List.of(course));
+        when(this.courseRepository.findByNameContainingIgnoreCase(anyString())).thenReturn(List.of(course));
         List<CourseDTO> listByName = this.courseService.findByName("Spring");
         assertThat(listByName).isNotEmpty();
         assertEquals(courseMapper.toDTO(course), listByName.get(0));
-        verify(this.courseRepository).findByName(anyString());
+        verify(this.courseRepository).findByNameContainingIgnoreCase(anyString());
     }
 
     /**

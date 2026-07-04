@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.loiane.course.Course;
 import com.loiane.course.CourseRepository;
+import com.loiane.course.CourseTestRepository;
 import com.loiane.course.Lesson;
 import com.loiane.course.enums.Category;
 import com.loiane.course.enums.Status;
@@ -44,6 +45,9 @@ class CourseRepositoryIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private CourseTestRepository courseTestRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -93,26 +97,6 @@ class CourseRepositoryIntegrationTest extends AbstractIntegrationTest {
                     courseRepository.save(duplicateCourse);
                     entityManager.flush(); // Force the constraint violation
                 });
-    }
-
-    @Test
-    @DisplayName("Should find courses by status")
-    void testFindByStatus() {
-        // Given - Create courses with different statuses
-        Course activeCourse1 = createCourse("Active Course 1", Category.BACK_END);
-        Course activeCourse2 = createCourse("Active Course 2", Category.FRONT_END);
-        Course inactiveCourse = createCourse("Inactive Course", Category.FRONT_END);
-        inactiveCourse.setStatus(Status.INACTIVE);
-
-        courseRepository.saveAll(List.of(activeCourse1, activeCourse2, inactiveCourse));
-
-        // When - Find active courses using pagination
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Course> activeCourses = courseRepository.findByStatus(pageable, Status.ACTIVE);
-
-        // Then - Verify only active courses are returned
-        assertThat(activeCourses.getContent()).hasSize(2);
-        activeCourses.getContent().forEach(course -> assertEquals(Status.ACTIVE, course.getStatus()));
     }
 
     @Test
@@ -197,7 +181,7 @@ class CourseRepositoryIntegrationTest extends AbstractIntegrationTest {
         entityManager.clear(); // Clear persistence context
 
         // Then - Course should still exist but with INACTIVE status
-        Optional<Course> deletedCourse = courseRepository.findByIdIgnoringRestriction(courseId);
+        Optional<Course> deletedCourse = courseTestRepository.findByIdIgnoringRestriction(courseId);
         assertTrue(deletedCourse.isPresent());
         assertEquals(Status.INACTIVE, deletedCourse.get().getStatus());
 

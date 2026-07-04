@@ -101,7 +101,7 @@ public class Course {
             throw new IllegalArgumentException("Lessons cannot be null.");
         }
         this.lessons.clear();
-        this.lessons.addAll(lessons);
+        lessons.forEach(this::addLesson);
     }
 
     public void addLesson(Lesson lesson) {

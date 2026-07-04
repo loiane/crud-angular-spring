@@ -11,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.loiane.config.TestContainersConfiguration;
@@ -36,22 +33,18 @@ class CourseRepositoryTest {
     CourseRepository courseRepository;
 
     /**
-     * Method under test: {@link CourseRepository#findByStatus(Pageable, Status)}
+     * Method under test: {@link CourseRepository#findByNameContainingIgnoreCase(String)}
      */
     @Test
-    @DisplayName("Should find all courses in the database by Status with pagination")
-    void testFindAllByStatus() {
+    @DisplayName("Should find courses by partial name ignoring case")
+    void testFindByNameContainingIgnoreCase() {
         Course course = createValidCourse();
         entityManager.persist(course);
-        Page<Course> coursePage = courseRepository.findByStatus(PageRequest.of(0, 5), Status.ACTIVE);
 
-        assertThat(coursePage).isNotNull();
-        assertThat(coursePage.getContent()).isNotEmpty();
-        assertThat(coursePage.getContent().get(0).getLessons()).isNotEmpty();
-        coursePage.getContent().forEach(c -> {
-            assertThat(c.getStatus()).isEqualTo(Status.ACTIVE);
-            assertThat(c.getLessons()).isNotEmpty();
-        });
+        List<Course> courseFound = courseRepository.findByNameContainingIgnoreCase("spr");
+
+        assertThat(courseFound).isNotEmpty();
+        assertThat(courseFound.get(0).getName()).isEqualTo(course.getName());
     }
 
     @Test

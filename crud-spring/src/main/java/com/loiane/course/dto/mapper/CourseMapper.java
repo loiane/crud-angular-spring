@@ -34,9 +34,9 @@ public class CourseMapper {
                     }
                     lesson.setName(lessonDTO.name());
                     lesson.setYoutubeUrl(lessonDTO.youtubeUrl());
-                    lesson.setCourse(course);
                     return lesson;
                 }).collect(Collectors.toSet());
+        // setLessons wires the lesson -> course back-reference
         course.setLessons(lessons);
 
         return course;

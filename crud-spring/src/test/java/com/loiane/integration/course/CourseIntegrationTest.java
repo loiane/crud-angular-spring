@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.loiane.course.Course;
 import com.loiane.course.CourseRepository;
+import com.loiane.course.CourseTestRepository;
 import com.loiane.course.dto.CourseDTO;
 import com.loiane.course.dto.CoursePageDTO;
 import com.loiane.course.dto.CourseRequestDTO;
@@ -47,6 +48,9 @@ class CourseIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private CourseTestRepository courseTestRepository;
 
     @AfterEach
     void cleanUp() {
@@ -250,7 +254,7 @@ class CourseIntegrationTest extends AbstractIntegrationTest {
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 
         // Verify it was soft deleted (status changed to INACTIVE)
-        Course deletedCourse = courseRepository.findByIdIgnoringRestriction(courseId).orElse(null);
+        Course deletedCourse = courseTestRepository.findByIdIgnoringRestriction(courseId).orElse(null);
         assertNotNull(deletedCourse);
         assertEquals(Status.INACTIVE, deletedCourse.getStatus());
     }

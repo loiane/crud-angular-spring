@@ -21,7 +21,6 @@ import com.loiane.course.dto.CourseRequestDTO;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 /**
@@ -45,12 +44,12 @@ public class CourseController {
     }
 
     @GetMapping("/searchByName")
-    public List<CourseDTO> findByName(@RequestParam @NotNull @NotBlank String name) {
+    public List<CourseDTO> findByName(@RequestParam @NotBlank String name) {
         return courseService.findByName(name);
     }
 
     @GetMapping("/{id}")
-    public CourseDTO findById(@PathVariable @Positive @NotNull Long id) {
+    public CourseDTO findById(@PathVariable @Positive Long id) {
         return courseService.findById(id);
     }
 
@@ -61,14 +60,14 @@ public class CourseController {
     }
 
     @PutMapping(value = "/{id}")
-    public CourseDTO update(@PathVariable @Positive @NotNull Long id,
+    public CourseDTO update(@PathVariable @Positive Long id,
             @RequestBody @Valid CourseRequestDTO course) {
         return courseService.update(id, course);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable @Positive @NotNull Long id) {
+    public void delete(@PathVariable @Positive Long id) {
         courseService.delete(id);
     }
 }

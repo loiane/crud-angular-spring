@@ -22,10 +22,10 @@ public class CrudSpringApplication {
 	@Bean
 	@Profile("test")
 	CommandLineRunner initDatabase(CourseRepository courseRepository) {
-		return args -> extracted(courseRepository);
+		return args -> seedDatabase(courseRepository);
 	}
 
-	private void extracted(CourseRepository courseRepository) {
+	private void seedDatabase(CourseRepository courseRepository) {
 		courseRepository.deleteAll();
 		for (int i = 1; i < 5; i++) {
 			Course c = new Course();
