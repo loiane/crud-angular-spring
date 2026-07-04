@@ -1,7 +1,5 @@
 package com.loiane.course.enums.converters;
 
-import java.util.stream.Stream;
-
 import com.loiane.course.enums.Category;
 
 import jakarta.persistence.AttributeConverter;
@@ -23,10 +21,7 @@ public class CategoryConverter implements AttributeConverter<Category, String> {
         if (value == null) {
             return null;
         }
-        return Stream.of(Category.values())
-                .filter(c -> c.getValue().equals(value))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+        return Category.fromValue(value);
     }
 
 }

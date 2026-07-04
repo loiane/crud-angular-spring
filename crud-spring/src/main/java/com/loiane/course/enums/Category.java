@@ -13,6 +13,18 @@ public enum Category {
         return value;
     }
 
+    /**
+     * Returns the category whose display value matches the given string.
+     */
+    public static Category fromValue(String value) {
+        for (Category category : values()) {
+            if (category.value.equals(value)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Invalid Category: " + value);
+    }
+
     @Override
     public String toString() {
         return value; // required for @ValueOfEnum

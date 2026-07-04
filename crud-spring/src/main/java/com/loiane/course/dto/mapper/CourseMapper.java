@@ -58,11 +58,7 @@ public class CourseMapper {
         if (value == null) {
             return null;
         }
-        return switch (value) {
-            case "Front-end" -> Category.FRONT_END;
-            case "Back-end" -> Category.BACK_END;
-            default -> throw new IllegalArgumentException("Invalid Category.");
-        };
+        return Category.fromValue(value);
     }
 
     public Lesson convertLessonDTOToLesson(LessonDTO lessonDTO) {

@@ -73,6 +73,12 @@ public class Lesson {
         this.course = course;
     }
 
+    /**
+     * Equality is based on the database identity only: two persisted lessons are
+     * the same if they have the same id, and unsaved lessons (id == 0) are only
+     * equal to themselves. Mutable fields are excluded so instances stay
+     * consistent while held in a HashSet.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -82,20 +88,22 @@ public class Lesson {
             return false;
         }
         Lesson lesson = (Lesson) obj;
-        return id == lesson.id && name.equals(lesson.name) && youtubeUrl.equals(lesson.youtubeUrl);
+        return id != 0 && id == lesson.id;
+    }
+
+    @Override
+    public int hashCode() {
+        // Constant per class: the id is assigned on persist and mutable fields would
+        // corrupt hash-based collections, so no field is a stable hash source
+        return getClass().hashCode();
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Lesson [id=").append(id).append(", name=").append(name).append(", youtubeUrl=")
-                .append(youtubeUrl).append(", course=").append(course).append("]");
+                .append(youtubeUrl).append("]");
         return builder.toString();
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * id + name.hashCode() + youtubeUrl.hashCode();
     }
 
 }

@@ -26,7 +26,7 @@ import com.loiane.course.dto.CourseRequestDTO;
 import com.loiane.course.dto.LessonDTO;
 import com.loiane.course.enums.Status;
 import com.loiane.integration.AbstractIntegrationTest;
-import com.loiane.shared.controller.ApplicationControllerAdvice.ValidationErrorResponse;
+import com.loiane.shared.controller.ApplicationControllerAdvice.FieldValidationError;
 
 /**
  * Integration tests for Course API endpoints using TestContainers.
@@ -37,6 +37,13 @@ import com.loiane.shared.controller.ApplicationControllerAdvice.ValidationErrorR
 class CourseIntegrationTest extends AbstractIntegrationTest {
 
     private static final String TEST_YOUTUBE_URL = "dQw4w9WgXcQ";
+
+    /**
+     * Subset of the RFC 7807 Problem Details response returned by the API,
+     * including the custom "errors" property added for validation failures.
+     */
+    record ProblemResponse(String detail, List<FieldValidationError> errors) {
+    }
 
     @Autowired
     private CourseRepository courseRepository;
@@ -153,15 +160,15 @@ class CourseIntegrationTest extends AbstractIntegrationTest {
 
         // When - Call the API
         String url = buildCourseUrl("");
-        ResponseEntity<ValidationErrorResponse> response = restTemplate.postForEntity(
-                url, invalidRequest, ValidationErrorResponse.class);
+        ResponseEntity<ProblemResponse> response = restTemplate.postForEntity(
+                url, invalidRequest, ProblemResponse.class);
 
         // Then - Verify validation errors
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ValidationErrorResponse errorResponse = response.getBody();
+        ProblemResponse errorResponse = response.getBody();
         assertNotNull(errorResponse);
 
-        assertEquals("Validation failed", errorResponse.message());
+        assertEquals("Validation failed", errorResponse.detail());
         assertThat(errorResponse.errors()).isNotEmpty();
 
         // Verify specific error fields

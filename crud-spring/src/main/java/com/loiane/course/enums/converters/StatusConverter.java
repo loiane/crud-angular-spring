@@ -1,7 +1,5 @@
 package com.loiane.course.enums.converters;
 
-import java.util.stream.Stream;
-
 import com.loiane.course.enums.Status;
 
 import jakarta.persistence.AttributeConverter;
@@ -23,10 +21,7 @@ public class StatusConverter implements AttributeConverter<Status, String> {
         if (value == null) {
             return null;
         }
-        return Stream.of(Status.values())
-                .filter(c -> c.getValue().equals(value))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+        return Status.fromValue(value);
     }
 
 }
