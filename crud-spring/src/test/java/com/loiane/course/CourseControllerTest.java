@@ -45,8 +45,7 @@ import jakarta.servlet.ServletException;
 @ActiveProfiles("test")
 @SpringJUnitConfig(classes = {
         CourseController.class,
-        com.loiane.config.ValidationConfig.class,
-        com.loiane.shared.validation.UniqueCourseNameValidator.class
+        com.loiane.config.ValidationConfig.class
 })
 class CourseControllerTest {
 
@@ -58,9 +57,6 @@ class CourseControllerTest {
 
     @MockitoBean
     private CourseService courseService;
-
-    @MockitoBean
-    private CourseRepository courseRepository;
 
     @Autowired
     private ApplicationContext applicationContext;

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.loiane.exception.BusinessException;
 import com.loiane.exception.RecordNotFoundException;
 
 import jakarta.validation.ConstraintViolationException;
@@ -23,6 +24,12 @@ public class ApplicationControllerAdvice {
     @ExceptionHandler(RecordNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFoundException(RecordNotFoundException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handleBusinessException(BusinessException e) {
         return e.getMessage();
     }
 

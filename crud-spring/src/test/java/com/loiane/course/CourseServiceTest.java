@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,7 +33,9 @@ import com.loiane.config.ValidationAdvice;
 import com.loiane.course.dto.CourseDTO;
 import com.loiane.course.dto.CoursePageDTO;
 import com.loiane.course.dto.CourseRequestDTO;
+import com.loiane.course.dto.LessonDTO;
 import com.loiane.course.dto.mapper.CourseMapper;
+import com.loiane.exception.BusinessException;
 import com.loiane.exception.RecordNotFoundException;
 
 import jakarta.validation.ConstraintViolationException;
@@ -156,8 +159,6 @@ class CourseServiceTest {
         for (CourseRequestDTO course : courses) {
             assertThrows(ConstraintViolationException.class, () -> this.courseService.create(course));
         }
-        // Note: repository interactions are expected because UniqueCourseNameValidator
-        // calls findByName
     }
 
     /**
@@ -170,7 +171,7 @@ class CourseServiceTest {
         when(this.courseRepository.findByName(any()))
                 .thenReturn(List.of(TestData.createValidCourse()));
 
-        assertThrows(ConstraintViolationException.class, () -> this.courseService.create(courseRequestDTO));
+        assertThrows(BusinessException.class, () -> this.courseService.create(courseRequestDTO));
         verify(this.courseRepository).findByName(any());
         verify(this.courseRepository, times(0)).save(any());
     }
@@ -179,7 +180,7 @@ class CourseServiceTest {
      * Method under test: {@link CourseService#update(Long, CourseRequestDTO)}
      */
     @Test
-    @DisplayName("Should update a course when valid")
+    @DisplayName("Should update a course when valid, keeping its own name")
     void testUpdate() {
         Course course = TestData.createValidCourse();
         Optional<Course> ofResult = Optional.of(course);
@@ -187,11 +188,64 @@ class CourseServiceTest {
         Course course1 = TestData.createValidCourse();
         when(this.courseRepository.save(any())).thenReturn(course1);
         when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
+        // the course being updated keeps its own name: not a duplicate
+        when(this.courseRepository.findByName(anyString())).thenReturn(List.of(course));
 
         CourseRequestDTO course2 = TestData.createValidCourseRequest();
         assertEquals(courseMapper.toDTO(course1), this.courseService.update(1L, course2));
         verify(this.courseRepository).save(any());
         verify(this.courseRepository).findById(anyLong());
+    }
+
+    /**
+     * Method under test: {@link CourseService#update(Long, CourseRequestDTO)}
+     */
+    @Test
+    @DisplayName("Should throw an exception when updating to a name used by another course")
+    void testUpdateDuplicateName() {
+        Course course = TestData.createValidCourse();
+        when(this.courseRepository.findById(anyLong())).thenReturn(Optional.of(course));
+
+        Course otherCourse = TestData.createValidCourse();
+        otherCourse.setId(2L);
+        when(this.courseRepository.findByName(anyString())).thenReturn(List.of(otherCourse));
+
+        CourseRequestDTO courseRequestDTO = TestData.createValidCourseRequest();
+        assertThrows(BusinessException.class, () -> this.courseService.update(1L, courseRequestDTO));
+        verify(this.courseRepository, times(0)).save(any());
+    }
+
+    /**
+     * Method under test: {@link CourseService#update(Long, CourseRequestDTO)}
+     */
+    @Test
+    @DisplayName("Should keep, update, add and remove lessons when updating a course")
+    void testUpdateMergeLessons() {
+        Course course = TestData.createValidCourse();
+        Lesson keptLesson = new Lesson();
+        keptLesson.setId(1);
+        keptLesson.setName("Lesson to keep");
+        keptLesson.setYoutubeUrl("abcdefgh123");
+        Lesson removedLesson = new Lesson();
+        removedLesson.setId(2);
+        removedLesson.setName("Lesson to remove");
+        removedLesson.setYoutubeUrl("abcdefgh456");
+        course.setLessons(Set.of(keptLesson, removedLesson));
+
+        when(this.courseRepository.findById(anyLong())).thenReturn(Optional.of(course));
+        when(this.courseRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        CourseRequestDTO request = new CourseRequestDTO(course.getName(), course.getCategory().getValue(),
+                List.of(new LessonDTO(1, "Lesson renamed", "abcdefgh123"),
+                        new LessonDTO(0, "Lesson added", "abcdefgh789")));
+
+        this.courseService.update(1L, request);
+
+        assertThat(course.getLessons()).hasSize(2);
+        assertThat(course.getLessons()).noneMatch(lesson -> lesson.getId() == 2);
+        assertThat(course.getLessons())
+                .anyMatch(lesson -> lesson.getId() == 1 && lesson.getName().equals("Lesson renamed"));
+        assertThat(course.getLessons()).anyMatch(lesson -> lesson.getName().equals("Lesson added"));
     }
 
     /**
@@ -235,9 +289,6 @@ class CourseServiceTest {
             assertThrows(ConstraintViolationException.class, () -> this.courseService.update(-1L, course));
             assertThrows(ConstraintViolationException.class, () -> this.courseService.update(null, course));
         }
-
-        // Note: repository interactions are expected because UniqueCourseNameValidator
-        // calls findByName
     }
 
     /**

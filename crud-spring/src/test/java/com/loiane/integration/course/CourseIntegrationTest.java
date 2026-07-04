@@ -188,18 +188,14 @@ class CourseIntegrationTest extends AbstractIntegrationTest {
 
         // When - Call the API
         String url = buildCourseUrl("");
-        ResponseEntity<ValidationErrorResponse> response = restTemplate.postForEntity(
-                url, duplicateRequest, ValidationErrorResponse.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                url, duplicateRequest, String.class);
 
         // Then - Verify it's rejected
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ValidationErrorResponse errorResponse = response.getBody();
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        String errorResponse = response.getBody();
         assertNotNull(errorResponse);
-
-        boolean hasUniqueNameError = errorResponse.errors().stream()
-                .anyMatch(error -> error.message().contains("already exists"));
-
-        assertTrue(hasUniqueNameError);
+        assertTrue(errorResponse.contains("already exists"));
     }
 
     @Test

@@ -12,6 +12,7 @@ import com.loiane.course.dto.CoursePageDTO;
 import com.loiane.course.dto.CourseRequestDTO;
 import com.loiane.course.dto.mapper.CourseMapper;
 import com.loiane.course.enums.Status;
+import com.loiane.exception.BusinessException;
 import com.loiane.exception.RecordNotFoundException;
 
 import jakarta.validation.Valid;
@@ -51,6 +52,7 @@ public class CourseService {
     }
 
     public CourseDTO create(@Valid CourseRequestDTO courseRequestDTO) {
+        validateUniqueName(courseRequestDTO.name(), null);
         Course course = courseMapper.toModel(courseRequestDTO);
         course.setStatus(Status.ACTIVE);
         return courseMapper.toDTO(courseRepository.save(course));
@@ -58,6 +60,7 @@ public class CourseService {
 
     public CourseDTO update(@Positive @NotNull Long id, @Valid CourseRequestDTO courseRequestDTO) {
         return courseRepository.findById(id).map(actual -> {
+            validateUniqueName(courseRequestDTO.name(), id);
             actual.setName(courseRequestDTO.name());
             actual.setCategory(courseMapper.convertCategoryValue(courseRequestDTO.category()));
             mergeLessonsForUpdate(actual, courseRequestDTO);
@@ -66,12 +69,25 @@ public class CourseService {
                 .orElseThrow(() -> new RecordNotFoundException(id));
     }
 
+    /**
+     * A course name must be unique among active courses. When updating, the
+     * course being updated may keep its own name.
+     */
+    private void validateUniqueName(String name, Long currentId) {
+        boolean duplicateExists = courseRepository.findByName(name).stream()
+                .anyMatch(course -> course.getStatus() == Status.ACTIVE
+                        && !course.getId().equals(currentId));
+        if (duplicateExists) {
+            throw new BusinessException("A course with name '" + name + "' already exists");
+        }
+    }
+
     private void mergeLessonsForUpdate(Course updatedCourse, CourseRequestDTO courseRequestDTO) {
 
         // find the lessons that were removed
         List<Lesson> lessonsToRemove = updatedCourse.getLessons().stream()
                 .filter(lesson -> courseRequestDTO.lessons().stream()
-                        .anyMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId()))
+                        .noneMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId()))
                 .toList();
         lessonsToRemove.forEach(updatedCourse::removeLesson);
 

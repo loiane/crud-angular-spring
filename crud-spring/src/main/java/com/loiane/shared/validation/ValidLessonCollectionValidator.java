@@ -50,11 +50,9 @@ public class ValidLessonCollectionValidator implements ConstraintValidator<Valid
      */
     private boolean isValidLesson(LessonDTO lesson) {
         return lesson != null
+                && lesson.name() != null
                 && lesson.name().trim().length() >= LESSON_NAME_MIN_LENGTH
-                && !lesson.name().trim().isEmpty()
-                && lesson.name().trim().length() >= 5
                 && lesson.youtubeUrl() != null
-                && !lesson.youtubeUrl().trim().isEmpty()
                 && lesson.youtubeUrl().trim().length() >= MIN_YOUTUBE_URL_LENGTH;
     }
 }

@@ -2,6 +2,7 @@ package com.loiane.shared.validation;
 
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -63,10 +64,10 @@ public class ValidCourseNameValidator implements ConstraintValidator<ValidCourse
             return false;
         }
 
-        // Check for inappropriate words
-        String lowerCaseName = trimmedValue.toLowerCase();
-        boolean containsInappropriate = INAPPROPRIATE_WORDS.stream()
-                .anyMatch(word -> lowerCaseName.contains(word.toLowerCase()));
+        // Check for inappropriate words (whole words only, so names like
+        // "Latest Angular Features" are not rejected for containing "test")
+        boolean containsInappropriate = Stream.of(trimmedValue.toLowerCase().split("[^a-z0-9]+"))
+                .anyMatch(INAPPROPRIATE_WORDS::contains);
 
         if (containsInappropriate) {
             addCustomMessage(context, "Course name appears to contain test or placeholder content");
