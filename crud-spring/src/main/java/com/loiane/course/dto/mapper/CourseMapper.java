@@ -26,16 +26,10 @@ public class CourseMapper {
         course.setName(courseRequestDTO.name());
         course.setCategory(convertCategoryValue(courseRequestDTO.category()));
 
+        // ids sent by the client are ignored: every lesson is created as new
         Set<Lesson> lessons = courseRequestDTO.lessons().stream()
-                .map(lessonDTO -> {
-                    Lesson lesson = new Lesson();
-                    if (lessonDTO._id() > 0) {
-                        lesson.setId(lessonDTO._id());
-                    }
-                    lesson.setName(lessonDTO.name());
-                    lesson.setYoutubeUrl(lessonDTO.youtubeUrl());
-                    return lesson;
-                }).collect(Collectors.toSet());
+                .map(this::convertLessonDTOToLesson)
+                .collect(Collectors.toSet());
         // setLessons wires the lesson -> course back-reference
         course.setLessons(lessons);
 
@@ -61,9 +55,12 @@ public class CourseMapper {
         return Category.fromValue(value);
     }
 
+    /**
+     * Creates a new (unsaved) Lesson from the DTO. The DTO id is not copied:
+     * the database assigns ids, and client-supplied ids must not be trusted.
+     */
     public Lesson convertLessonDTOToLesson(LessonDTO lessonDTO) {
         Lesson lesson = new Lesson();
-        lesson.setId(lessonDTO._id());
         lesson.setName(lessonDTO.name());
         lesson.setYoutubeUrl(lessonDTO.youtubeUrl());
         return lesson;

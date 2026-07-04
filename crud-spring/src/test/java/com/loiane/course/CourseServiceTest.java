@@ -168,11 +168,11 @@ class CourseServiceTest {
     @DisplayName("Should throw an exception when creating a duplicate course")
     void testCreateSameName() {
         CourseRequestDTO courseRequestDTO = TestData.createValidCourseRequest();
-        when(this.courseRepository.findByName(any()))
+        when(this.courseRepository.findByNameIgnoringRestriction(any()))
                 .thenReturn(List.of(TestData.createValidCourse()));
 
         assertThrows(BusinessException.class, () -> this.courseService.create(courseRequestDTO));
-        verify(this.courseRepository).findByName(any());
+        verify(this.courseRepository).findByNameIgnoringRestriction(any());
         verify(this.courseRepository, times(0)).save(any());
     }
 
@@ -189,7 +189,7 @@ class CourseServiceTest {
         when(this.courseRepository.save(any())).thenReturn(course1);
         when(this.courseRepository.findById(anyLong())).thenReturn(ofResult);
         // the course being updated keeps its own name: not a duplicate
-        when(this.courseRepository.findByName(anyString())).thenReturn(List.of(course));
+        when(this.courseRepository.findByNameIgnoringRestriction(anyString())).thenReturn(List.of(course));
 
         CourseRequestDTO course2 = TestData.createValidCourseRequest();
         assertEquals(courseMapper.toDTO(course1), this.courseService.update(1L, course2));
@@ -208,7 +208,7 @@ class CourseServiceTest {
 
         Course otherCourse = TestData.createValidCourse();
         otherCourse.setId(2L);
-        when(this.courseRepository.findByName(anyString())).thenReturn(List.of(otherCourse));
+        when(this.courseRepository.findByNameIgnoringRestriction(anyString())).thenReturn(List.of(otherCourse));
 
         CourseRequestDTO courseRequestDTO = TestData.createValidCourseRequest();
         assertThrows(BusinessException.class, () -> this.courseService.update(1L, courseRequestDTO));

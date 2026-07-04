@@ -210,6 +210,27 @@ class CourseIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @DisplayName("Should reject reusing the name of a soft-deleted course")
+    void testCreateDuplicateOfDeletedCourse() {
+        // Given - Create and soft delete a course
+        Course course = createAndSaveCourseDirect("Deleted Course", "Front-end");
+        courseRepository.delete(course);
+
+        CourseRequestDTO duplicateRequest = createValidCourseRequest("Deleted Course", "Back-end");
+
+        // When - Call the API
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                buildCourseUrl(""), duplicateRequest, String.class);
+
+        // Then - the unique constraint on name also covers soft-deleted rows,
+        // so the API must reject the name with a friendly message
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        String errorResponse = response.getBody();
+        assertNotNull(errorResponse);
+        assertTrue(errorResponse.contains("already exists"));
+    }
+
+    @Test
     @DisplayName("Should update an existing course")
     void testUpdateCourse() {
         // Given - Create and save a course using repository

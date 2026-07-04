@@ -126,12 +126,13 @@ class CourseRepositoryIntegrationTest extends AbstractIntegrationTest {
     @Test
     @DisplayName("Should find course by name")
     void testFindByName() {
-        // Given - Save a course
+        // Given - Save a course; flush so the native query can see the new row
         Course course = createCourse("Findable Course", Category.BACK_END);
         courseRepository.save(course);
+        entityManager.flush();
 
         // When - Find by name
-        List<Course> foundCourses = courseRepository.findByName("Findable Course");
+        List<Course> foundCourses = courseRepository.findByNameIgnoringRestriction("Findable Course");
 
         // Then - Verify it was found
         assertThat(foundCourses).hasSize(1);

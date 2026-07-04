@@ -77,13 +77,13 @@ public class CourseService {
     }
 
     /**
-     * A course name must be unique among active courses. When updating, the
-     * course being updated may keep its own name.
+     * A course name must be unique across all courses, including soft-deleted
+     * ones, mirroring the unique constraint on the name column. When updating,
+     * the course being updated may keep its own name.
      */
     private void validateUniqueName(String name, Long currentId) {
-        boolean duplicateExists = courseRepository.findByName(name).stream()
-                .anyMatch(course -> course.getStatus() == Status.ACTIVE
-                        && !course.getId().equals(currentId));
+        boolean duplicateExists = courseRepository.findByNameIgnoringRestriction(name).stream()
+                .anyMatch(course -> !course.getId().equals(currentId));
         if (duplicateExists) {
             throw new BusinessException("A course with name '" + name + "' already exists");
         }
@@ -91,28 +91,22 @@ public class CourseService {
 
     private void mergeLessonsForUpdate(Course updatedCourse, CourseRequestDTO courseRequestDTO) {
 
-        // find the lessons that were removed
+        // remove the lessons that are no longer present in the request
         List<Lesson> lessonsToRemove = updatedCourse.getLessons().stream()
                 .filter(lesson -> courseRequestDTO.lessons().stream()
                         .noneMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId()))
                 .toList();
         lessonsToRemove.forEach(updatedCourse::removeLesson);
 
-        courseRequestDTO.lessons().forEach(lessonDto -> {
-            // new lesson, add it
-            if (lessonDto._id() == 0) {
-                updatedCourse.addLesson(courseMapper.convertLessonDTOToLesson(lessonDto));
-            } else {
-                // existing lesson, find it and update
-                updatedCourse.getLessons().stream()
-                        .filter(lesson -> lesson.getId() == lessonDto._id())
-                        .findAny()
-                        .ifPresent(lesson -> {
-                            lesson.setName(lessonDto.name());
-                            lesson.setYoutubeUrl(lessonDto.youtubeUrl());
-                        });
-            }
-        });
+        // update the lessons that match an existing id; anything else (id 0 or
+        // an id that does not belong to this course) is added as a new lesson
+        courseRequestDTO.lessons().forEach(lessonDto -> updatedCourse.getLessons().stream()
+                .filter(lesson -> lessonDto._id() != 0 && lesson.getId() == lessonDto._id())
+                .findAny()
+                .ifPresentOrElse(lesson -> {
+                    lesson.setName(lessonDto.name());
+                    lesson.setYoutubeUrl(lessonDto.youtubeUrl());
+                }, () -> updatedCourse.addLesson(courseMapper.convertLessonDTOToLesson(lessonDto))));
     }
 
     @Transactional

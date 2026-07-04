@@ -61,15 +61,17 @@ class CourseRepositoryTest {
     }
 
     /**
-     * Method under test: {@link CourseRepository#findByName(String)}
+     * Method under test: {@link CourseRepository#findByNameIgnoringRestriction(String)}
      */
     @Test
-    @DisplayName("Should find a course by name")
+    @DisplayName("Should find a course by exact name")
     void testFindByName() {
         Course course = createValidCourse();
-        entityManager.persist(course);
+        // flush so the native query, which bypasses the persistence context,
+        // can see the new row
+        entityManager.persistAndFlush(course);
 
-        List<Course> courseFound = courseRepository.findByName(course.getName());
+        List<Course> courseFound = courseRepository.findByNameIgnoringRestriction(course.getName());
 
         assertThat(courseFound).isNotEmpty();
         assertThat(courseFound.get(0).getStatus()).isEqualTo(Status.ACTIVE);
