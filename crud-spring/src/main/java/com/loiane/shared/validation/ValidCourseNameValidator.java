@@ -13,18 +13,19 @@ import jakarta.validation.ConstraintValidatorContext;
  */
 public class ValidCourseNameValidator implements ConstraintValidator<ValidCourseName, String> {
 
-    // Pattern for valid course names: letters, numbers, spaces, and common
-    // punctuation
-    private static final Pattern VALID_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\s\\-_.,()&+#]+$");
+    // Pattern for valid course names: letters (any language), numbers, spaces,
+    // and common punctuation
+    private static final Pattern VALID_NAME_PATTERN = Pattern.compile("^[\\p{L}\\p{N}\\s\\-_.,()&+#]+$");
 
     // Patterns to detect potential issues
-    private static final Pattern EXCESSIVE_SPECIAL_CHARS = Pattern.compile("[^a-zA-Z0-9\\s]{3,}");
+    private static final Pattern EXCESSIVE_SPECIAL_CHARS = Pattern.compile("[^\\p{L}\\p{N}\\s]{3,}");
     private static final Pattern MULTIPLE_SPACES = Pattern.compile("\\s{3,}");
     private static final Pattern STARTS_OR_ENDS_WITH_SPACE = Pattern.compile("(^\\s)|(\\s$)");
 
-    // Common inappropriate or spam-like words (extend as needed)
+    // Common placeholder or spam-like words (extend as needed). Words like
+    // "test" are deliberately not listed: real course names may contain them.
     private static final Set<String> INAPPROPRIATE_WORDS = Set.of(
-            "test", "testing", "dummy", "sample", "lorem", "ipsum", "asdf", "qwerty");
+            "dummy", "sample", "lorem", "ipsum", "asdf", "qwerty");
 
     @Override
     public void initialize(ValidCourseName constraintAnnotation) {
@@ -66,7 +67,7 @@ public class ValidCourseNameValidator implements ConstraintValidator<ValidCourse
 
         // Check for inappropriate words (whole words only, so names like
         // "Latest Angular Features" are not rejected for containing "test")
-        boolean containsInappropriate = Stream.of(trimmedValue.toLowerCase().split("[^a-z0-9]+"))
+        boolean containsInappropriate = Stream.of(trimmedValue.toLowerCase().split("[^\\p{L}\\p{N}]+"))
                 .anyMatch(INAPPROPRIATE_WORDS::contains);
 
         if (containsInappropriate) {

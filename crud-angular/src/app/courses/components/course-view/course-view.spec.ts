@@ -3,8 +3,8 @@ import { CourseView } from './course-view';
 import { Course } from '../../model/course';
 import { Lesson } from '../../model/lesson';
 
-const mockLesson1: Lesson = { _id: 'l1', name: 'Lesson 1', youtubeUrl: 'abc123xy' };
-const mockLesson2: Lesson = { _id: 'l2', name: 'Lesson 2', youtubeUrl: 'def456yz' };
+const mockLesson1: Lesson = { _id: 1, name: 'Lesson 1', youtubeUrl: 'abc123xy' };
+const mockLesson2: Lesson = { _id: 2, name: 'Lesson 2', youtubeUrl: 'def456yz' };
 const mockCourse: Course = {
   _id: '1',
   name: 'Angular',

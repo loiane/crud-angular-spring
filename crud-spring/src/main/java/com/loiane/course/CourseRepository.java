@@ -2,6 +2,7 @@ package com.loiane.course;
 
 import java.util.List;
 
+import org.springframework.data.domain.Limit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +18,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findByNameIgnoringRestriction(@Param("name") String name);
 
     /**
-     * Case-insensitive partial-match search, used by the search endpoint.
+     * Case-insensitive partial-match search, used by the search endpoint. The
+     * result is capped so a broad query cannot return the whole table.
      */
-    List<Course> findByNameContainingIgnoreCase(String name);
+    List<Course> findByNameContainingIgnoreCase(String name, Limit limit);
 }

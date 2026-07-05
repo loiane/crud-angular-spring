@@ -3,7 +3,9 @@
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef>Course</mat-header-cell>
     <mat-cell *matCellDef="let course"
-      ><a (click)="onView(course)">{{ course.name }}</a></mat-cell
+      ><button type="button" class="link-button" (click)="onView(course)">
+        {{ course.name }}
+      </button></mat-cell
     >
   </ng-container>
 
@@ -13,7 +15,7 @@
     <mat-cell *matCellDef="let course">
       {{ course.category }}
       <mat-icon aria-hidden="false" aria-label="Course Category">{{
-        course.category | category
+        course.category | categoryIcon
       }}</mat-icon>
     </mat-cell>
   </ng-container>

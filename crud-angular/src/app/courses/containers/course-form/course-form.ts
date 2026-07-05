@@ -1,4 +1,5 @@
 import { Location } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ChangeDetectionStrategy, inject, input, linkedSignal } from '@angular/core';
 import {
   FormField,
@@ -33,6 +34,8 @@ interface CourseModel {
   lessons: Lesson[];
 }
 
+const NAME_MAX_LENGTH = 150;
+
 const REQUIRED_MESSAGE = 'Field is required.';
 const minLengthMessage = (length: number) =>
   `Field cannot be less than ${length} characters long.`;
@@ -61,6 +64,8 @@ const maxLengthMessage = (length: number) =>
 export class CourseForm {
   course = input.required<Course>();
 
+  protected readonly nameMaxLength = NAME_MAX_LENGTH;
+
   private service = inject(CoursesService);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
@@ -71,7 +76,7 @@ export class CourseForm {
   protected courseForm = form(this.model, path => {
     required(path.name, { message: REQUIRED_MESSAGE });
     minLength(path.name, 5, { message: minLengthMessage(5) });
-    maxLength(path.name, 100, { message: maxLengthMessage(100) });
+    maxLength(path.name, NAME_MAX_LENGTH, { message: maxLengthMessage(NAME_MAX_LENGTH) });
     required(path.category, { message: REQUIRED_MESSAGE });
     minLength(path.lessons, 1, { message: 'At least one lesson is required.' });
     applyEach(path.lessons, lesson => {
@@ -91,14 +96,14 @@ export class CourseForm {
       category: course.category ?? '',
       lessons: course.lessons?.length
         ? course.lessons
-        : [{ _id: '', name: '', youtubeUrl: '' }]
+        : [{ _id: 0, name: '', youtubeUrl: '' }]
     };
   }
 
   protected addLesson() {
     this.model.update(course => ({
       ...course,
-      lessons: [...course.lessons, { _id: '', name: '', youtubeUrl: '' }]
+      lessons: [...course.lessons, { _id: 0, name: '', youtubeUrl: '' }]
     }));
   }
 
@@ -114,11 +119,20 @@ export class CourseForm {
       try {
         await firstValueFrom(this.service.save(this.model()));
         this.onSuccess();
-      } catch {
-        this.onError();
+      } catch (err) {
+        this.onError(this.extractErrorMessage(err));
       }
       return undefined;
     });
+  }
+
+  /**
+   * Surfaces the RFC 7807 detail returned by the API (e.g. a duplicate
+   * course name), falling back to a generic message.
+   */
+  private extractErrorMessage(err: unknown): string {
+    const detail = (err as HttpErrorResponse)?.error?.detail;
+    return typeof detail === 'string' && detail ? detail : 'Error saving course.';
   }
 
   protected onCancel() {
@@ -130,9 +144,9 @@ export class CourseForm {
     this.onCancel();
   }
 
-  private onError() {
+  private onError(message: string) {
     this.dialog.open(ErrorDialog, {
-      data: 'Error saving course.'
+      data: message
     });
   }
 }

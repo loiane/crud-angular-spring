@@ -38,15 +38,15 @@ class YouTubeUrlValidatorTest {
     }
 
     @Test
-    @DisplayName("Should extract and validate YouTube URLs")
+    @DisplayName("Should reject full YouTube URLs: only the video ID is stored")
     void testYouTubeUrls() {
         TestClass testObj = new TestClass("https://youtu.be/dQw4w9WgXcQ");
         Set<ConstraintViolation<TestClass>> violations = validator.validate(testObj);
-        assertTrue(violations.isEmpty());
+        assertFalse(violations.isEmpty());
 
         testObj = new TestClass("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         violations = validator.validate(testObj);
-        assertTrue(violations.isEmpty());
+        assertFalse(violations.isEmpty());
     }
 
     @Test

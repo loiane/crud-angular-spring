@@ -38,9 +38,9 @@ public class Course {
 
     @NotBlank
     @NotNull
-    @Length(min = 5, max = 200)
+    @Length(min = 5, max = 150)
     @ValidCourseName
-    @Column(length = 200, nullable = false, unique = true)
+    @Column(length = 150, nullable = false, unique = true)
     private String name;
 
     @NotNull

@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 
 import { Course } from '../../model/course';
-import { CategoryPipe } from '../../../shared/pipes/category-pipe';
+import { CategoryIconPipe } from '../../../shared/pipes/category-pipe';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -11,19 +11,19 @@ import { MatTableModule } from '@angular/material/table';
   templateUrl: './courses-list.html',
   styleUrl: './courses-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatTableModule, MatIconModule, MatButtonModule, CategoryPipe]
+  imports: [MatTableModule, MatIconModule, MatButtonModule, CategoryIconPipe]
 })
 export class CoursesList {
   courses = input<Course[]>([]);
   edit = output<Course>();
   remove = output<Course>();
-  add = output<boolean>();
+  add = output<void>();
   view = output<Course>();
 
   protected readonly displayedColumns = ['name', 'category', 'actions'];
 
   protected onAdd() {
-    this.add.emit(true);
+    this.add.emit();
   }
 
   protected onEdit(record: Course) {

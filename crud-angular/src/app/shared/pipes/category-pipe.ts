@@ -1,9 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * Maps a course category to the Material icon that represents it.
+ */
 @Pipe({
-  name: 'category',
+  name: 'categoryIcon',
 })
-export class CategoryPipe implements PipeTransform {
+export class CategoryIconPipe implements PipeTransform {
   transform(value: string): string {
     switch (value?.toLowerCase()) {
       case 'front-end':

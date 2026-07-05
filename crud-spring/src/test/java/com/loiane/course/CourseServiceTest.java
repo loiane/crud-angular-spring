@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -41,7 +42,7 @@ import com.loiane.exception.RecordNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 
 @ActiveProfiles("test")
-@SpringJUnitConfig(classes = { CourseService.class, CourseMapper.class, com.loiane.config.ValidationConfig.class })
+@SpringJUnitConfig(classes = { CourseService.class, CourseMapper.class })
 class CourseServiceTest {
 
     @MockitoBean
@@ -128,11 +129,12 @@ class CourseServiceTest {
     @DisplayName("Should return a course by name")
     void testFindByName() {
         Course course = TestData.createValidCourse();
-        when(this.courseRepository.findByNameContainingIgnoreCase(anyString())).thenReturn(List.of(course));
+        when(this.courseRepository.findByNameContainingIgnoreCase(anyString(), any(Limit.class)))
+                .thenReturn(List.of(course));
         List<CourseDTO> listByName = this.courseService.findByName("Spring");
         assertThat(listByName).isNotEmpty();
         assertEquals(courseMapper.toDTO(course), listByName.get(0));
-        verify(this.courseRepository).findByNameContainingIgnoreCase(anyString());
+        verify(this.courseRepository).findByNameContainingIgnoreCase(anyString(), any(Limit.class));
     }
 
     /**
@@ -223,11 +225,11 @@ class CourseServiceTest {
     void testUpdateMergeLessons() {
         Course course = TestData.createValidCourse();
         Lesson keptLesson = new Lesson();
-        keptLesson.setId(1);
+        keptLesson.setId(1L);
         keptLesson.setName("Lesson to keep");
         keptLesson.setYoutubeUrl("abcdefgh123");
         Lesson removedLesson = new Lesson();
-        removedLesson.setId(2);
+        removedLesson.setId(2L);
         removedLesson.setName("Lesson to remove");
         removedLesson.setYoutubeUrl("abcdefgh456");
         course.setLessons(Set.of(keptLesson, removedLesson));
@@ -236,15 +238,16 @@ class CourseServiceTest {
         when(this.courseRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         CourseRequestDTO request = new CourseRequestDTO(course.getName(), course.getCategory().getValue(),
-                List.of(new LessonDTO(1, "Lesson renamed", "abcdefgh123"),
-                        new LessonDTO(0, "Lesson added", "abcdefgh789")));
+                List.of(new LessonDTO(1L, "Lesson renamed", "abcdefgh123"),
+                        new LessonDTO(null, "Lesson added", "abcdefgh789")));
 
         this.courseService.update(1L, request);
 
         assertThat(course.getLessons()).hasSize(2);
-        assertThat(course.getLessons()).noneMatch(lesson -> lesson.getId() == 2);
+        assertThat(course.getLessons()).noneMatch(lesson -> Long.valueOf(2L).equals(lesson.getId()));
         assertThat(course.getLessons())
-                .anyMatch(lesson -> lesson.getId() == 1 && lesson.getName().equals("Lesson renamed"));
+                .anyMatch(lesson -> Long.valueOf(1L).equals(lesson.getId())
+                        && lesson.getName().equals("Lesson renamed"));
         assertThat(course.getLessons()).anyMatch(lesson -> lesson.getName().equals("Lesson added"));
     }
 

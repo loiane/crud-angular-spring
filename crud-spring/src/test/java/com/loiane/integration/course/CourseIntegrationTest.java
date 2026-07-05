@@ -359,7 +359,7 @@ class CourseIntegrationTest extends AbstractIntegrationTest {
     }
 
     private CourseRequestDTO createValidCourseRequest(String name, String category) {
-        LessonDTO lesson = new LessonDTO(0, "Introduction", TEST_YOUTUBE_URL);
+        LessonDTO lesson = new LessonDTO(null, "Introduction", TEST_YOUTUBE_URL);
         return new CourseRequestDTO(name, category, List.of(lesson));
     }
 }

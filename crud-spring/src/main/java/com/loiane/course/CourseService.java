@@ -2,6 +2,7 @@ package com.loiane.course;
 
 import java.util.List;
 
+import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import com.loiane.course.dto.CourseDTO;
 import com.loiane.course.dto.CoursePageDTO;
 import com.loiane.course.dto.CourseRequestDTO;
+import com.loiane.course.dto.LessonDTO;
 import com.loiane.course.dto.mapper.CourseMapper;
 import com.loiane.course.enums.Status;
 import com.loiane.exception.BusinessException;
@@ -26,6 +28,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 @Service
 @Validated
 public class CourseService {
+
+    private static final int MAX_SEARCH_RESULTS = 50;
 
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
@@ -45,7 +49,7 @@ public class CourseService {
 
     @Transactional(readOnly = true)
     public List<CourseDTO> findByName(@NotNull @NotBlank String name) {
-        return courseRepository.findByNameContainingIgnoreCase(name).stream()
+        return courseRepository.findByNameContainingIgnoreCase(name, Limit.of(MAX_SEARCH_RESULTS)).stream()
                 .map(courseMapper::toDTO)
                 .toList();
     }
@@ -94,19 +98,27 @@ public class CourseService {
         // remove the lessons that are no longer present in the request
         List<Lesson> lessonsToRemove = updatedCourse.getLessons().stream()
                 .filter(lesson -> courseRequestDTO.lessons().stream()
-                        .noneMatch(lessonDto -> lessonDto._id() != 0 && lessonDto._id() == lesson.getId()))
+                        .noneMatch(lessonDto -> hasExistingId(lessonDto) && lessonDto._id().equals(lesson.getId())))
                 .toList();
         lessonsToRemove.forEach(updatedCourse::removeLesson);
 
-        // update the lessons that match an existing id; anything else (id 0 or
+        // update the lessons that match an existing id; anything else (no id or
         // an id that does not belong to this course) is added as a new lesson
         courseRequestDTO.lessons().forEach(lessonDto -> updatedCourse.getLessons().stream()
-                .filter(lesson -> lessonDto._id() != 0 && lesson.getId() == lessonDto._id())
+                .filter(lesson -> hasExistingId(lessonDto) && lessonDto._id().equals(lesson.getId()))
                 .findAny()
                 .ifPresentOrElse(lesson -> {
                     lesson.setName(lessonDto.name());
                     lesson.setYoutubeUrl(lessonDto.youtubeUrl());
                 }, () -> updatedCourse.addLesson(courseMapper.convertLessonDTOToLesson(lessonDto))));
+    }
+
+    /**
+     * A lesson sent with a null or zero id is a new lesson; anything else refers
+     * to a persisted one.
+     */
+    private static boolean hasExistingId(LessonDTO lessonDto) {
+        return lessonDto._id() != null && lessonDto._id() != 0;
     }
 
     @Transactional

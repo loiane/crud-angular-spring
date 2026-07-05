@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Limit;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -33,7 +34,8 @@ class CourseRepositoryTest {
     CourseRepository courseRepository;
 
     /**
-     * Method under test: {@link CourseRepository#findByNameContainingIgnoreCase(String)}
+     * Method under test:
+     * {@link CourseRepository#findByNameContainingIgnoreCase(String, Limit)}
      */
     @Test
     @DisplayName("Should find courses by partial name ignoring case")
@@ -41,7 +43,7 @@ class CourseRepositoryTest {
         Course course = createValidCourse();
         entityManager.persist(course);
 
-        List<Course> courseFound = courseRepository.findByNameContainingIgnoreCase("spr");
+        List<Course> courseFound = courseRepository.findByNameContainingIgnoreCase("spr", Limit.of(50));
 
         assertThat(courseFound).isNotEmpty();
         assertThat(courseFound.get(0).getName()).isEqualTo(course.getName());

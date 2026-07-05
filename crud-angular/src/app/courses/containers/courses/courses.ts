@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal, effect } from '@angular/core';
-import { httpResource } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -13,7 +13,6 @@ import { ConfirmationDialog } from '../../../shared/components/confirmation-dial
 import { ErrorDialog } from '../../../shared/components/error-dialog/error-dialog';
 import { CoursesList } from '../../components/courses-list/courses-list';
 import { Course } from '../../model/course';
-import { CoursePage } from '../../model/course-page';
 import { CoursesService } from '../../services/courses';
 
 @Component({
@@ -22,6 +21,7 @@ import { CoursesService } from '../../services/courses';
   styleUrl: './courses.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    MatButtonModule,
     MatCardModule,
     MatToolbarModule,
     CoursesList,
@@ -41,10 +41,7 @@ export class Courses {
   protected pageIndex = signal(0);
   protected pageSize = signal(10);
 
-  protected coursesResource = httpResource<CoursePage>(() => ({
-    url: '/api/courses',
-    params: { page: this.pageIndex(), pageSize: this.pageSize() }
-  }));
+  protected coursesResource = this.coursesService.list(this.pageIndex, this.pageSize);
 
   constructor() {
     effect(() => {

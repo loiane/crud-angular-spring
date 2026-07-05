@@ -43,10 +43,7 @@ import com.loiane.exception.RecordNotFoundException;
 import jakarta.servlet.ServletException;
 
 @ActiveProfiles("test")
-@SpringJUnitConfig(classes = {
-        CourseController.class,
-        com.loiane.config.ValidationConfig.class
-})
+@SpringJUnitConfig(classes = { CourseController.class })
 class CourseControllerTest {
 
     private static final String API = "/api/courses";
@@ -242,7 +239,7 @@ class CourseControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(this.courseController).build();
-        assertThrows(AssertionError.class, () -> {
+        assertThrows(ServletException.class, () -> {
             ResultActions actualPerformResult = mockMvc.perform(requestBuilder);
             actualPerformResult.andExpect(status().isNotFound());
         });
@@ -258,7 +255,7 @@ class CourseControllerTest {
         // invalid id and valid course
         final Course validCourse = TestData.createValidCourse();
         final String content = (new ObjectMapper()).writeValueAsString(validCourse);
-        assertThrows(AssertionError.class, () -> {
+        assertThrows(ServletException.class, () -> {
             MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put(API_ID, -1)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(content);

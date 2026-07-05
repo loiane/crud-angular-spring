@@ -2,11 +2,11 @@
   <mat-toolbar>Course Details</mat-toolbar>
 
   <mat-card-content>
-    <form class="min-width">
+    <form class="min-width" (submit)="$event.preventDefault(); onSubmit()">
       <mat-form-field class="full-width">
         <mat-label>Name</mat-label>
         <input matInput [formField]="courseForm.name" #name />
-        <mat-hint align="end">{{ name.value.length }} / 100</mat-hint>
+        <mat-hint align="end">{{ name.value.length }} / {{ nameMaxLength }}</mat-hint>
         @if (courseForm.name().invalid() && courseForm.name().touched()) {
           <mat-error>
             {{ courseForm.name().errors()[0]?.message }}
@@ -17,7 +17,6 @@
       <mat-form-field class="full-width">
         <mat-label>Category</mat-label>
         <mat-select [formField]="courseForm.category">
-          <mat-option value=""> </mat-option>
           <mat-option value="Front-end">Front-End</mat-option>
           <mat-option value="Back-end">Back-End</mat-option>
         </mat-select>

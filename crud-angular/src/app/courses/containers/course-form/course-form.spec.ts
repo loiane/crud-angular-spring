@@ -13,7 +13,7 @@ const existingCourse: Course = {
   _id: '1',
   name: 'Angular Basics',
   category: 'front-end',
-  lessons: [{ _id: 'l1', name: 'Intro Lesson', youtubeUrl: 'abcdefghij' }]
+  lessons: [{ _id: 1, name: 'Intro Lesson', youtubeUrl: 'abcdefghij' }]
 };
 
 const buildModule = async () => {

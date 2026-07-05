@@ -34,14 +34,14 @@ describe('CoursesList', () => {
   it('should emit view when the course name link is clicked', () => {
     let emitted: Course | undefined;
     component.view.subscribe(v => (emitted = v));
-    const nameLink = fixture.nativeElement.querySelector('mat-cell a');
+    const nameLink = fixture.nativeElement.querySelector('mat-cell button.link-button');
     nameLink?.click();
     expect(emitted).toEqual(mockCourses[0]);
   });
 
   it('should emit add when the Add button in the header is clicked', () => {
-    let emitted: boolean | undefined;
-    component.add.subscribe(v => (emitted = v));
+    let emitted = false;
+    component.add.subscribe(() => (emitted = true));
     const addBtn = fixture.nativeElement.querySelector('button[aria-label="Add a new Course"]');
     addBtn?.click();
     expect(emitted).toBe(true);

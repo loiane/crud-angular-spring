@@ -21,7 +21,7 @@ public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @NotBlank
     @NotNull
@@ -41,11 +41,11 @@ public class Lesson {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Course course;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -75,7 +75,7 @@ public class Lesson {
 
     /**
      * Equality is based on the database identity only: two persisted lessons are
-     * the same if they have the same id, and unsaved lessons (id == 0) are only
+     * the same if they have the same id, and unsaved lessons (id == null) are only
      * equal to themselves. Mutable fields are excluded so instances stay
      * consistent while held in a HashSet.
      */
@@ -88,7 +88,7 @@ public class Lesson {
             return false;
         }
         Lesson lesson = (Lesson) obj;
-        return id != 0 && id == lesson.id;
+        return id != null && id.equals(lesson.id);
     }
 
     @Override

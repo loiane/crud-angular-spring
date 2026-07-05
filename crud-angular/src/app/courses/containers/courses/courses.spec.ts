@@ -92,7 +92,7 @@ describe('Courses container', () => {
   it('should navigate to view when the course name link is clicked', async () => {
     await flushInitialRequest();
     const spy = vi.spyOn(router, 'navigate');
-    const nameLink = fixture.nativeElement.querySelector('mat-cell a');
+    const nameLink = fixture.nativeElement.querySelector('mat-cell button.link-button');
     nameLink?.click();
     expect(spy).toHaveBeenCalledWith(['view', '1'], expect.any(Object));
   });

@@ -45,7 +45,7 @@ public class TestData {
     }
 
     private static List<LessonDTO> createLessonsDTO() {
-        return List.of(new LessonDTO(1, LESSON_NAME, LESSON_YOUTUBE));
+        return List.of(new LessonDTO(1L, LESSON_NAME, LESSON_YOUTUBE));
     }
 
     public static List<Course> createInvalidCourses() {

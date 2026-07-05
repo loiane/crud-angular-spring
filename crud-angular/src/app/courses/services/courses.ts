@@ -1,12 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { Service, inject } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { Service, Signal, inject } from '@angular/core';
 
 import { Course } from '../model/course';
+import { CoursePage } from '../model/course-page';
 
 @Service()
 export class CoursesService {
   private readonly API = '/api/courses';
   private http = inject(HttpClient);
+
+  list(page: Signal<number>, pageSize: Signal<number>) {
+    return httpResource<CoursePage>(() => ({
+      url: this.API,
+      params: { page: page(), pageSize: pageSize() }
+    }));
+  }
 
   loadById(id: string) {
     return this.http.get<Course>(`${this.API}/${id}`);

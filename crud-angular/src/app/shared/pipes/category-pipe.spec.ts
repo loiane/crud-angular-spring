@@ -1,10 +1,10 @@
-import { CategoryPipe } from './category-pipe';
+import { CategoryIconPipe } from './category-pipe';
 
-describe('CategoryPipe', () => {
-  let pipe: CategoryPipe;
+describe('CategoryIconPipe', () => {
+  let pipe: CategoryIconPipe;
 
   beforeEach(() => {
-    pipe = new CategoryPipe();
+    pipe = new CategoryIconPipe();
   });
 
   it('should create an instance', () => {

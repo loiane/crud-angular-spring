@@ -23,6 +23,13 @@
     <div class="loading-spinner">
       <mat-spinner></mat-spinner>
     </div>
+  } @else {
+    <div class="load-error">
+      <p>Could not load the courses.</p>
+      <button matButton="filled" type="button" (click)="coursesResource.reload()">
+        Try again
+      </button>
+    </div>
   }
 </mat-card>
 
