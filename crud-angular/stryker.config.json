@@ -9,6 +9,7 @@
     "command": "npm run test:ci"
   },
   "coverageAnalysis": "off",
+  "thresholds": { "high": 80, "low": 60, "break": 50 },
   "concurrency": 2,
   "reporters": ["html", "clear-text", "progress"],
   "htmlReporter": {
