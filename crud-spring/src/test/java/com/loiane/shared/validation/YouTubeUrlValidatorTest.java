@@ -75,6 +75,14 @@ class YouTubeUrlValidatorTest {
                 && v.getConstraintDescriptor().getAnnotation().annotationType().equals(NotNull.class)));
     }
 
+    @Test
+    @DisplayName("Should accept blank values: @NotBlank handles them if required")
+    void testBlankValues() {
+        YouTubeUrlValidator youTubeUrlValidator = new YouTubeUrlValidator();
+        assertTrue(youTubeUrlValidator.isValid("   ", null));
+        assertTrue(youTubeUrlValidator.isValid(null, null));
+    }
+
     // Test class for validation
     private static class TestClass {
         @NotNull
