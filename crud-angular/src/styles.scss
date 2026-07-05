@@ -16,6 +16,20 @@ html {
   ));
 }
 
+mat-toolbar {
+  @include mat.toolbar-overrides((
+    container-background-color: #4995eb,
+    container-text-color: #fff,
+  ));
+}
+
+html {
+  @include mat.fab-overrides((
+    small-container-color: #536dfe,
+    small-foreground-color: #fff,
+  ));
+}
+
 .danger-action {
   @include mat.icon-button-overrides((
     icon-color: var(--mat-sys-error),
