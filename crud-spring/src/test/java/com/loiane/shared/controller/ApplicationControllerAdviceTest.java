@@ -58,6 +58,10 @@ class ApplicationControllerAdviceTest {
                 .handleConstraintViolationException(new ConstraintViolationException(violations));
         assertEquals(400, detail.getStatus());
         assertEquals("Validation failed", detail.getDetail());
-        assertTrue(detail.getProperties().containsKey("errors"));
+        @SuppressWarnings("unchecked")
+        var errors = (java.util.List<ApplicationControllerAdvice.FieldValidationError>) detail.getProperties()
+                .get("errors");
+        assertEquals(violations.size(), errors.size());
+        assertTrue(errors.stream().allMatch(error -> error != null && error.field() != null));
     }
 }

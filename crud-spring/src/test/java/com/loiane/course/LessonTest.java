@@ -52,6 +52,7 @@ class LessonTest {
     @Test
     @DisplayName("Should have a constant hashCode per class")
     void testHashCode() {
+        assertEquals(Lesson.class.hashCode(), createLesson(1L).hashCode());
         assertEquals(createLesson(1L).hashCode(), createLesson(2L).hashCode());
     }
 

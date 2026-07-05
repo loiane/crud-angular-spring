@@ -1,6 +1,7 @@
 package com.loiane.course;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,5 +48,20 @@ class CourseTest {
         course.removeLesson(lesson);
         assertNull(lesson.getCourse());
         assertTrue(course.getLessons().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Should replace existing lessons when setting a new collection")
+    void testSetLessonsReplaces() {
+        Course course = new Course();
+        Lesson first = createLesson();
+        course.setLessons(Set.of(first));
+
+        Lesson second = createLesson();
+        second.setName("Second lesson");
+        course.setLessons(Set.of(second));
+
+        assertEquals(Set.of(second), course.getLessons());
+        assertFalse(course.getLessons().contains(first));
     }
 }

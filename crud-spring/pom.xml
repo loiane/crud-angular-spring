@@ -149,6 +149,40 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.25.5</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-junit5-plugin</artifactId>
+						<version>1.2.3</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<targetClasses>
+						<param>com.loiane.*</param>
+					</targetClasses>
+					<targetTests>
+						<param>com.loiane.*</param>
+					</targetTests>
+					<excludedClasses>
+						<!-- application bootstrap and dev seed data, only runs at startup -->
+						<param>com.loiane.CrudSpringApplication</param>
+					</excludedClasses>
+					<excludedTestClasses>
+						<param>com.loiane.integration.*</param>
+						<param>com.loiane.CrudSpringApplicationTests</param>
+					</excludedTestClasses>
+					<outputFormats>
+						<outputFormat>HTML</outputFormat>
+						<outputFormat>XML</outputFormat>
+					</outputFormats>
+					<timestampedReports>false</timestampedReports>
+					<mutationThreshold>85</mutationThreshold>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<repositories>

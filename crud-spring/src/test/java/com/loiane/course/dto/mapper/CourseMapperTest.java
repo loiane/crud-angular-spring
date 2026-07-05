@@ -45,5 +45,8 @@ class CourseMapperTest {
         assertEquals("Spring Boot Fundamentals", dto.name());
         assertEquals("Back-end", dto.category());
         assertEquals(1, dto.lessons().size());
+        LessonDTO lessonDTO = dto.lessons().get(0);
+        assertEquals("Introduction", lessonDTO.name());
+        assertEquals("dQw4w9WgXcQ", lessonDTO.youtubeUrl());
     }
 }

@@ -34,6 +34,13 @@ class EnumConvertersTest {
     }
 
     @Test
+    @DisplayName("Should use the display value as toString")
+    void testToString() {
+        assertEquals("Active", Status.ACTIVE.toString());
+        assertEquals("Front-end", Category.FRONT_END.toString());
+    }
+
+    @Test
     @DisplayName("Should reject unknown enum values")
     void testInvalidValues() {
         assertThrows(IllegalArgumentException.class, () -> Status.fromValue("Unknown"));
