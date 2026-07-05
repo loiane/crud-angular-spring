@@ -59,7 +59,7 @@ export class CourseView {
     this.selectedLesson.set(lesson);
   }
 
-  protected displaySelectedLesson(lesson: Lesson) {
+  protected displaySelectedLesson(lesson: Lesson): boolean {
     return this.selectedLesson() === lesson;
   }
 }

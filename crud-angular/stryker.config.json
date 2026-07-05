@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "mutate": [
+    "src/app/**/*.ts",
+    "!src/**/*.spec.ts"
+  ],
+  "testRunner": "command",
+  "commandRunner": {
+    "command": "npm run test:ci"
+  },
+  "coverageAnalysis": "off",
+  "concurrency": 2,
+  "reporters": ["html", "clear-text", "progress"],
+  "htmlReporter": {
+    "fileName": "reports/mutation/mutation.html"
+  },
+  "tempDirName": ".stryker-tmp",
+  "cleanTempDir": true
+}
