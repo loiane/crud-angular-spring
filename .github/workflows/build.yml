@@ -19,7 +19,7 @@ jobs:
     name: Maven Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v7
     - name: Set up JDK 25
       uses: actions/setup-java@v5
       with:
@@ -29,7 +29,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file crud-spring/pom.xml
     - name: Publish Maven Test Report
-      uses: dorny/test-reporter@v2
+      uses: dorny/test-reporter@v3
       if: always()
       with:
         name: Maven Test Report
@@ -40,9 +40,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the source code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: 'npm'
@@ -60,7 +60,7 @@ jobs:
     name: Maven Architecture Tests (ArchUnit)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Set up JDK 25
         uses: actions/setup-java@v5
         with:
@@ -73,7 +73,7 @@ jobs:
     name: Maven Mutation Tests (PIT)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Set up JDK 25
         uses: actions/setup-java@v5
         with:
@@ -83,7 +83,7 @@ jobs:
       - name: Run PIT mutation tests
         run: mvn -B test-compile org.pitest:pitest-maven:mutationCoverage --file crud-spring/pom.xml
       - name: Upload PIT report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: pit-mutation-report
@@ -93,9 +93,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the source code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: 'npm'
@@ -107,7 +107,7 @@ jobs:
         run: npm run test:mutation
         working-directory: crud-angular
       - name: Upload Stryker report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: stryker-mutation-report
