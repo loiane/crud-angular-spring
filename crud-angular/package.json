@@ -33,7 +33,7 @@
     "@stryker-mutator/core": "^9.6.1",
     "@stryker-mutator/vitest-runner": "^9.6.1",
     "@vitest/coverage-v8": "^4.1.10",
-    "jsdom": "^28.0.0",
+    "jsdom": "^29.1.1",
     "prettier": "^3.8.1",
     "typescript": "~6.0.3",
     "vitest": "^4.1.10"
