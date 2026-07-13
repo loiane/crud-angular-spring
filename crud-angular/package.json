@@ -20,7 +20,7 @@
     "@angular/core": "^22.0.3",
     "@angular/forms": "^22.0.3",
     "@angular/material": "^22.0.3",
-    "@angular/platform-browser": "^22.0.3",
+    "@angular/platform-browser": "^22.0.6",
     "@angular/router": "^22.0.3",
     "@angular/youtube-player": "^22.0.3",
     "rxjs": "~7.8.2",
