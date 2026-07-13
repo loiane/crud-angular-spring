@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@angular/build": "^22.0.0",
-    "@angular/cli": "^22.0.0",
+    "@angular/cli": "^22.0.6",
     "@angular/compiler-cli": "^22.0.3",
     "@stryker-mutator/core": "^9.6.1",
     "@stryker-mutator/vitest-runner": "^9.6.1",
