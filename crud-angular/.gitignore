@@ -46,3 +46,7 @@ Thumbs.db
 # Stryker mutation testing
 .stryker-tmp/
 /reports
+
+# Pact contract testing: commit generated pacts, ignore runtime logs
+/logs
+/pact/logs
