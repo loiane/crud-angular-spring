@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@angular/build": "^22.0.7",
-    "@angular/cli": "^22.0.7",
+    "@angular/cli": "^22.1.2",
     "@angular/compiler-cli": "^22.0.7",
     "@pact-foundation/pact": "^17.0.1",
     "@stryker-mutator/core": "^9.6.1",
