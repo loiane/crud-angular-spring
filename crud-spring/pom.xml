@@ -110,7 +110,7 @@
 		<dependency>
 			<groupId>au.com.dius.pact.provider</groupId>
 			<artifactId>junit5spring</artifactId>
-			<version>4.6.17</version>
+			<version>4.7.4</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
