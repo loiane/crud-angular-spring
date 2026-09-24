@@ -7,10 +7,14 @@ import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.MethodParameter;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.loiane.course.Course;
+import com.loiane.course.CourseController;
 import com.loiane.exception.BusinessException;
 import com.loiane.exception.RecordNotFoundException;
 
@@ -63,5 +67,39 @@ class ApplicationControllerAdviceTest {
                 .get("errors");
         assertEquals(violations.size(), errors.size());
         assertTrue(errors.stream().allMatch(error -> error != null && error.field() != null));
+    }
+
+    @Test
+    @DisplayName("Should return 400 Problem Detail for MethodArgumentTypeMismatchException")
+    void testHandleMethodArgumentTypeMismatchException() throws NoSuchMethodException {
+        MethodParameter param = new MethodParameter(
+                CourseController.class.getMethod("findById", Long.class), 0);
+        MethodArgumentTypeMismatchException ex = new MethodArgumentTypeMismatchException(
+                "abc", Long.class, "id", param, new NumberFormatException("For input string: \"abc\""));
+
+        ProblemDetail detail = advice.handleMethodArgumentTypeMismatchException(ex);
+        assertEquals(400, detail.getStatus());
+        assertEquals("Validation failed", detail.getDetail());
+        @SuppressWarnings("unchecked")
+        var errors = (java.util.List<ApplicationControllerAdvice.FieldValidationError>) detail.getProperties()
+                .get("errors");
+        assertEquals(1, errors.size());
+        assertEquals("id", errors.get(0).field());
+        assertTrue(errors.get(0).message().contains("Long"));
+    }
+
+    @Test
+    @DisplayName("Should return 400 Problem Detail for MissingServletRequestParameterException")
+    void testHandleMissingServletRequestParameterException() {
+        MissingServletRequestParameterException ex = new MissingServletRequestParameterException("name", "String");
+
+        ProblemDetail detail = advice.handleMissingServletRequestParameterException(ex);
+        assertEquals(400, detail.getStatus());
+        assertEquals("Validation failed", detail.getDetail());
+        @SuppressWarnings("unchecked")
+        var errors = (java.util.List<ApplicationControllerAdvice.FieldValidationError>) detail.getProperties()
+                .get("errors");
+        assertEquals(1, errors.size());
+        assertEquals("name", errors.get(0).field());
     }
 }

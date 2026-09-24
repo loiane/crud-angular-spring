@@ -8,8 +8,10 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.loiane.exception.BusinessException;
 import com.loiane.exception.RecordNotFoundException;
@@ -62,6 +64,19 @@ public class ApplicationControllerAdvice {
                 .toList();
 
         return validationProblem(errors);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ProblemDetail handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        String requiredType = ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "a different type";
+        String message = "Failed to convert value to required type " + requiredType;
+        return validationProblem(List.of(new FieldValidationError(ex.getName(), message)));
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ProblemDetail handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+        return validationProblem(
+                List.of(new FieldValidationError(ex.getParameterName(), "Required parameter is not present")));
     }
 
     private ProblemDetail validationProblem(List<FieldValidationError> errors) {
