@@ -34,6 +34,7 @@
     "@pact-foundation/pact": "^17.1.4",
     "@stryker-mutator/core": "^10.0.0",
     "@stryker-mutator/vitest-runner": "^10.0.0",
+    "@types/node": "^26.6.2",
     "@vitest/coverage-v8": "^4.1.11",
     "jsdom": "^30.1.0",
     "prettier": "^3.9.8",
