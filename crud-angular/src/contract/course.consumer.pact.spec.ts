@@ -1,5 +1,3 @@
-import path from 'node:path';
-
 import { PactV3, MatchersV3 } from '@pact-foundation/pact';
 
 const { eachLike, integer, string } = MatchersV3;
@@ -7,7 +5,7 @@ const { eachLike, integer, string } = MatchersV3;
 const provider = new PactV3({
   consumer: 'crud-angular',
   provider: 'crud-spring',
-  dir: path.resolve(process.cwd(), 'pacts')
+  dir: 'pacts'
 });
 
 describe('CoursesService contract', () => {
